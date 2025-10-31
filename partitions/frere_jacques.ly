@@ -1,18 +1,14 @@
 \version "2.24.3"
 
 \header {
-  title = "Frere Jacques"
+  title = "Frère Jacques"
   tagline = ##f
 }
-
-
-%Source: https://www.petiteguitare.fr/partition-frere-jacques/
-
 
 \include "harmonica.ly"
 \include "style.ly"
 
-Morceau = {
+melodie = {
   \time 4/4
   c4 d e c | c d e c |
   \break
@@ -30,43 +26,91 @@ Morceau = {
   Ding, daing, "dong !" Ding, daing, "dong !" 
 }
 
-%Some words may need explanation - a bobtail nag is a horse that has had its tail 'docked' (cut short) and a 'bay' is a brown horse with a black mane and tail.
+% ============================
+% SCORE DIATONIQUE
+% ============================
 
-
-\markup {
-  \column {
-    \vspace #4
-    \fontsize #4 "Harmonica diatonique"
-    \vspace #4
-  }
-}
-%{
-\diatonicHarmonicaTab \relative c'' {
-  \Morceau
-}
-
-\pageBreak
-
-\markup {
-  \column {
-    \vspace #4
-    \fontsize #4 "Harmonica chromatique"
-    \vspace #4
-  }
-}
-%}
-\chromaticHarmonicaTab \relative c'' {
-  \Morceau
+diatoniqueScore = 
+\score {
+  <<
+    \new Staff { 
+      \set Staff.instrumentName = "Harmonica diatonique (Do)"
+      \clef treble
+      \diatonicHarmonicaTab \relative c'' {
+        \melodie
+      }
+    }
+    \markup {
+      \vspace #1
+      \bold "Tablature diatonique (Do):"
+      \vspace #0.5
+      \tabDiatonique
+    }
+  >>
+  \layout { }
 }
 
+
+% ============================
+% SCORE CHROMATIQUE
+% ============================
+
+chromatiqueScore = 
+\score {
+  <<
+    \new Staff { 
+      \set Staff.instrumentName = "Harmonica chromatique (Do)"
+      \clef treble
+      \chromaticHarmonicaTab \relative c'' {
+        \melodie
+      }
+    }
+    \new Lyrics \lyricmode { \markup { \column { "" "" "" "" "" "" "" "" "" "" } } }
+    \markup {
+      \vspace #1
+      \bold "Tablature chromatique (Do):"
+      \vspace #0.5
+      \tabChromatique
+    }
+  >>
+  \layout { }
+}
+
+
+% ============================
+% SCORE MIDI
+% ============================
+
+midiScore =
 \score {
   \new Staff {
     \set Staff.midiInstrument = #"harmonica"
     \chromaticHarmonicaTab \relative c'' {
-      \Morceau
+      \melodie
     }
   }
   \midi {
     \tempo 4 = 90
   }
 }
+
+% ============================
+% COMPILATION SÉPARÉE
+% ============================
+
+% Pour générer la version diatonique :
+% lilypond -dcompile-diatonique comptine.ly
+
+% Pour générer la version chromatique :
+% lilypond -dcompile-chromatique comptine.ly
+
+#(define compile-diatonique (ly:get-option 'compile-diatonique))
+#(define compile-chromatique (ly:get-option 'compile-chromatique))
+#(define compile-midi (ly:get-option 'compile-midi))
+
+#(if compile-diatonique
+     (ly:parser-include-string "\\diatoniqueScore"))
+#(if compile-chromatique
+     (ly:parser-include-string "\\chromatiqueScore"))
+#(if compile-midi
+     (ly:parser-include-string "\\midiScore"))
