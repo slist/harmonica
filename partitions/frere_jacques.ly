@@ -8,6 +8,18 @@
 \include "harmonica.ly"
 \include "style.ly"
 
+% Options de compilation personnalisées
+
+#(define compile-diatonique (ly:get-option 'compile-diatonique))
+#(define compile-chromatique (ly:get-option 'compile-chromatique))
+#(define compile-midi (ly:get-option 'compile-midi))
+
+
+
+% ============================
+% MÉLODIE DE LA COMPTINE
+% ============================
+
 melodie = {
   \time 4/4
   c4 d e c | c d e c |
@@ -34,17 +46,11 @@ diatoniqueScore =
 \score {
   <<
     \new Staff { 
-      \set Staff.instrumentName = "Harmonica diatonique (Do)"
-      \clef treble
+      %\set Staff.instrumentName = "Harmonica diatonique (Do)"
+      %\clef treble
       \diatonicHarmonicaTab \relative c'' {
         \melodie
       }
-    }
-    \markup {
-      \vspace #1
-      \bold "Tablature diatonique (Do):"
-      \vspace #0.5
-      \tabDiatonique
     }
   >>
   \layout { }
@@ -59,18 +65,11 @@ chromatiqueScore =
 \score {
   <<
     \new Staff { 
-      \set Staff.instrumentName = "Harmonica chromatique (Do)"
-      \clef treble
+      %\set Staff.instrumentName = "Harmonica chromatique (Do)"
+      %\clef treble
       \chromaticHarmonicaTab \relative c'' {
         \melodie
       }
-    }
-    \new Lyrics \lyricmode { \markup { \column { "" "" "" "" "" "" "" "" "" "" } } }
-    \markup {
-      \vspace #1
-      \bold "Tablature chromatique (Do):"
-      \vspace #0.5
-      \tabChromatique
     }
   >>
   \layout { }
@@ -104,9 +103,7 @@ midiScore =
 % Pour générer la version chromatique :
 % lilypond -dcompile-chromatique comptine.ly
 
-#(define compile-diatonique (ly:get-option 'compile-diatonique))
-#(define compile-chromatique (ly:get-option 'compile-chromatique))
-#(define compile-midi (ly:get-option 'compile-midi))
+% Inclusion conditionnelle des scores
 
 #(if compile-diatonique
      (ly:parser-include-string "\\diatoniqueScore"))
@@ -114,3 +111,4 @@ midiScore =
      (ly:parser-include-string "\\chromatiqueScore"))
 #(if compile-midi
      (ly:parser-include-string "\\midiScore"))
+
