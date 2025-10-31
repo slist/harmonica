@@ -1,0 +1,55 @@
+name: Compile LilyPond scores
+
+on:
+  push:
+    paths:
+      - '**.ly'
+  pull_request:
+    paths:
+      - '**.ly'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install LilyPond
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y lilypond
+
+      - name: Compile all LilyPond scores
+        run: |
+          mkdir -p output
+          for file in $(find partitions -name '*.ly'); do
+            echo "Compiling $file..."
+            lilypond -o output/ "$file"
+          done
+
+      - name: Upload PDFs as artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: lilypond-pdfs
+          path: output/*.pdf
+          
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download generated PDFs
+        uses: actions/download-artifact@v4
+        with:
+          name: lilypond-pdfs
+          path: site
+
+      - name: Publish to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: site
