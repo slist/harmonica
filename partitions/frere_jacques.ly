@@ -14,8 +14,6 @@
 #(define compile-chromatique (ly:get-option 'compile-chromatique))
 #(define compile-midi (ly:get-option 'compile-midi))
 
-
-
 % ============================
 % MÉLODIE DE LA COMPTINE
 % ============================
@@ -98,10 +96,13 @@ midiScore =
 % ============================
 
 % Pour générer la version diatonique :
-% lilypond -dcompile-diatonique comptine.ly
+% lilypond -dcompile-diatonique <fichier.ly>
 
 % Pour générer la version chromatique :
-% lilypond -dcompile-chromatique comptine.ly
+% lilypond -dcompile-chromatique <fichier.ly>
+
+% Pour générer le fichier midi :
+% lilypond -dcompile-midi <fichier.ly>
 
 % Inclusion conditionnelle des scores
 

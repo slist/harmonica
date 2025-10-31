@@ -13,7 +13,13 @@
 \include "harmonica.ly"
 \include "style.ly"
 
-Morceau = {
+% Options de compilation personnalisées
+
+#(define compile-diatonique (ly:get-option 'compile-diatonique))
+#(define compile-chromatique (ly:get-option 'compile-chromatique))
+#(define compile-midi (ly:get-option 'compile-midi))
+
+melodie = {
   \time 4/4
   \tempo 4 = 116
 
@@ -76,44 +82,82 @@ Tout petit enfant que vous êtes,
 Oh Jésus ! Oh Roi tout-puissant,
 Régnez sur nous entièrement !
 
-\markup {
-  \column {
-    \vspace #4
-    \fontsize #4 "Harmonica diatonique"
-    \vspace #4
-  }
-}
-
-
-\diatonicHarmonicaTab \relative c' {
-  \Morceau
-}
-
-\pageBreak
-
-
-
-\markup {
-  \column {
-    \vspace #4
-    \fontsize #4 "Harmonica chromatique"
-    \vspace #4
-  }
-}
 %}
 
-\chromaticHarmonicaTab \relative c' {
-  \Morceau
+
+% ============================
+% SCORE DIATONIQUE
+% ============================
+
+diatoniqueScore = 
+\score {
+  <<
+    \new Staff { 
+      %\set Staff.instrumentName = "Harmonica diatonique (Do)"
+      %\clef treble
+      \diatonicHarmonicaTab \relative c'' {
+        \melodie
+      }
+    }
+  >>
+  \layout { }
 }
 
+
+% ============================
+% SCORE CHROMATIQUE
+% ============================
+
+chromatiqueScore = 
+\score {
+  <<
+    \new Staff { 
+      %\set Staff.instrumentName = "Harmonica chromatique (Do)"
+      %\clef treble
+      \chromaticHarmonicaTab \relative c'' {
+        \melodie
+      }
+    }
+  >>
+  \layout { }
+}
+
+
+% ============================
+% SCORE MIDI
+% ============================
+
+midiScore =
 \score {
   \new Staff {
     \set Staff.midiInstrument = #"harmonica"
-    \chromaticHarmonicaTab \relative c' {
-      \Morceau
+    \chromaticHarmonicaTab \relative c'' {
+      \melodie
     }
   }
   \midi {
     \tempo 4 = 116
   }
 }
+
+% ============================
+% COMPILATION SÉPARÉE
+% ============================
+
+% Pour générer la version diatonique :
+% lilypond -dcompile-diatonique <fichier.ly>
+
+% Pour générer la version chromatique :
+% lilypond -dcompile-chromatique <fichier.ly>
+
+% Pour générer le fichier midi :
+% lilypond -dcompile-midi <fichier.ly>
+
+% Inclusion conditionnelle des scores
+
+#(if compile-diatonique
+     (ly:parser-include-string "\\diatoniqueScore"))
+#(if compile-chromatique
+     (ly:parser-include-string "\\chromatiqueScore"))
+#(if compile-midi
+     (ly:parser-include-string "\\midiScore"))
