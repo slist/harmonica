@@ -25,8 +25,13 @@ jobs:
         run: |
           mkdir -p output
           for file in $(find partitions -name '*.ly'); do
-            echo "Compiling $file..."
-            lilypond -o output/ "$file"
+            # echo "Compiling $file..."
+            # lilypond -o output/ "$file"
+            base=$(basename "$file" .ly)
+            echo "Compiling variants for $base..."
+            lilypond -dcompile-diatonique -o output/${base}_diatonique.pdf "$file"
+            lilypond -dcompile-chromatique -o output/${base}_chromatique.pdf "$file"
+            lilypond -dcompile-diatonique -dcompile-midi -o output/${base}.mid "$file"
           done
 
       - name: Upload PDFs as artifacts
