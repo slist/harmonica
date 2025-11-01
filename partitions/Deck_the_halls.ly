@@ -54,7 +54,7 @@ diatoniqueScore =
 \score {
   <<
     \new Staff { 
-      \diatonicHarmonicaTab \relative do'' {
+      \diatonicHarmonicaTab \relative c'' {
         \melodie
       }
     }
@@ -71,7 +71,7 @@ chromatiqueScore =
 \score {
   <<
     \new Staff { 
-      \chromaticHarmonicaTab \relative do'' {
+      \chromaticHarmonicaTab \relative c'' {
         \melodie
       }
     }
@@ -88,7 +88,7 @@ midiScore =
 \score {
   \new Staff {
     \set Staff.midiInstrument = #"harmonica"
-    \chromaticHarmonicaTab \relative do'' {
+    \chromaticHarmonicaTab \relative c'' {
       \melodie
     }
   }
