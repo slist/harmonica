@@ -11,12 +11,11 @@
 \language "français"
 
 % Options de compilation personnalisées
-
 #(define compile-diatonique (ly:get-option 'compile-diatonique))
 #(define compile-chromatique (ly:get-option 'compile-chromatique))
 #(define compile-midi (ly:get-option 'compile-midi))
 
-melodie = \relative do'' {
+melodie = {
   %\tempo "Largo" 4 = 50
   %\time 3/4
   \tempo 4 = 126
@@ -55,16 +54,25 @@ melodie = \relative do'' {
   r2 
   r4
   \break
-  fa4-. \bar "||" do'2 la8-- sol4-. fa8~ | fa2 re8-- fa4-. fa8~ | fa2 re8-- fa4-. fa8~ fa2 r4
+  fa4-. \bar "||" do'2 la8-- sol4-. fa8~-> | fa2 re8-- fa4-. fa8~-> |
   \break
-  fa4-.       |   do'2 re8 do4-. la8~ | la2 sol8-- la4-.sol8~ | sol2 mi8-- re4-. do8~ | do2 r4
+  fa2 re8-- fa4-. fa8~-> fa2 r4
+  %\break
+  fa4-.       |   do'2 re8 do4-. la8~-> | la2 sol8-- la4-. sol8~-> | sol2 mi8-- re4-. do8~-> |
   \break
-  fa4-.       |   do'2 la8-- sol4-. fa8~ | fa2 re8-- fa4-. fa8~ | fa2 re8-- fa4-. fa8~ | fa2
+  do2 r4
+  %\break
+  fa4-.       |   do'2 la8-- sol4-. fa8~-> | fa2 re8-- fa4-. fa8~-> | fa2 re8-- fa4-. fa8~-> | fa2
+  %\break
+  fa8-- fa4-. la8~-> |
   \break
-  fa8-- fa4-. la8~ | la2 sol8-- sol4-. do,8~ | do2 fa8-- fa4-. fa8~ | fa2 r4
+  la2 sol8-- sol4-. fa8~-> | fa2 re8-- re4-. do8~ | do2 fa8-- fa4-. fa8~-> | fa2 r4 fa4-. \bar "||" do'2 la8-- sol4-. fa8~-> |
   \break
-  fa4-. \bar "||" do'2 la8-- sol4-. fa8~ | fa2
-  
+  fa2 re8-- fa4-. fa8~-> | fa2 re8-- fa4-. fa8~-> | fa2 r4 fa4-. | do'2 re 8-- do4-. la8~-> | la2 sol8-- la4-. sol8~-> |
+  \break
+  sol4 mi'4-. mi8-- re4-. do8~-> | do2 r4 fa,4-. | do'2 la8 sol4-. fa8~-> | fa2 re8-- fa4-. fa8~-> | fa2 re8-- fa4-. fa8~-> |
+  \break
+  fa2 fa8-- fa4-. la8~-> | la2 sol8 sol4-. fa8~-> | fa2 re8-- re4-. do8~-> | do2 fa8-- fa4-. fa8~-> | fa2 r2  
 
   \bar "|."  
 }
@@ -154,7 +162,7 @@ midiScore =
     }
   }
   \midi {
-    \tempo 4 = 100
+    \tempo 4 = 126
   }
 }
 
@@ -166,3 +174,6 @@ midiScore =
 #(if compile-midi
      (ly:parser-include-string "\\midiScore"))
 
+%\diatoniqueScore
+%\chromatiqueScore
+%\midiScore
