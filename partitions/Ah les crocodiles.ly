@@ -1,4 +1,4 @@
-\version "2.24.3"
+\version "2.24.0"
 
 \header {
   title = "Ah! Les Crocodiles"
@@ -52,7 +52,6 @@ melodie = {
 }
 
 %{
-
 2. Il fredonnait une marche militaire
 Dont il mâchait les mots à grosses dents,
 Quand il ouvrait la gueule tout entière
