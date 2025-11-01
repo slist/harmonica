@@ -23,7 +23,7 @@ jobs:
           # Check lilypond version
           lilypond --version
 
-      - name: Compile all LilyPond scores
+      - name: Compile all LilyPond scores (PDF + MIDI)
         run: |
           mkdir -p output
           for file in $(find partitions -name '*.ly'); do
@@ -31,29 +31,44 @@ jobs:
             # lilypond -o output/ "$file"
             base=$(basename "$file" .ly)
             echo "Compiling variants for $base..."
+
+            # PDF outputs
             lilypond -dcompile-diatonique -o output/${base}_diatonique "$file"
             lilypond -dcompile-chromatique -o output/${base}_chromatique "$file"
-            lilypond -dcompile-diatonique -dcompile-midi -o output/${base}.mid "$file"
+
+            # MIDI output
+            lilypond --formats=midi -dcompile-midi -o output/${base} "$file"
           done
 
-      - name: Upload PDFs as artifacts
+      - name: Upload compiled files as artifact
         uses: actions/upload-artifact@v4
         with:
-          name: lilypond-pdfs
-          path: output/*.pdf
+          name: lilypond-outputs
+          path: output/
           
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # to publish to gh-pages
+      pages: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Download generated PDFs
+      - name: Download build artifacts
         uses: actions/download-artifact@v4
         with:
-          name: lilypond-pdfs
+          name: lilypond-outputs
           path: site
+
+      - name: Generate simple index.html
+        run: |
+          echo "<h1>LilyPond Generated Files</h1><ul>" > site/index.html
+          find site -type f | sed 's|site/||' | while read f; do
+            echo "<li><a href=\"$f\">$f</a></li>" >> site/index.html
+          done
+          echo "</ul>" >> site/index.html
 
       - name: Publish to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
