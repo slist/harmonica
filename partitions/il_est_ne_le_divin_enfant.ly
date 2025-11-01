@@ -151,7 +151,7 @@ midiScore =
 % lilypond -dcompile-chromatique <fichier.ly>
 
 % Pour générer le fichier midi :
-% lilypond -dcompile-midi <fichier.ly>
+% lilypond --formats=midi -dcompile-midi <fichier.ly>
 
 % Inclusion conditionnelle des scores
 
