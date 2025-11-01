@@ -1,4 +1,4 @@
-\version "2.24.4"
+\version "2.24.3"
 
 \header {
   title = "Go, tell it on the mountain"
