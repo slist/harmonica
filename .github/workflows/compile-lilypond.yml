@@ -35,17 +35,19 @@ jobs:
       - name: Compile all LilyPond scores (PDF + MIDI)
         run: |
           mkdir -p output
-          for file in $(find partitions -name '*.ly'); do
-            echo "Compiling $file..."
-            base=$(basename "$file" .ly)
-            echo "Compiling variants for $base..."
+          shopt -s nullglob
+          find partitions -type f -name "*.ly" -print0 | while IFS= read -r -d '' file; do
+          # for file in $(find partitions -name '*.ly'); do
+            echo "Compiling ${file}..."
+            base=$(basename "${file}" .ly)
+            echo "Compiling variants for {$base}..."
 
             # PDF outputs
-            lilypond -dcompile-diatonique -o "output/${base}_diatonique" "$file"
-            lilypond -dcompile-chromatique -o "output/${base}_chromatique" "$file"
+            lilypond -dcompile-diatonique -o "output/${base}_diatonique" "${file}"
+            lilypond -dcompile-chromatique -o "output/${base}_chromatique" "${file}"
 
             # MIDI output
-            lilypond --formats=midi -dcompile-midi -o "output/${base}" "$file"
+            lilypond --formats=midi -dcompile-midi -o "output/${base}" "${file}"
           done
 
       - name: Generate index.html
