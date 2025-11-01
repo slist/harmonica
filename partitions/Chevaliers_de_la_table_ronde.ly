@@ -1,4 +1,4 @@
-\version "2.25.26"
+\version "2.24.3"
 \header {
   title = "Chevaliers de la table ronde"
   %composer = ""
