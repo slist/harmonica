@@ -1,4 +1,4 @@
-\version "2.25.26"
+\version "2.24.3"
 \header {
   title = "Dans la troupe"
   %composer = "César Geoffray (1901 - 1972)" % Entrera dans le domaine public à partir du 1er janvier 2043
