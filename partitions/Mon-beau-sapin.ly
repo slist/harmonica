@@ -1,24 +1,19 @@
 \version "2.24.3"
 
 \header {
-  title = "Casatschok - Katioucha - Katyusha"
+  title = "Mon beau sapin"
   instrument = "Harmonica en C"
-  autor = "Mikhaïl Issakovski"
-  composer = "Matveï Blanter"
-  date = ""
+  composer = "Tonton Stéphane"
   tagline = ##f
 }
 
-%{
-%Source: https://www.harptabs.com/song.php?ID=4436
-Song: 	-6 -7 7 -6 7 7 -7 -6 -7 5
--7 7 -8 -7 -8 -8 7 -7 -6
-|: -6 -10 9 -10 9 -9 -9 8 -8 8 -6
--9 -8 -9 7 -8 -8 7 -7 -6 :|
-%}
+%Source:
+%notes: http://harmonicacomte.blogspot.com/search/label/pour%20d%C3%A9buter
+%rythme et paroles: https://www.petiteguitare.fr/mon-beau-sapin/
 
 \include "harmonica.ly"
 \include "style.ly"
+
 
 % Options de compilation personnalisées
 
@@ -27,20 +22,45 @@ Song: 	-6 -7 7 -6 7 7 -7 -6 -7 5
 #(define compile-midi (ly:get-option 'compile-midi))
 
 melodie = {
-  \time 2/4
-  \tempo 4 = 105
-  a4. b8 c4. a8 c c b a b4 e,
-  \break
-  b'4. c8 d4. b8 d8 d c b a2
-  \break
-  \bar ".|:"
-  e'4 a g ( a8 ) g f f e d e4 a,
-  r8 f'4 d8 e4. c8 b8 e, c' b a2 
-  \bar ":|."
+  \time 3/4
+  r2 r8 g'8
+  c8. c16 c4. 
+  d8 e8. e16 e4. 
+  e8 d e f4 b, d c 
+  r8
+  g'8 g e a4. 
+  g8 g f f4. 
+  f8 f d g4. 
+  f8 f e e4
+  r8
+  g,8
+  c8. c16 c4.
+  d8 e8. e16 e4.
+  e8 d e f4 b, d c
+  r8
+  \bar "|."
 }
 \addlyrics {
-
+  Mon beau sa -- pin, roi des fo -- rêts, que j'ai -- me ta ver -- du -- re!
+  Quand par l'hi -- ver bois et gué -- rets sont dé -- pouil -- lés de leurs at -- traits
+  Mon beau sa -- pin, roi des fo -- rêts, tu gar -- des ta pa  -- ru -- re.
 }
+
+%{
+2. Toi que Noël Planta chez nous,
+au saint anniversaire,
+joli sapin, comme ils sont doux
+Ee tes bonbons et tes joujoux.
+Toi que Noël planta chez nous
+par les mains de ma mère.
+
+3. Mon beau sapin, tes verts sommets,
+et leur fidèle ombrage,
+de la foi qui ne ment jamais,
+de la constance et de la paix.
+Mon beau sapin, tes verts sommets,
+m’offrent la douce image.
+%}
 
 % ============================
 % SCORE DIATONIQUE
@@ -87,7 +107,7 @@ midiScore =
     }
   }
   \midi {
-    \tempo 4 = 105
+    \tempo 4 = 100
   }
 }
 

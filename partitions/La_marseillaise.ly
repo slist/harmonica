@@ -1,21 +1,10 @@
 \version "2.24.3"
 
 \header {
-  title = "Casatschok - Katioucha - Katyusha"
-  instrument = "Harmonica en C"
-  autor = "Mikhaïl Issakovski"
-  composer = "Matveï Blanter"
-  date = ""
+  title = "La Marseillaise"
+  composer = "Claude Joseph Rouget de Lisle (1760 - 1836)"
   tagline = ##f
 }
-
-%{
-%Source: https://www.harptabs.com/song.php?ID=4436
-Song: 	-6 -7 7 -6 7 7 -7 -6 -7 5
--7 7 -8 -7 -8 -8 7 -7 -6
-|: -6 -10 9 -10 9 -9 -9 8 -8 8 -6
--9 -8 -9 7 -8 -8 7 -7 -6 :|
-%}
 
 \include "harmonica.ly"
 \include "style.ly"
@@ -27,20 +16,34 @@ Song: 	-6 -7 7 -6 7 7 -7 -6 -7 5
 #(define compile-midi (ly:get-option 'compile-midi))
 
 melodie = {
-  \time 2/4
-  \tempo 4 = 105
-  a4. b8 c4. a8 c c b a b4 e,
-  \break
-  b'4. c8 d4. b8 d8 d c b a2
-  \break
-  \bar ".|:"
-  e'4 a g ( a8 ) g f f e d e4 a,
-  r8 f'4 d8 e4. c8 b8 e, c' b a2 
-  \bar ":|."
+  \time 4/4
+  \tempo 4 = 100
+
+  %\clef "treble_8" % "treble^8" "treble_8"
+  %\key f \major  % Définit l'armure avec si♭
+  %\key d \major % Tonalité de Ré majeur (fa♯, do♯)
+  %\key g \major % Tonalité de Sol majeur (fa♯)
+  \key c \major
+  
+  r2 r8 g8 g g | c4 c d d | g4. e8 c8. c16 e8. c16 | a4 f'2 d8. b16 |
+  %\break
+  c2 r4 c8. d16 | e4 e e f8. e16 | e4 d r4 d8. e16 | f4 f f g8. f16 |
+  %\break
+  e2 r4 g8. g16 | g4 e8. c16 g'4 e8. c16  | g2 r8 g8 g8. b16 | d2 f4 d8. b16 |
+  %\break
+  c2 bes | a4 c8. c16 c4 b8. c16 | d2. r8 d8 | ees4 ees4 ~ ees8 ees f g |
+  %\break
+  d2. ees8 d | c4. c8 c ees d c | c4 b r4 r8. g'16 | g2 r8 g8 e8. c16 |
+  %\break
+  d2 r4 r8. g16 | g2 r8 g8 e8. c16 | d2 r4 g,4 | c2 r4 d4 |
+  %\break
+  e1 | f2 g4 a | d,2 r4 a'4 g2 ~ g8. e16 f8. d16 | c1
+   \bar "|."
 }
 \addlyrics {
-
+  
 }
+
 
 % ============================
 % SCORE DIATONIQUE
@@ -87,7 +90,7 @@ midiScore =
     }
   }
   \midi {
-    \tempo 4 = 105
+    \tempo 4 = 100
   }
 }
 
