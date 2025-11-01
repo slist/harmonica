@@ -2,9 +2,6 @@
 
 \header {
   title = "Ah! Les Crocodiles"
-  %instrument = "Harmonica en C"
-  %composer = "Anonyme"
-  %date = ""
   tagline = ##f
 }
 
@@ -12,14 +9,9 @@
 \include "style.ly"
 
 % Options de compilation personnalisées
-
 #(define compile-diatonique (ly:get-option 'compile-diatonique))
 #(define compile-chromatique (ly:get-option 'compile-chromatique))
 #(define compile-midi (ly:get-option 'compile-midi))
-
-% ============================
-% MÉLODIE DE LA COMPTINE
-% ============================
 
 melodie = {
   \time 2/4
@@ -80,9 +72,7 @@ Le crocodile s'y jeta subitement
 S'en retourna vers ses petits enfants
 Notre éléphant d'une trompe plus fière
 Voulut alors accompagner ce chant
-
 %}
-
 
 % ============================
 % SCORE DIATONIQUE
@@ -92,8 +82,7 @@ diatoniqueScore =
 \score {
   <<
     \new Staff { 
-      %\set Staff.instrumentName = "Harmonica diatonique (Do)"
-      %\clef treble
+
       \diatonicHarmonicaTab \relative c'' {
         \melodie
       }
@@ -101,7 +90,6 @@ diatoniqueScore =
   >>
   \layout { }
 }
-
 
 % ============================
 % SCORE CHROMATIQUE
@@ -111,16 +99,13 @@ chromatiqueScore =
 \score {
   <<
     \new Staff { 
-      %\set Staff.instrumentName = "Harmonica chromatique (Do)"
-      %\clef treble
-      \chromaticHarmonicaTab \relative c'' {
+      \chromaticHarmonicaTab \relative c' {
         \melodie
       }
     }
   >>
   \layout { }
 }
-
 
 % ============================
 % SCORE MIDI
@@ -138,21 +123,6 @@ midiScore =
     \tempo 4 = 100
   }
 }
-
-% ============================
-% COMPILATION SÉPARÉE
-% ============================
-
-% Pour générer la version diatonique :
-% lilypond -dcompile-diatonique <fichier.ly>
-
-% Pour générer la version chromatique :
-% lilypond -dcompile-chromatique <fichier.ly>
-
-% Pour générer le fichier midi :
-% lilypond --formats=midi -dcompile-midi <fichier.ly>
-
-% Inclusion conditionnelle des scores
 
 #(if compile-diatonique
      (ly:parser-include-string "\\diatoniqueScore"))
