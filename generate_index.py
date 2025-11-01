@@ -49,4 +49,10 @@ html += "</table>\n</body>\n</html>"
 with open(os.path.join(dossier, "index.html"), "w", encoding="utf-8") as f:
     f.write(html)
 
+# Affiche le nombre de partitions traitées
+print(f"Nombre de partitions diatoniques: {len(partitions_diat)}")
+print(f"Nombre de partitions chromatiques: {len(partitions_chro)}")
+print(f"Nombre de fichiers MIDI: {len(midis)}")
+print(f"Nombre de fichiers MP3: {len(mp3s)}")
+
 print("index.html généré avec succès !")
