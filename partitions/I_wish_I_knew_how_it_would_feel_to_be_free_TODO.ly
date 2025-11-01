@@ -68,45 +68,46 @@ melodie = \relative do'' {
 
   \bar "|."  
 }
-\addlyrics {
-  And I wi -- sh I knew how
-It would feel to be free
-I wi -- sh that I could break
-All the chains holding me
-I wi -- sh I could say
-All the things that I'd like to say
-Say 'em loud say 'em clear
-For the whole round world to hear
-I wi -- sh I could share
-All the love that's in my heart
-Remove all the bars
-that keep us apart
-And I wi -- sh you could know
-What it means to be me
-Then you'd see and agree
-Every man should be free
-I wi -- sh I could live
-Like I'm longin' to live
-I wi -- sh I could give
-What I'm longin' to give
-And I wi -- sh I could do
-All the things I'd like to do
-You know they'll still miss part of you
-Yes Sir...
-And I'm way way over due
-I wish I could be like a bird up in the sky
-How sweet it would be
-If I found out I could fly
-So long to my song
-And look down upon Ihe sea
-And I sing because I know
-I would see you
-I sing because I know
-I would see you
-And I sing because I know
-I would see you
-To be free, yeah
-}
+
+% \addlyrics {
+% And I wi -- sh I knew how
+% It would feel to be free
+% I wi -- sh that I could break
+% All the chains holding me
+% I wi -- sh I could say
+% All the things that I'd like to say
+% Say 'em loud say 'em clear
+% For the whole round world to hear
+% I wi -- sh I could share
+% All the love that's in my heart
+% Remove all the bars
+% that keep us apart
+% And I wi -- sh you could know
+% What it means to be me
+% Then you'd see and agree
+% Every man should be free
+% I wi -- sh I could live
+% Like I'm longin' to live
+% I wi -- sh I could give
+% What I'm longin' to give
+% And I wi -- sh I could do
+% All the things I'd like to do
+% You know they'll still miss part of you
+% Yes Sir...
+% And I'm way way over due
+% I wish I could be like a bird up in the sky
+% How sweet it would be
+% If I found out I could fly
+% So long to my song
+% And look down upon Ihe sea
+% And I sing because I know
+% I would see you
+% I sing because I know
+% I would see you
+% And I sing because I know
+% I would see you
+% To be free, yeah
+% }
 
 % ============================
 % SCORE DIATONIQUE
