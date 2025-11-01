@@ -1,4 +1,4 @@
-\version "2.24.4"
+\version "2.24.3"
 \header {
   title = "I wish I knew how it would feel to be free"
   composer = "Nina Simone"
