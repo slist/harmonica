@@ -416,3 +416,11 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+# Added file types for harmonica project
+*.ps
+*.pdf
+*.midi
+*.mid
+*.wav
+*.mp3

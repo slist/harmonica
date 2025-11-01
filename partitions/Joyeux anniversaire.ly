@@ -2,8 +2,6 @@
 
 \header {
   title = "Joyeux anniversaire"
-  composer = ""
-  date = ""
   tagline = ##f
 }
 
@@ -11,28 +9,32 @@
 \include "style.ly"
 
 % Options de compilation personnalisées
-
 #(define compile-diatonique (ly:get-option 'compile-diatonique))
 #(define compile-chromatique (ly:get-option 'compile-chromatique))
 #(define compile-midi (ly:get-option 'compile-midi))
 
 melodie = {
   \time 3/4
-  r2
-  g8. g16 a4 g c b2
+  
+  %r2 --> la première mesure est incomplète (on appelle ça une anacrouse ou “pickup measure”).
+  %   --> on peut afficher un silence (r2):q ou rien et signifier la fin de l'anacrouse avec la
+  %   --> double barre verticale.
+  
+  \partial 4
+  g8. g16 \bar "||" a4 g c | b2
   \break
-  g8. g16 a4 g d' c2
+  g8. g16 | a4 g d' | c2
   \break
-  g8. g16 g'4 e c b a\fermata % Point d'orgue, il indique que la note ou le silence sur lequel il est placé doit être prolongé au-delà de sa durée normale, selon l'interprétation du musicien ou du chef d'orchestre.
+  g8. g16 | g'4 e c | b a\fermata % Point d'orgue, il indique que la note ou le silence sur lequel il est placé doit être prolongé au-delà de sa durée normale, selon l'interprétation du musicien ou du chef d'orchestre.
   \break
-  f'8. f16 e4 c d c2\fermata
+  f'8. f16 | e4 c d | c2.
   \bar "|."
 }
 \addlyrics {
-  Joy -- eux a -- nni -- ver -- saire.
-  Joy -- eux a -- nni -- ver -- saire.
-  Joy -- eux a -- nni -- ver -- sai -- re.
-  Joy -- eux a -- nni -- ver -- saire.
+  Joy -- eux an -- ni -- ver -- saire.
+  Joy -- eux an -- ni -- ver -- saire.
+  Joy -- eux an -- ni -- ver -- sai -- re.
+  Joy -- eux an -- ni -- ver -- saire.
 }
 
 
@@ -93,3 +95,4 @@ midiScore =
 #(if compile-midi
      (ly:parser-include-string "\\midiScore"))
 
+\diatoniqueScore
