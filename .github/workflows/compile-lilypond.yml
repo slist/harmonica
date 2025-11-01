@@ -25,10 +25,10 @@ jobs:
         run: |
           python -m pip install --upgrade pip
 
-      - name: Install LilyPond
+      - name: Install LilyPond fluidsynth and lame
         run: |
           sudo apt-get update
-          sudo apt-get install -y lilypond
+          sudo apt-get install -y lilypond fluidsynth fluid-soundfont-gm lame
           # Check lilypond version
           lilypond --version
 
@@ -48,6 +48,20 @@ jobs:
 
             # MIDI output
             lilypond --formats=midi -dcompile-midi -o "output/${base}" "${file}"
+          done
+
+      - name: Generate MP3 files from MIDI
+        run: |
+          shopt -s nullglob
+          find output -type f -name "*.midi" -print0 | while IFS= read -r -d '' midi_file; do
+            base=$(basename "${midi_file}" .midi)
+            wav_file="output/${base}.wav"
+            echo "Generating WAV for ${midi_file}..."
+            fluidsynth -ni /usr/share/sounds/sf2/FluidR3_GM.sf2 "${midi_file}" -F "${wav_file}" -r 44100
+            mp3_file="output/${base}.mp3"
+            echo "Generating MP3 for ${wav_file}..."
+            lame --preset standard "${wav_file}" "${mp3_file}"
+            rm "${wav_file}"
           done
 
       - name: Generate index.html
