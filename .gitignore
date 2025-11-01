@@ -418,9 +418,12 @@ FodyWeavers.xsd
 *.msp
 
 # Added file types for harmonica project
+# From LilyPond: https://github.com/github/gitignore/blob/main/Lilypond.gitignore
 *.ps
 *.pdf
 *.midi
 *.mid
 *.wav
 *.mp3
+*.log
+*~
