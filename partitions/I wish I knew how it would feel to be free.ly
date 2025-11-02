@@ -176,4 +176,3 @@ midiScore =
 
 %\diatoniqueScore
 %\chromatiqueScore
-%\midiScore
