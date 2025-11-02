@@ -2,17 +2,15 @@
 
 \header {
   title = "Hard Times"
-  instrument = "Harmonica en C"
-  arranger = "Stephen Foster"
+  composer = "Stephen Foster"
   tagline = ##f
 }
 
-%Source:
-%https://www.wedesoft.de/software/2021/12/19/lilypond-bluesharp-tabs/
+%From https://www.wedesoft.de/software/2021/12/19/lilypond-bluesharp-tabs/
+
 
 \include "harmonica.ly"
 \include "style.ly"
-
 
 % Options de compilation personnalisées
 
@@ -74,7 +72,6 @@ diatoniqueScore =
   \layout { }
 }
 
-
 % ============================
 % SCORE CHROMATIQUE
 % ============================
@@ -90,7 +87,6 @@ chromatiqueScore =
   >>
   \layout { }
 }
-
 
 % ============================
 % SCORE MIDI
@@ -109,21 +105,7 @@ midiScore =
   }
 }
 
-% ============================
-% COMPILATION SÉPARÉE
-% ============================
-
-% Pour générer la version diatonique :
-% lilypond -dcompile-diatonique <fichier.ly>
-
-% Pour générer la version chromatique :
-% lilypond -dcompile-chromatique <fichier.ly>
-
-% Pour générer le fichier midi :
-% lilypond --formats=midi -dcompile-midi <fichier.ly>
-
 % Inclusion conditionnelle des scores
-
 #(if compile-diatonique
      (ly:parser-include-string "\\diatoniqueScore"))
 #(if compile-chromatique
