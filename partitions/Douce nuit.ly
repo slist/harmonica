@@ -1,10 +1,14 @@
 \version "2.24.3"
 
 \header {
-  title = "Hymne à la joie"
-  composer = "L. W. Beethoven"
+  title = "Silent night - Douce nuit"
+  composer = "Franz Xaver Gruber"
   tagline = ##f
 }
+
+\markup " "
+\markup " "
+\markup " "
 
 \include "harmonica.ly"
 \include "style.ly"
@@ -17,23 +21,29 @@
 #(define compile-midi (ly:get-option 'compile-midi))
 
 melodie = {
-  \time 4/4
-  \tempo 4 = 80
+  \time 3/4
+  %\tempo 4 = 80
 
   %\key sol \major % Sol majeur (un dièse : fa♯)
   %\key re \major % Ré majeur (fa♯, do♯)
   %\key sib \major  % Si♭ (Si♭, Mi♭)
   
-  mi4 mi fa sol | sol fa mi re | do do re mi | mi4. re8 re2
+  
+  sol4. la8 sol4 | mi2. | sol4. la8 sol4 | mi2. | re'2 re4 | si2. | do2 do4 | sol2. | la2 la4 | do4. si8 la4 | sol4. la8 sol4 |
   \break
-  mi4 mi fa sol | sol fa mi re | do do re mi | re4. do8 do2
-  \break
-  re4 re mi do | re mi8 fa mi4 do | re mi8 fa mi4 re | do re sol,2 |
-  \break
-  mi'4 mi fa sol | sol fa mi re | do do re mi | re4. do8 do2
+  mi2. | la2 la4 | do4. si8 la4 sol4. la8 sol4 | mi2. | re'2 re4 | fa4. re8  si4 | do2. | mi2 r4 | do4 sol mi | sol4. fa8 re4 | do2.~ | do2 r4
+  
+  %\break
+  
   \bar "|."
 }
 \addlyrics {
+  Dou -- " " ce nuit, sain -- " " te nuit!
+  Dans les cieux, l'as -- tre luit.
+  Le mys -- tère an -- non -- cé s'ac -- com -- plit.
+  Cet en -- fant sur la paille en -- dor -- mi,
+  c'est " " l'a -- mour in -- fi -- ni!
+  C'est " " l'a -- mour in -- fi -- ni!
 }
 
 % ============================
@@ -44,7 +54,7 @@ diatoniqueScore =
 \score {
   <<
     \new Staff { 
-      \diatonicHarmonicaTab \relative do'' {
+      \diatonicHarmonicaTab \relative do''' {
         \melodie
       }
     }
@@ -81,7 +91,7 @@ midiScore =
     }
   }
   \midi {
-    \tempo 4 = 80
+    \tempo 4 = 90
   }
 }
 

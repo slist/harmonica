@@ -2,6 +2,8 @@
 
 \header {
   title = "Amazing Grace"
+  meter = "Hymn"
+  arranger = "Trad. arr."
   composer = "John Newton"
   tagline = ##f
 }
@@ -136,3 +138,6 @@ midiScore =
 #(if compile-midi
      (ly:parser-include-string "\\midiScore"))
 
+
+%\chromatiqueScore
+%\midiScore
