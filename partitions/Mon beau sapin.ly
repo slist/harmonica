@@ -70,7 +70,7 @@ diatoniqueScore =
 \score {
   <<
     \new Staff { 
-      \diatonicHarmonicaTab \relative c'' {
+      \diatonicHarmonicaTab \relative c' {
         \melodie
       }
     }
@@ -86,7 +86,7 @@ chromatiqueScore =
 \score {
   <<
     \new Staff { 
-      \chromaticHarmonicaTab \relative c'' {
+      \chromaticHarmonicaTab \relative c' {
         \melodie
       }
     }
@@ -102,7 +102,7 @@ midiScore =
 \score {
   \new Staff {
     \set Staff.midiInstrument = #"harmonica"
-    \relative c'' {
+    \relative c' {
       \melodie
     }
   }
@@ -119,3 +119,6 @@ midiScore =
 #(if compile-midi
      (ly:parser-include-string "\\midiScore"))
 
+%\diatoniqueScore
+%\chromatiqueScore
+%\midiScore
