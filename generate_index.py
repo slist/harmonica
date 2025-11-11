@@ -27,6 +27,12 @@ html = """<html>
 </head>
 <body>
 <h1>Partitions Harmonica</h1>
+<h2>Compilation de toutes les partitions</h2>
+<ul>
+<li><a href="all_diatonique.pdf">Toutes les partitions diatoniques (PDF)</a></li>
+<li><a href="all_chromatique.pdf">Toutes les partitions chromatiques (PDF)</a></li>
+</ul>
+<br>
 <table>
 <tr>
     <th>Diatonique</th>
