@@ -3,7 +3,6 @@
 \header {
   title = "Mon beau sapin"
   instrument = "Harmonica en C"
-  composer = "Tonton Stéphane"
   tagline = ##f
 }
 
