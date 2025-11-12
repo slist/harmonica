@@ -2,11 +2,7 @@
 
 \header {
   title = "When the Saints go marching in"
-  instrument = "Harmonica en C"
-  %(Negro spirituel dont l'origine remonterait aux alentours des années 1896)
-  %composer = "Louis Armstrong" % Aug 4, 1901 -- Jul 6, 1971 
   tagline = ##f
-  % Gospel
 }
 
 \include "harmonica.ly"
@@ -20,7 +16,6 @@
 #(define compile-midi (ly:get-option 'compile-midi))
 
 melodie = {
-  %\clef "treble^8" % "treble_8"
   \tempo 4 = 144
   r4 c, e f g1
   \break
@@ -53,7 +48,7 @@ diatoniqueScore =
 \score {
   <<
     \new Staff { 
-      \diatonicHarmonicaTab \relative c' {
+      \diatonicHarmonicaTab \relative c''' {
         \melodie
       }
     }
@@ -69,7 +64,7 @@ chromatiqueScore =
 \score {
   <<
     \new Staff { 
-      \chromaticHarmonicaTab \relative c' {
+      \chromaticHarmonicaTab \relative c''' {
         \melodie
       }
     }
