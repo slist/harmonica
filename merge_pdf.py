@@ -15,23 +15,24 @@ partitions_chro.sort()
 merger_diat = PdfMerger()
 merger_chro = PdfMerger()
 
-# Ajoute chaque PDF dans l’ordre
+# Fusionne les PDFs diatoniques
 for pdf in partitions_diat:
-    print(f"Ajout de {pdf}")
-    merger_diat.append(pdf)
+    chemin_pdf = os.path.join(dossier, pdf)
+    print(f"Ajout de {chemin_pdf}")
+    merger_diat.append(chemin_pdf)
 
-# Sauvegarde le résultat final
-merger_diat.write("all_diatonique.pdf")
+# Sauvegarde le résultat final dans le dossier output
+merger_diat.write(os.path.join(dossier, "all_diatonique.pdf"))
 merger_diat.close()
 
-# Ajoute chaque PDF dans l’ordre
+# Fusionne les PDFs chromatiques
 for pdf in partitions_chro:
-    print(f"Ajout de {pdf}")
-    merger_chro.append(pdf)
+    chemin_pdf = os.path.join(dossier, pdf)
+    print(f"Ajout de {chemin_pdf}")
+    merger_chro.append(chemin_pdf)
 
-# Sauvegarde le résultat final
-merger_chro.write("all_chromatique.pdf")
+# Sauvegarde le résultat final dans le dossier output
+merger_chro.write(os.path.join(dossier, "all_chromatique.pdf"))
 merger_chro.close()
-
 
 print("Fusion terminéee avec succès !")
