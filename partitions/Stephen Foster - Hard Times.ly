@@ -80,7 +80,7 @@ chromatiqueScore =
 \score {
   <<
     \new Staff { 
-      \chromaticHarmonicaTab \relative c'' {
+      \chromaticHarmonicaTab \relative c' {
         \melodie
       }
     }
