@@ -42,9 +42,9 @@ def creer_page_index(titre, liste_pdfs, fichier_sortie):
 
         # Le nom se termine par _diatonique ou _chromatique, on le retire
         if nom.endswith("_diatonique"):
-            nom = nom[:-12]
+            nom = nom[:-11]
         elif nom.endswith("_chromatique"):
-            nom = nom[:-13]
+            nom = nom[:-12]
 
         texte = f"{numero:>2}. {nom}"
         c.drawString(2 * cm, y, texte)
@@ -89,9 +89,9 @@ def fusionner_avec_index(liste_pdfs, sortie, titre_index):
 
         # Retire le suffixe _diatonique ou _chromatique pour le nom du signet
         if nom_sans_ext.endswith("_diatonique"):
-            nom_sans_ext = nom_sans_ext[:-12]
+            nom_sans_ext = nom_sans_ext[:-11]
         elif nom_sans_ext.endswith("_chromatique"):
-            nom_sans_ext = nom_sans_ext[:-13]
+            nom_sans_ext = nom_sans_ext[:-12]
 
         print(f"Ajout de {chemin_pdf} ({num_pages} pages)")
         merger.append(chemin_pdf)
