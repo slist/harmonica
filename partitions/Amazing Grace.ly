@@ -21,14 +21,7 @@
 #(define compile-midi (ly:get-option 'compile-midi))
 
 melodie = {
-  \time 3/4                  % Définit la mesure
-  %\key g \major  % Sol majeur (un dièse : fa♯)
-  
-   % Afficher le numéro de mesure seulement au début de chaque ligne sauf la première
-  %\override Score.BarNumber.break-visibility = #'#(#f #t #t)
-  %\override Score.BarNumber.stencil = #ly:text-interface::print
-  %\set Score.barNumberVisibility = #all-bar-numbers-visible
-  %\set Score.measurePosition = #0
+  \time 3/4
 
   r2
   d4 | g2 b4 | b2 a4 | g2 e4 | d2 d4 |
