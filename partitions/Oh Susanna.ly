@@ -22,7 +22,6 @@
 melodie = {
   \time 4/4
   \tempo 4 = 150
-  %\tempo "Moderately" % 4=100
   %\tempo "Moderately" 4=100
   
   % EN
