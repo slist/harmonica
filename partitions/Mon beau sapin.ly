@@ -2,7 +2,6 @@
 
 \header {
   title = "Mon beau sapin"
-  instrument = "Harmonica en C"
   tagline = ##f
 }
 

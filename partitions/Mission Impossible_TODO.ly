@@ -2,7 +2,6 @@
 
 \header {
   title = "Mission Impossible"
-  %instrument = "Harmonica"
   tagline = ##f
 }
 
