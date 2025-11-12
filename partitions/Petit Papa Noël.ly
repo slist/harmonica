@@ -21,25 +21,80 @@ melodie = {
 
   \partial 4
   re4 | sol sol sol la | sol2 r4 sol8 la | si4 si si do |
-  \break
+  %\break
   si2 r4 la4 | sol4. sol8 sol sol fad mi | re2. re8 re | sol2 sol8 sol fad sol |
-  \break
+  %\break
   la2. re,4 | sol4 sol sol la | sol2 r4 sol8 la | si4 si si do |
-  \break
+  %\break
   si2. la4 | sol4. sol8 sol sol fad mi | re2. re8 re | sol2 sol8 sol la la |
-  \break
+  %\break
   sol2. r4 | mi8 mi mi mi mi4 mi8 fad | sol4. mi8 mi4 re | sol8 sol sol sol sol4 fad8 sol |
-  \break
+  %\break
   la2. r4 | sib8 sib sib sib sib4 la8 sib | do4. la8 sol4 fa4 | sib sib8 sib do4 do8 do |
-  \break
+  %\break
   re2 r4 re,4 | sol4 sol sol la | sol2. sol8 la | si4 si si do |
-  \break
+  %\break
   si2. la4 | sol4. sol8 sol sol fad mi | re2. re8 re | sol2 sol8 sol la la |
-  \break
+  %\break
   sol2. re4 | mi sol la do | re1 
   \bar "|."
 }
 \addlyrics {
+%C'est la belle nuit de Noël
+%La neige étend son manteau blanc
+%Et les yeux levés vers le ciel
+%À genoux, les petits enfants
+%Avant de fermer les paupières
+%Font une dernière prière.
+
+Pe -- tit pa -- pa No -- ël,
+Quand tu des -- cen -- dras du ciel,
+Av -- ec des jou -- ets par mil -- liers,
+N'ou -- blie pas mon pe -- tit sou -- lier.
+
+Mais av -- ant de par -- tir,
+Il fau -- dra bien te cou -- vrir,
+De -- hors tu dois a -- voir si froid,
+C'est un peu à  cau -- se de moi.
+
+Il me tar -- de tant que le jour se lè -- ve,
+Pour voir ce que tu m'as appor -- té,
+Tous les beaux jou -- joux que je vois en rê -- ve,
+Et que je t'ai com -- man -- dés.
+
+Pe -- tit pa -- pa No -- ël,
+Quand tu des -- cen -- dras du ciel,
+Av -- ec des jou -- ets par mil -- liers,
+N'ou -- blie pas mon pe -- tit sou -- lier.
+
+Pe -- tit pa -- pa No -- ël!
+
+Le marchand de sable est passé,
+Les enfants vont faire dodo,
+Et tu vas pouvoir commencer,
+Avec ta hotte sur le dos
+Au son des cloches des églises,
+Ta distribution de surprises.
+
+Petit papa Noël,
+Quand tu descendras du ciel
+Avec des jouets par milliers,
+N'oublie pas mon petit soulier.
+Si tu dois t'arrêter,
+Sur les toits du monde entier
+Tout ça avant demain matin,
+Mets toi vite, vite en chemin.
+
+Et quand tu seras sur ton beau nuage,
+Viens d'abord sur notre maison
+Je n'ai pas été tous les jours bien sage,
+Mais j'en demande pardon.
+
+Petit papa Noël,
+Quand tu descendras du ciel,
+Avec des jouets par milliers,
+N'oublie pas mon petit soulier.
+Petit papa Noël.
 }
 
 % ============================
@@ -100,5 +155,5 @@ midiScore =
      (ly:parser-include-string "\\midiScore"))
 
 %\diatoniqueScore
-%\chromatiqueScore
-%\midiScore
+\chromatiqueScore
+\midiScore
