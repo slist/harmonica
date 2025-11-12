@@ -63,7 +63,7 @@ diatoniqueScore =
 \score {
   <<
     \new Staff { 
-      \diatonicHarmonicaTab \relative c' {
+      \diatonicHarmonicaTab \relative c''' {
         \melodie
       }
     }
@@ -79,7 +79,7 @@ chromatiqueScore =
 \score {
   <<
     \new Staff { 
-      \chromaticHarmonicaTab \relative c' {
+      \chromaticHarmonicaTab \relative c''' {
         \melodie
       }
     }
