@@ -5,34 +5,33 @@ dossier = "output"  # dossier contenant PDFs, MIDIs et MP3s
 fichiers = os.listdir(dossier)
 
 # Filtrer les fichiers à inclure
-partitions_diat = [f for f in fichiers if f.endswith("_diatonique.pdf")]
-partitions_chro = [f for f in fichiers if f.endswith("_chromatique.pdf")]
+partitions_diat = sorted(f for f in fichiers if f.endswith("_diatonique.pdf"))
+partitions_chro = sorted(f for f in fichiers if f.endswith("_chromatique.pdf"))
 
-partitions_diat.sort()
-partitions_chro.sort()
+def fusionner_avec_index(liste_pdfs, sortie):
+    merger = PdfMerger()
+    page_offset = 0  # permet de suivre à quelle page commence chaque document
 
-# Crée les objets de fusion
-merger_diat = PdfMerger()
-merger_chro = PdfMerger()
+    for pdf in liste_pdfs:
+        chemin_pdf = os.path.join(dossier, pdf)
+        nom_sans_ext = os.path.splitext(pdf)[0]
+        print(f"Ajout de {chemin_pdf}")
+        merger.append(chemin_pdf)
+        # Ajoute un signet pointant vers la première page du document ajouté
+        merger.add_outline_item(nom_sans_ext, page_offset)
+        # Met à jour l’offset pour le prochain fichier
+        num_pages = merger.pages[-1].get("/Count", 1) if merger.pages else 1
+        page_offset += num_pages
 
-# Fusionne les PDFs diatoniques
-for pdf in partitions_diat:
-    chemin_pdf = os.path.join(dossier, pdf)
-    print(f"Ajout de {chemin_pdf}")
-    merger_diat.append(chemin_pdf)
+    # Sauvegarde le PDF final
+    merger.write(sortie)
+    merger.close()
+    print(f"Fichier généré : {sortie}")
 
-# Sauvegarde le résultat final dans le dossier output
-merger_diat.write(os.path.join(dossier, "all_diatonique.pdf"))
-merger_diat.close()
+# Fusionne les diatoniques
+fusionner_avec_index(partitions_diat, os.path.join(dossier, "all_diatonique.pdf"))
 
-# Fusionne les PDFs chromatiques
-for pdf in partitions_chro:
-    chemin_pdf = os.path.join(dossier, pdf)
-    print(f"Ajout de {chemin_pdf}")
-    merger_chro.append(chemin_pdf)
+# Fusionne les chromatiques
+fusionner_avec_index(partitions_chro, os.path.join(dossier, "all_chromatique.pdf"))
 
-# Sauvegarde le résultat final dans le dossier output
-merger_chro.write(os.path.join(dossier, "all_chromatique.pdf"))
-merger_chro.close()
-
-print("Fusion terminéee avec succès !")
+print("Fusion terminée avec succès avec index !")
