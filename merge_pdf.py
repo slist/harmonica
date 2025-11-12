@@ -39,6 +39,13 @@ def creer_page_index(titre, liste_pdfs, fichier_sortie):
 
     for pdf in liste_pdfs:
         nom = os.path.splitext(pdf)[0]
+
+        # Le nom se termine par _diatonique ou _chromatique, on le retire
+        if nom.endswith("_diatonique"):
+            nom = nom[:-12]
+        elif nom.endswith("_chromatique"):
+            nom = nom[:-13]
+
         texte = f"{numero:>2}. {nom}"
         c.drawString(2 * cm, y, texte)
         y -= 16
@@ -51,9 +58,9 @@ def creer_page_index(titre, liste_pdfs, fichier_sortie):
         numero += 1
 
     # Pied de page
-    c.setFont("Helvetica-Oblique", 10)
-    c.setFillColor(HexColor("#555555"))
-    c.drawCentredString(largeur / 2, 40, "Généré automatiquement avec amour 💙")
+    #c.setFont("Helvetica-Oblique", 10)
+    #c.setFillColor(HexColor("#555555"))
+    #c.drawCentredString(largeur / 2, 40, "Généré automatiquement avec amour 💙")
 
     c.save()
 
@@ -79,6 +86,13 @@ def fusionner_avec_index(liste_pdfs, sortie, titre_index):
             continue
 
         nom_sans_ext = os.path.splitext(pdf)[0]
+
+        # Retire le suffixe _diatonique ou _chromatique pour le nom du signet
+        if nom_sans_ext.endswith("_diatonique"):
+            nom_sans_ext = nom_sans_ext[:-12]
+        elif nom_sans_ext.endswith("_chromatique"):
+            nom_sans_ext = nom_sans_ext[:-13]
+
         print(f"Ajout de {chemin_pdf} ({num_pages} pages)")
         merger.append(chemin_pdf)
         merger.add_outline_item(nom_sans_ext, page_offset)
@@ -96,10 +110,10 @@ def fusionner_avec_index(liste_pdfs, sortie, titre_index):
 
 # Fusionne les diatoniques
 fusionner_avec_index(partitions_diat, os.path.join(dossier, "all_diatonique.pdf"),
-                     "Index des partitions diatoniques")
+                     "Index des partitions pour harmonica diatonique")
 
 # Fusionne les chromatiques
 fusionner_avec_index(partitions_chro, os.path.join(dossier, "all_chromatique.pdf"),
-                     "Index des partitions chromatiques")
+                     "Index des partitions pour harmonica chromatique")
 
 print("🎶 Fusion terminée avec succès avec page d’index et signets cliquables !")
