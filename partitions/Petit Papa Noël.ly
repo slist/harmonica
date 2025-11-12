@@ -5,9 +5,6 @@
   tagline = ##f
 }
 
-
-% From: https://www.free-scores.com/PDF_FR/anderson-gustav-mission-impossible-89474.pdf
-
 \include "harmonica.ly"
 \include "style.ly"
 
@@ -20,11 +17,7 @@
 
 melodie = {
   \time 4/4
-  %\tempo "Allegro molto" 4 = 170
-
   \key sol \major % fa♯
-
-  % TODO : 4 mesures vides
 
   \partial 4
   re4 | sol sol sol la | sol2 r4 sol8 la | si4 si si do |
@@ -37,10 +30,13 @@ melodie = {
   \break
   sol2. r4 | mi8 mi mi mi mi4 mi8 fad | sol4. mi8 mi4 re | sol8 sol sol sol sol4 fad8 sol |
   \break
-  la2. r4 | sib8 sib sib sib sib4 la8 si | do4. la8 sol4 fa4 | sib sib8 sib do4 do8 do |
+  la2. r4 | sib8 sib sib sib sib4 la8 sib | do4. la8 sol4 fa4 | sib sib8 sib do4 do8 do |
   \break
-  re2
- 
+  re2 r4 re,4 | sol4 sol sol la | sol2. sol8 la | si4 si si do |
+  \break
+  si2. la4 | sol4. sol8 sol sol fad mi | re2. re8 re | sol2 sol8 sol la la |
+  \break
+  sol2. re4 | mi sol la do | re1 
   \bar "|."
 }
 \addlyrics {
@@ -104,5 +100,5 @@ midiScore =
      (ly:parser-include-string "\\midiScore"))
 
 %\diatoniqueScore
-\chromatiqueScore
-\midiScore
+%\chromatiqueScore
+%\midiScore
