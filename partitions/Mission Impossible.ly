@@ -65,18 +65,18 @@ melodie = {
   \mark \markup { \musicglyph #"scripts.segno" }
   
   do8\f ( la mi2. ) r4 | do'8( la mib2. ) r4 | do'8( la re,2. ) r4 | do'8-- re-. r4 r4 r2 |
-  \break
+  %\break
   la4^\marcato\mf r8 la4^\marcato r8 do4^\marcato re^\marcato | la4^\marcato r8 la4^\marcato r8 sol4^\marcato sold4^\marcato \bar "||" do8\f^\markup { \box "A" } ( la sold'2. ) r4 | do,8( la sol'2.) r4 | do,8( la fad'2.) r4 |
   
   % un marcato indique qu’il faut jouer la note avec un accent fort et bref.
   
-  \break
+  %\break
   fa8-- mi8-. r4 r4 r2 | \bar "||" fa8\f ( re la2. ) r4 | fa'8 ( re lab2. ) r4 | fa'8 ( re sol,2. ) r4 | fa'8-- sol8-. r4 r4 r2 \bar "||" 
-  \break
-  do,8\f^\markup { \box "B" } ( la sold'2. ) r4 | do,8 ( la sol'2. ) r4 | do,8 ( la fad'2. ) r4 \mark \markup { \italic "To Coda" } \bar "||"
+  %\break
+  do,8\f^\markup { \box "B" } ( la sold'2. ) r4 | do,8 ( la sol'2. ) r4 | do,8 ( la fad'2. ) r4 \mark \markup { \bold "To Coda" } \bar "||"
   
   fa8-- mi8-. r8 mi4^\marcato r8 fa4^\marcato sol4^\marcato | mi4^\marcato\f r8 mi4^\marcato r8 fa4^\marcato sol4^\marcato |
-  \break
+  %\break
   mi4^\marcato r4 r4 r2 |
   
   \compressEmptyMeasures
@@ -86,15 +86,15 @@ melodie = {
   \unset Score.proportionalNotationDuration
   
   la,4^\marcato\mp r8 la4^\marcato r8 do4^\marcato dod^\marcato \bar "||" re2.\f~^\markup { \box "C" } re8 fa, la re | dod2.~ dod8 fa, la re |
-  \break
+  %\break
   do2.~ do8 si do si | sib la r8 re4^\marcato r8 fa4^\marcato sol4^\marcato | re4^\marcato r8 re4^\marcato r8 do8^\marcato la ( do dod ) \bar "||" re2.~ re8 mi re la |
-  \break
+  %\break
   dod2. ( dod8 ) re dod re | do2. ( dod8 ) si do si | sib la r8 la4^\marcato r8 do8^\marcato re ( fa fad ) \bar "||" sol2.~^\markup { \box "D" } sol8 sib, ( re sol ) |
-  \break
+  %\break
   fad2.~ fad8 sib, re fad | fa2. ( fad8 ) mi fa mi | mib re r8  sol,4^\marcato r8  sib4^\marcato do^\marcato \bar "||" re2.~ re8 mi re la |
-  \break
+  %\break
   dod2. ( dod8 ) dod re dod | do2. ( dod8) dod si sol | sib8 la r8 mi'4^\marcato r8 fa4^\marcato sol4^\marcato \bar "||" la4^\marcato r4 r4 r2\mark \markup { \bold "D.S. al Coda" } | r1 r4 \bar "||"
-  \break
+  %\break
   % Coda section
   \coda 
   la,4^\marcato r8 la4^\marcato r8 sib4^\marcato do^\marcato | si^\marcato r4 r4 sol'8 la4.~ | la2.~ la2
@@ -214,7 +214,7 @@ midiScore =
     \line {       "   • pp = pianissimo : très doux" }
     \line {       "   • p = piano : doux" }
     \line { \bold "   • mp" " = mezzo-piano : moyennement doux" }
-    \line { \bold "   • mf" " = mezzo-forte : moyennement fort" }
+    \line { \bold "   • mf = mezzo-forte : moyennement fort" }
     \line { \bold "   • f" " = forte : fort" }
     \line {       "   • ff = fortissimo : très fort" }
     \line {       "   • sfz = sforzando : accent fort et soudain" }
