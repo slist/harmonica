@@ -179,8 +179,8 @@ midiScore =
      (ly:parser-include-string "\\midiScore"))
 
 %\diatoniqueScore
-\chromatiqueScore
-\midiScore
+%\chromatiqueScore
+%\midiScore
 
 %\pageBreak
 
@@ -188,9 +188,6 @@ midiScore =
   \column {
     \vspace #1
     \fill-line { \bold "Commentaires" }
-    %    "Voici un paragraphe de texte placé sous la partition."
-    %    "Tu peux écrire plusieurs lignes comme ceci."
-    %    "Elles seront toutes alignées proprement."
   }
 }
 
@@ -217,7 +214,7 @@ midiScore =
     \line {       "   • pp = pianissimo : très doux" }
     \line {       "   • p = piano : doux" }
     \line { \bold "   • mp" " = mezzo-piano : moyennement doux" }
-    \line {       "   • mf = mezzo-forte : moyennement fort" }
+    \line { \bold "   • mf" " = mezzo-forte : moyennement fort" }
     \line { \bold "   • f" " = forte : fort" }
     \line {       "   • ff = fortissimo : très fort" }
     \line {       "   • sfz = sforzando : accent fort et soudain" }
@@ -244,7 +241,7 @@ midiScore =
     \vspace #1
     \bold "Les chemins musicaux : Segno, D.S. al Coda, Coda"
     \vspace #0.5
-    \line { "Tu joues normal… jusqu’à lire : D.S. al Coda" }
+    \line { "Tu joues normal… jusqu’à lire : D.S. al Coda (= Dal Segno à la Coda)" }
     \line { "Tu reviens au symbole 𝄋 (Segno)" }
     \line { "Tu rejoues à partir du Segno jusqu’à voir : To Coda" }
     \line { "Tu sautes vers la Coda, symbole 𝄌 placé plus loin (dernière ligne pour Mission Impossible)" }
