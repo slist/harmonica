@@ -38,6 +38,31 @@ melodie = {
   Ha -- ha -- ha, you and me, lit -- tle brown jug, don't I love thee.
 }
 
+accords = \chordmode {
+  \partial 4
+  s4
+  
+  la1
+  re1
+  mi1:7
+
+  la1
+  la1
+  re1
+  mi1:7
+  la1
+
+  la1
+  re1
+  mi1:7
+  la1
+
+  la1
+  re1
+  mi1:7
+  la1
+}
+
 % ============================
 % SCORE DIATONIQUE
 % ============================
@@ -61,6 +86,9 @@ diatoniqueScore =
 chromatiqueScore = 
 \score {
   <<
+    \new ChordNames {
+      \accords
+    }
     \new Staff { 
       \chromaticHarmonicaTab \relative do'' {
         \melodie
