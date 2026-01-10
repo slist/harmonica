@@ -2,6 +2,8 @@
 
 \header {
   title = "Mon beau sapin"
+  subtitle = "O Tannenbaum"
+  composer = "Ernst Anschütz (1780 - 1861)"
   tagline = ##f
 }
 
@@ -19,36 +21,48 @@
 #(define compile-chromatique (ly:get-option 'compile-chromatique))
 #(define compile-midi (ly:get-option 'compile-midi))
 
+\layout {
+  \context {
+    \Lyrics
+    \override LyricText.font-size = #+1
+    \override LyricHyphen.minimum-distance = #0.5
+    \override LyricSpace.minimum-distance = #0.6
+  }
+}
+
+\paper {
+  markup-system-spacing.basic-distance = #20 % Espace entre titre et première portée
+  system-system-spacing.basic-distance = #20 % Espace entre les portées
+}
+
 melodie = {
   \time 3/4
-  r2 r8 g'8
-  c8. c16 c4. 
-  d8 e8. e16 e4. 
-  e8 d e f4 b, d c 
-  r8
-  g'8 g e a4. 
-  g8 g f f4. 
-  f8 f d g4. 
-  f8 f e e4
-  r8
-  g,8
-  c8. c16 c4.
-  d8 e8. e16 e4.
-  e8 d e f4 b, d c
-  r8
+  \tempo 4 = 80 % Caractère : Andante (calme, chantant)
+  
+  r2 r8 g'8 | c8. c16 c4. d8 | e8. e16 e4. 
+  \break
+  e8 | d e f4 b, | d c
+  \break
+  r8 g'8 | g e a4. g8 | g f f4. 
+  \break
+  f8 | f d g4. f8 | f e e4
+  \break
+  r8 g,8 | c8. c16 c4. d8 | e8. e16 e4.
+  \break
+  e8 d e f4 b, | d c  r4
   \bar "|."
 }
 \addlyrics {
   Mon beau sa -- pin, roi des fo -- rêts, que j'ai -- me ta ver -- du -- re!
   Quand par l'hi -- ver bois et gué -- rets sont dé -- pouil -- lés de leurs at -- traits
-  Mon beau sa -- pin, roi des fo -- rêts, tu gar -- des ta pa  -- ru -- re.
+  Mon beau sa -- pin, roi des fo -- rêts, tu gar -- des ta pa -- ru -- re.
 }
 
 %{
 2. Toi que Noël Planta chez nous,
 au saint anniversaire,
 joli sapin, comme ils sont doux
-Ee tes bonbons et tes joujoux.
+Et tes bonbons et tes joujoux.
 Toi que Noël planta chez nous
 par les mains de ma mère.
 
@@ -105,7 +119,7 @@ midiScore =
     }
   }
   \midi {
-    \tempo 4 = 100
+    \tempo 4 = 80
   }
 }
 
