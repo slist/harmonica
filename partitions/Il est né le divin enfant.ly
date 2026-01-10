@@ -2,9 +2,9 @@
 
 \header {
   title = "Il est né le divin enfant"
-  %instrument = "Harmonica en C"
-  %composer = "Anonyme"
-  %date = ""
+  %poet = "Placide Cappeau (1808–1877)"
+  %composer = "?"
+  %date = "XVIIᵉ ou XVIIIᵉ siècle"
   tagline = ##f
 }
 
@@ -19,6 +19,20 @@
 #(define compile-chromatique (ly:get-option 'compile-chromatique))
 #(define compile-midi (ly:get-option 'compile-midi))
 
+\layout {
+  \context {
+    \Lyrics
+    \override LyricText.font-size = #2
+    \override LyricHyphen.minimum-distance = #0.5
+    \override LyricSpace.minimum-distance = #0.6
+  }
+}
+
+\paper {
+  markup-system-spacing.basic-distance = #20 % Espace entre titre et première portée
+  system-system-spacing.basic-distance = #20 % Espace entre les portées
+}
+
 melodie = {
   \time 4/4
   \tempo 4 = 116
@@ -28,7 +42,9 @@ melodie = {
   %\key d \major % Tonalité de Ré majeur (fa♯, do♯)
   %\key g \major % Tonalité de Sol majeur (fa♯)
   
-  c4 f f a8 f | c4 f f2 | f4 f8 g a4 bes8 a | g4 f g g |
+  c4 f f a8 f | c4 f f2 |
+  \break
+  f4 f8 g a4 bes8 a | g4 f g g |
   \break
   c,4 f f a8 f | c4 f f2 |
   \break
@@ -48,7 +64,6 @@ melodie = {
   Il est né le di -- vin en -- fant, Chan -- tons tous son a -- vè -- ne -- "ment !"
   De -- puis plus de qua -- tre mille ans, Nous le pro -- met -- taient les pro -- phè -- tes 
   De -- puis plus de qua -- tre mille ans, Nous at -- ten -- dions cet heu -- reux temps.
-  
 }
 
 %{
@@ -114,7 +129,7 @@ chromatiqueScore =
     \new Staff { 
       %\set Staff.instrumentName = "Harmonica chromatique (Do)"
       %\clef treble
-      \chromaticHarmonicaTab \relative c'' {
+      \chromaticHarmonicaTab \relative c' {
         \melodie
       }
     }
@@ -161,3 +176,6 @@ midiScore =
      (ly:parser-include-string "\\chromatiqueScore"))
 #(if compile-midi
      (ly:parser-include-string "\\midiScore"))
+
+%\chromatiqueScore
+%\midiScore
