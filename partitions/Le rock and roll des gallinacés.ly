@@ -3,6 +3,11 @@
 \header {
   title = "Le rock and roll des gallinacés"
   composer = "Steve Waring (1943-)"
+  arranger = "Stéphane List"
+  
+  lyricsLang = #'(fr)
+
+  copyright = "© Steve Waring — Tous droits réservés"
   copyrightStatus = "copyrighted"
   tagline = ##f
 }
@@ -114,5 +119,5 @@ midiScore =
      (ly:parser-include-string "\\midiScore"))
 
 %diatoniqueScore
-\chromatiqueScore
-\midiScore
+%\chromatiqueScore
+%\midiScore
