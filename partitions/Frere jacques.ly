@@ -2,6 +2,8 @@
 
 \header {
   title = "Frère Jacques"
+  lyricsLang = #'(fr)
+  copyrightStatus = "public-domain"
   tagline = ##f
 }
 
