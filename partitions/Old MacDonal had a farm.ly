@@ -3,6 +3,8 @@
 \header {
   title = "Old MacDonald had a farm"
   composer = "Anonyme (XVIII siècle)"
+  lyricsLang = #'(en)
+  copyrightStatus = "public-domain"
   tagline = ##f
 }
 
@@ -119,5 +121,5 @@ midiScore =
      (ly:parser-include-string "\\midiScore"))
 
 %diatoniqueScore
-%\chromatiqueScore
-%\midiScore
+\chromatiqueScore
+\midiScore
