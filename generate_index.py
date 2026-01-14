@@ -11,7 +11,14 @@ def parse_ly_metadata(base_name):
     Cherche un fichier .ly correspondant et extrait
     copyrightStatus et lyricsLang depuis le \\header
     """
-    ly_file = os.path.join(dossier, f"{base_name}.ly")
+
+    # Chercher d'abord dans le dossier partitions
+    ly_file = os.path.join("partitions", f"{base_name}.ly")
+    
+    # Si pas trouvé, chercher dans output (fallback)
+    if not os.path.exists(ly_file):
+        ly_file = os.path.join(dossier, f"{base_name}.ly")
+    
     metadata = {
         "copyrightStatus": "unknown",
         "lyricsLang": []
