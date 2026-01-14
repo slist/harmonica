@@ -4,6 +4,8 @@
   title = "Au Clair de la Lune"
   instrument = "Harmonica en C"
   composer = "Anonyme"
+  copyrightStatus = "public-domain"
+  lyricsLang = #'(fr)
   date = ""
   tagline = ##f
 }
