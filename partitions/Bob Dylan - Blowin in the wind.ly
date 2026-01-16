@@ -3,7 +3,10 @@
 \header {
   title = "Blowin' In The Wind"
   instrument = "Harmonica en C"
-  composer = "Bob Dylan" % May 24, 1941 -
+  composer = "Bob Dylan (1941-)" % May 24, 1941 -
+  lyricsLang = #'(en)
+  copyrightStatus = "copyrighted"
+  date = "1962"
   tagline = ##f
 }
 

@@ -2,8 +2,9 @@
 
 \header {
   title = "Deck the halls"
-  %instrument = "Harmonica en C"
   %composer = ""
+  lyricsLang = #'(en)
+  copyrightStatus = "public-domain" % Mélodie galloise traditionnelle (XVIe siècle)
   tagline = ##f
 }
 

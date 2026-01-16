@@ -2,6 +2,9 @@
 
 \header {
   title = "Auld Lang Syne - Ce n'est qu'un \"Au Revoir\""
+  poet = "Robert Burns (1759-1796)"
+  lyricsLang = % not set#'(en)
+  copyrightStatus = "public-domain"
   tagline = ##f
 }
 
@@ -18,10 +21,6 @@
 melodie = {
   \time 4/4
   \tempo 4 = 50
-
-  %\key sol \major % Sol majeur (un dièse : fa♯)
-  %\key re \major % Ré majeur (fa♯, do♯)
-  %\key sib \major  % Si♭ (Si♭, Mi♭)
   
   do8 fa8. fa16 fa8 la8 sol8. fa16 sol8
   \break

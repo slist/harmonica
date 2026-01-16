@@ -4,7 +4,9 @@
   title = "Amazing Grace"
   meter = "Hymn"
   arranger = "Trad. arr."
-  composer = "John Newton"
+  composer = "John Newton (1725-1807)"
+  lyricsLang = #'(en)
+  copyrightStatus = "public-domain"
   tagline = ##f
 }
 

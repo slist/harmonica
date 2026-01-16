@@ -3,6 +3,9 @@
 \header {
   title = "Dirty old town"
   instrument = "Harmonicas diatoniques en D et G, ou plus simplement chromatique"
+  composer = "Ewan MacColl (1915-1989)"
+  lyricsLang = #'(en)
+  % ??? copyrightStatus = "public-domain"
   tagline = ##f
 }
 

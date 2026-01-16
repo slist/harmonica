@@ -1,11 +1,9 @@
 \version "2.24.3"
 \header {
   title = "Dans la troupe"
-  %composer = "César Geoffray (1901 - 1972)" % Entrera dans le domaine public à partir du 1er janvier 2043
   %Ce chant n'est pas sous copyright : https://fr.scoutwiki.org/Dans_la_troupe
-  %opus = ""
-  %arranger = ""
-  %instrument = "Harmonica chromatique"
+  lyricsLang = #'(fr)
+  copyrightStatus = "public-domain"
   tagline = ##f
 }
 
