@@ -3,7 +3,6 @@
 \header {
   title = "Auld Lang Syne - Ce n'est qu'un \"Au Revoir\""
   poet = "Robert Burns (1759-1796)"
-  lyricsLang = % not set#'(en)
   copyrightStatus = "public-domain"
   tagline = ##f
 }
