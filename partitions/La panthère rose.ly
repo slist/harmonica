@@ -6,7 +6,8 @@
 
 \header {
   title = "La panthère rose"
-  composer = "Henry Mancini"
+  composer = "Henry Mancini (1924-1994)"
+  copyrightStatus = "copyrighted"
   tagline = ##f
 }
 

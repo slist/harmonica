@@ -27,6 +27,7 @@
   %opus = "HWV 437"
   arranger = ""
   %instrument = "Harmonica chromatique"
+  copyrightStatus = "public-domain"
   tagline = ##f
 }
 

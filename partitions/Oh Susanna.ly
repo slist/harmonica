@@ -4,6 +4,8 @@
   title = "Oh! Susanna"
   composer = "Stephen Foster"
   date = "1848"
+  lyricsLang = #'(en)
+  copyrightStatus = "public-domain"
   tagline = ##f
 }
 

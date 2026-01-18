@@ -4,6 +4,8 @@
   title = "Mon beau sapin"
   subtitle = "O Tannenbaum"
   composer = "Ernst Anschütz (1780 - 1861)"
+  lyricsLang = #'(fr)
+  copyrightStatus = "public-domain"
   tagline = ##f
 }
 

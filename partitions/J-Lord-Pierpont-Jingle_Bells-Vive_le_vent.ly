@@ -2,7 +2,9 @@
 
 \header {
   title = "Jingle Bells - Vive le vent"
-  composer = "James Lord Pierpont" % Apr 25, 1822 - Aug 5, 1893
+  composer = "James Lord Pierpont (1822-1893)" % Apr 25, 1822 - Aug 5, 1893
+  lyricsLang = #'(en)
+  copyrightStatus = "public-domain"
   tagline = ##f
 }
 

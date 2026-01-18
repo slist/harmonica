@@ -2,7 +2,9 @@
 
 \header {
   title = "Hymne à la joie"
-  composer = "L. W. Beethoven"
+  composer = "L. W. Beethoven (1770-1827)"
+  lyricsLang = #'()
+  copyrightStatus = "public-domain" % Chanson traditionnelle anglaise (XVIe siècle)
   tagline = ##f
 }
 

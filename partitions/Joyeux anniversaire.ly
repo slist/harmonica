@@ -2,6 +2,9 @@
 
 \header {
   title = "Joyeux anniversaire"
+  composer = "Traditional"
+  lyricsLang = #'(fr)
+  copyrightStatus = "public-domain"
   tagline = ##f
 }
 

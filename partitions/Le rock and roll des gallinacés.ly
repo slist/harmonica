@@ -2,7 +2,7 @@
 
 \header {
   title = "Le rock and roll des gallinacés"
-  composer = "Steve Waring (1943-)"
+  composer = "Steve Waring (1943-) ou Pierre Lozère (1948-) ?"
   arranger = "Stéphane List"
   
   lyricsLang = #'(fr)

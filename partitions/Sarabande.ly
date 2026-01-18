@@ -6,13 +6,15 @@
     \column {
       \line { 
         \with-url #"https://fr.wikipedia.org/wiki/Georg_Friedrich_Haendel" 
-        "Georg Friedrich Haendel"
+        "Georg Friedrich Haendel (1685 - 1759)"
       }
     }
   }
 %composer = \markup { "🇬🇧 Georg Friedrich Haendel" }
 %composer = "Georg Friedrich Händel (Haendel) (1685 - 1759)"
   opus = "HWV 437"
+  lyricsLang = #'()
+  copyrightStatus = "public-domain"
   tagline = ##f
 }
 

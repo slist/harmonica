@@ -5,6 +5,8 @@
   %instrument = "Harmonica en C"
   %composer = "Anonyme"
   %date = ""
+  lyricsLang = #'(fr)
+  copyrightStatus = "public-domain" % Chanson traditionnelle française
   tagline = ##f
 }
 

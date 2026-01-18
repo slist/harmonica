@@ -5,6 +5,8 @@
   %poet = "Placide Cappeau (1808–1877)"
   %composer = "?"
   %date = "XVIIᵉ ou XVIIIᵉ siècle"
+  lyricsLang = #'(fr)
+  copyrightStatus = "public-domain" % Chanson traditionnelle française
   tagline = ##f
 }
 

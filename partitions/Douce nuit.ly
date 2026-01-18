@@ -2,7 +2,9 @@
 
 \header {
   title = "Silent night - Douce nuit"
-  composer = "Franz Xaver Gruber"
+  composer = "Franz Xaver Gruber (1787-1863)"
+  lyricsLang = #'(fr)
+  copyrightStatus = "public-domain"
   tagline = ##f
 }
 
@@ -23,17 +25,10 @@
 melodie = {
   \time 3/4
   %\tempo 4 = 80
-
-  %\key sol \major % Sol majeur (un dièse : fa♯)
-  %\key re \major % Ré majeur (fa♯, do♯)
-  %\key sib \major  % Si♭ (Si♭, Mi♭)
-  
   
   sol4. la8 sol4 | mi2. | sol4. la8 sol4 | mi2. | re'2 re4 | si2. | do2 do4 | sol2. | la2 la4 | do4. si8 la4 | sol4. la8 sol4 |
   \break
   mi2. | la2 la4 | do4. si8 la4 sol4. la8 sol4 | mi2. | re'2 re4 | fa4. re8  si4 | do2. | mi2 r4 | do4 sol mi | sol4. fa8 re4 | do2.~ | do2 r4
-  
-  %\break
   
   \bar "|."
 }

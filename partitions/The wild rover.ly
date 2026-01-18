@@ -4,6 +4,8 @@
   title = "The wild rover"
   composer = "The Dubliners"
   date = "1964"
+  lyricsLang = #'(en)
+  % ?? copyrightStatus = "copyrighted"
   tagline = ##f
 }
 

@@ -3,6 +3,8 @@
   title = "Le lac des cygnes"
   composer = "Piotr Ilitch Tchaïkovsky (1840 - 1893)"
   details = "(Opus 20, acte 2, scène n°10)"
+  copyrightStatus = "public-domain" % Œuvre tombée dans le domaine public
+  opus = "Opus 20"
   arranger = ""
   instrument = ""
   tagline = ##f

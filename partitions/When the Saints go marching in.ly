@@ -2,6 +2,8 @@
 
 \header {
   title = "When the Saints go marching in"
+  lyricsLang = #'(en)
+  copyrightStatus = "public-domain"
   tagline = ##f
 }
 

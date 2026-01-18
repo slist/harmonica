@@ -4,6 +4,8 @@
   title = "J'ai du bon tabac"
   composer = "Gabriel-Charles de Latteignant (Abbé)"
   date = "1697-1779"
+  lyricsLang = #'(fr)
+  copyrightStatus = "public-domain" % Chanson traditionnelle française
   tagline = ##f
 }
 

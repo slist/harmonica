@@ -2,7 +2,9 @@
 
 \header {
   title = "Hard Times"
-  composer = "Stephen Foster"
+  composer = "Stephen Foster (1826-1864)"
+  lyricsLang = #'(en)
+  copyrightStatus = "public-domain"
   tagline = ##f
 }
 

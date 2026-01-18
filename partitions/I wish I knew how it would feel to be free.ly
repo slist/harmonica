@@ -1,7 +1,9 @@
 \version "2.24.3"
 \header {
   title = "I wish I knew how it would feel to be free"
-  composer = "Nina Simone"
+  composer = "Nina Simone (1933-2003) & Billy Taylor (1921-2010)"
+  lyricsLang = #'(en)
+  copyrightStatus = "copyrighted"
   tagline = ##f
 }
 

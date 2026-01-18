@@ -2,6 +2,9 @@
 
 \header {
   title = "Petit Papa Noël"
+  composer = "Henri Martinet (1906-1983) & Raymond Vincy (1912-1973)"
+  lyricsLang = #'(fr)
+  copyrightStatus = "public-domain" % ? Chanson de Noël française créée en 1946
   tagline = ##f
 }
 

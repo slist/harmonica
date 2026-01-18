@@ -3,8 +3,9 @@
 \header {
   title = "Head, shoulders, Knees and toes"
   instrument = "Harmonica en C"
-  composer = "Gilbert DeBenedetti"
-  
+  composer = "Gilbert DeBenedetti (1946-)"
+  lyricsLang = #'(en)
+  copyrightStatus = "copyrighted"
   tagline = ##f
 }
 

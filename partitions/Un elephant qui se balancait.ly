@@ -1,9 +1,8 @@
 \version "2.24.3"
 
 \header {
-  title = "What shall we do with the drunken sailor"
-  lyricsLang = #'(en)
-  copyrightStatus = "public-domain" % Chanson traditionnelle anglaise
+  title = "Un éléphant qui se balançait"
+  %composer = ""
   tagline = ##f
 }
 
@@ -17,36 +16,42 @@
 #(define compile-chromatique (ly:get-option 'compile-chromatique))
 #(define compile-midi (ly:get-option 'compile-midi))
 
-melodie = {
-  \time 4/4
-  %\tempo 4 = 120
+\layout {
+  \context {
+    \Lyrics
+    \override LyricText.font-size = #-1
+    \override LyricHyphen.minimum-distance = #0.5
+    \override LyricSpace.minimum-distance = #0.6
+  }
+}
 
-  %\key sol \major % Sol majeur (un dièse : fa♯)
-  %\key re \major % Ré majeur (fa♯, do♯)
-  \key sib \major  % Si♭ (Si♭, Mi♭)
+\paper {
+  markup-system-spacing.basic-distance = #20 % Espace entre titre et première portée
+  system-system-spacing.basic-distance = #20 % Espace entre les portées
+}
+
+melodie = {
+  \time 6/8
+  \clef "treble^8"
   
-  sol4 sol8 sol sol4 sol8 sol sol4 do, mib sol 
+  fa4. fa4 fa8 | re4. re4 re8 |sol4 sol8 r4 do,8~ | do4 do8 re4 mi8 |
   \break
-  fa fa8 fa fa4 fa8 fa fa4 sib, re fa
+  fa4 fa8 fa4 mi8 | re4.r4 sol8~ | sol4 la8 sol4 fa8 |mi4 do8 re4 mi8
   \break
-  sol4 sol8 sol sol4 sol8 sol sol4 la sib do
+  fa4.~ fa4. | re4. r4 sol8~ | sol4 la8 sol4 fa8 | mi4 do8 re4 mi8 |
   \break
-  sib sol fa re do2 do 
-  \break
-  sol' sol4. sol8 sol4 do, mib sol
-  \break
-  fa2 fa4. fa8 fa4 sib, re fa
-  \break
-  sol2 sol4. sol8 sol4 la sib do
-  \break
-  sib sol fa re do2 do
+  fa4. fa4. | re4. re4. | la'4 la8~ la4 fa8~ | fa4. r4 r8
+  
   \bar "|."
 }
 \addlyrics {
-  What shall we do with the drun -- ken sai -- lor,
-  what shall we do with the drun -- ken sai -- lor, 
-  what shall we do with the drun -- ken sai -- lor ear -- ly in the mor -- ning,
-  Hoo -- ray and up she ri -- ses, hoo -- ray and up she ri -- ses, hoo -- ray and up she ri -- ses ear -- ly in the mor -- ning.
+  Un é -- lé -- phant qui  se ba -- lan -- çait Sur u -- ne
+  toi -- le, toi -- le, toile... toi -- le d'a -- rai -- gnée; C' -- é --  tait
+  un jeu telle -- ment a  -- mu -- sant Qu'il alla cher -- 
+  cher un deu -- xième é -- lé -- phant!
+}
+
+accords = \chordmode {
 }
 
 % ============================
@@ -72,8 +77,11 @@ diatoniqueScore =
 chromatiqueScore = 
 \score {
   <<
+    \new ChordNames {
+      \accords
+    }
     \new Staff { 
-      \chromaticHarmonicaTab \relative do''' {
+      \chromaticHarmonicaTab \relative do'' {
         \melodie
       }
     }
@@ -89,12 +97,12 @@ midiScore =
 \score {
   \new Staff {
     \set Staff.midiInstrument = #"harmonica"
-    \relative do''' {
+    \relative do'' {
       \melodie
     }
   }
   \midi {
-    \tempo 4 = 120
+    \tempo 4 = 180
   }
 }
 
@@ -105,3 +113,7 @@ midiScore =
      (ly:parser-include-string "\\chromatiqueScore"))
 #(if compile-midi
      (ly:parser-include-string "\\midiScore"))
+
+%diatoniqueScore
+%\chromatiqueScore
+%\midiScore

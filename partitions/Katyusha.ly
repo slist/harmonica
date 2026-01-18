@@ -4,7 +4,9 @@
   title = "Casatschok - Katioucha - Katyusha"
   instrument = "Harmonica en C"
   autor = "Mikhaïl Issakovski"
-  composer = "Matveï Blanter"
+  composer = "Matveï Blanter (1903-1990)"
+  lyricsLang = #'()
+  copyrightStatus = "copyrighted"
   date = ""
   tagline = ##f
 }

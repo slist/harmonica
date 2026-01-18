@@ -3,9 +3,11 @@
 \header {
   title = "Campton Races"
   instrument = "Harmonica en C"
-  composer = "Stephen Foster"
+  composer = "Stephen Foster (1826-1864)"
   date = "1850-02"
   customDate = \markup { "February 1850" }  % Pour l'affichage personnalisé
+  lyricsLang = #'(en)
+  copyrightStatus = "public-domain"
   tagline = ##f
 }
 
