@@ -5,7 +5,7 @@
   composer = "Louis Guillaume Guglielmi (1916-1991)"
   poet = "Edit Piaf (1915-1963)"
   lyricsLang = #'(fr)
-  %copyrightStatus = "public-domain"
+  copyrightStatus = "copyrighted"
   tagline = ##f
 }
 
