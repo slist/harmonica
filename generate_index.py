@@ -198,7 +198,7 @@ th { background-color: #f2f2f2; }
   <th>Œuvre</th>
   <th>Diatonique</th>
   <th>Chromatique</th>
-  <th>MIDI</th>
+  <!-- <th>MIDI</th> midi is not necessary, so remove this column -->
   <th>MP3</th>
   <th>Paroles</th>
   <th>Droits</th>
@@ -226,13 +226,15 @@ for d, c, m, z in zip(partitions_diat, partitions_chro, midis, mp3s):
         print(f"  ✓ Fichiers PDF affichés (domaine public)")
         html += f"<td><a href='{d}'>PDF</a></td>"
         html += f"<td><a href='{c}'>PDF</a></td>"
+        html += f"<td><a href='{z}'>MP3</a></td>"
     else:
         print(f"  ⚠️  Fichiers PDF masqués (status: {status})")
         html += "<td class='hidden'>non affiché</td>"
         html += "<td class='hidden'>non affiché</td>"
+        html += "<td class='hidden'>non affiché</td>"
 
-    html += f"<td><a href='{m}'>MIDI</a></td>"
-    html += f"<td><a href='{z}'>MP3</a></td>"
+    # html += f"<td><a href='{m}'>MIDI</a></td>"
+    # html += f"<td><a href='{z}'>MP3</a></td>"
     html += f"<td class='badge'>{lyrics_icon(lyrics)}</td>"
     html += f"<td class='badge'>{copyright_icon(status)}</td>"
     html += "</tr>\n"
@@ -256,7 +258,7 @@ print("RÉSUMÉ FINAL")
 print("=" * 60)
 print(f"✓ Nombre de partitions diatoniques: {len(partitions_diat)}")
 print(f"✓ Nombre de partitions chromatiques: {len(partitions_chro)}")
-print(f"✓ Nombre de fichiers MIDI: {len(midis)}")
+#print(f"✓ Nombre de fichiers MIDI: {len(midis)}")
 print(f"✓ Nombre de fichiers MP3: {len(mp3s)}")
 print(f"✓ Nombre de lignes dans le tableau: {ligne_count}")
 print(f"\n✓ index.html généré avec succès!")
