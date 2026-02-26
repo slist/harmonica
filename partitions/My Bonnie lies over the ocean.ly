@@ -35,17 +35,16 @@
 melodie = {
   \time 3/4
   \clef "treble^8"
-  \tempo 4 = 125
-  \key la \major % fa♯, do♯, sol♯
+  \tempo "Allegretto" 4 = 152  \key la \major % fa♯, do♯, sol♯
   \partial 4 % anacrouse
   mi4 | dod' si la | si la fad | mi dod2 | r2 mi4 | dod' si la |
-  \break
+  %\break
   la sold la | si2. | r2 mi,4 | dod' si la | si la fad | mi dod2 |
-  \break
+  %\break
   r2 mi4 | fad si la | sold fad sold | la2.~ | la2. | mi2. | la2. |
-  \break
+  %\break
   fad2. | si2 la4 | sold sold sold | sold fad sold | la2 si4 | dod2. | mi,2. |
-  \break
+  %\break
   la2. | fad2. | si2 la4 | sold sold sold | sold fad sold  | la2.~ | la4 r2 |
   \bar "|."
 }
@@ -108,7 +107,7 @@ midiScore =
     }
   }
   \midi {
-    \tempo 4 = 125
+    \tempo 4 = 152
   }
 }
 
