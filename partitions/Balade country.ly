@@ -1,6 +1,8 @@
 \version "2.24.3"
 
 \header {
+  title = "Balade country"
+  copyrightStatus = "copyrighted"
   tagline = ##f
 }
 \include "harmonica.ly"
