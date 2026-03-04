@@ -6,7 +6,7 @@
   poet = "Traditional"
   arranger = "Traditional American folk song"
   lyricsLang = #'(en)
-  copyrightStatus = "public domain"
+  copyrightStatus = "public-domain"
   % Traditional American folk song, 19th century (California Gold Rush era)
   % Popularized in the 20th century by Johnny Cash (1932–2003)
   tagline = ##f

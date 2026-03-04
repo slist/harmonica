@@ -222,7 +222,7 @@ for d, c, m, z in zip(partitions_diat, partitions_chro, midis, mp3s):
     html += "<tr>"
     html += f"<td>{base}</td>"
 
-    if status == "public-domain":
+    if status == "public-domain" or status == "public domain":
         print(f"  ✓ Fichiers PDF affichés (domaine public)")
         html += f"<td><a href='{d}'>PDF</a></td>"
         html += f"<td><a href='{c}'>PDF</a></td>"
