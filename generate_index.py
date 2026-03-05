@@ -84,8 +84,8 @@ def parse_ly_metadata(base_name):
     else:
         print(f"  ⚠️  lyricsLang non trouvé")
 
-    # Extraction de la clé
-    m = re.search(r'\key\s+([a-z]+)\s+\\major', content)
+    # Extraction de la clé \key c \major
+    m = re.search(r'\\key\s+([a-z]+)\s+\\major', content)
     if m:
         metadata["key"] = m.group(1)
         print(f"  ✓ Clé trouvée: {metadata['key']}")
