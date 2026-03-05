@@ -34,7 +34,7 @@ print()
 def parse_ly_metadata(base_name):
     """
     Cherche un fichier .ly correspondant et extrait
-    copyrightStatus et lyricsLang depuis le \\header
+    copyrightStatus, lyricsLang et key depuis le \\header
     """
     print(f"\n--- Analyse de '{base_name}' ---")
     
@@ -52,7 +52,8 @@ def parse_ly_metadata(base_name):
     
     metadata = {
         "copyrightStatus": "unknown",
-        "lyricsLang": []
+        "lyricsLang": [],
+        "key": "unknown"
     }
 
     if not os.path.exists(ly_file):
@@ -65,6 +66,7 @@ def parse_ly_metadata(base_name):
     
     print(f"  Taille du contenu: {len(content)} caractères")
 
+    # Extraction de copyrightStatus = "public-domain"
     # copyrightStatus = "public-domain"
     m = re.search(r'copyrightStatus\s*=\s*"([^"]+)"', content)
     if m:
@@ -73,6 +75,7 @@ def parse_ly_metadata(base_name):
     else:
         print(f"  ⚠️  copyrightStatus non trouvé (par défaut: 'unknown')")
 
+    # Extraction de lyricsLang = #'(fr en)
     # lyricsLang = #'(fr en)
     m = re.search(r'lyricsLang\s*=\s*#\'\(([^)]*)\)', content)
     if m:
@@ -80,6 +83,14 @@ def parse_ly_metadata(base_name):
         print(f"  ✓ lyricsLang trouvé: {metadata['lyricsLang']}")
     else:
         print(f"  ⚠️  lyricsLang non trouvé")
+
+    # Extraction de la clé
+    m = re.search(r'\key\s+([a-z]+)\s+\\major', content)
+    if m:
+        metadata["key"] = m.group(1)
+        print(f"  ✓ Clé trouvée: {metadata['key']}")
+    else:
+        print(f"  ⚠️  Clé non trouvée")
 
     return metadata
 
@@ -196,6 +207,7 @@ th { background-color: #f2f2f2; }
 <table>
 <tr>
   <th>Œuvre</th>
+  <th>Clé</th>
   <th>Diatonique</th>
   <th>Chromatique</th>
   <!-- <th>MIDI</th> midi is not necessary, so remove this column -->
@@ -215,17 +227,21 @@ for d, c, m, z in zip(partitions_diat, partitions_chro, midis, mp3s):
 
     status = meta["copyrightStatus"]
     lyrics = meta["lyricsLang"]
+    key = meta["key"] if "key" in meta else "unknown"
     
     print(f"  Status final: {status}")
     print(f"  Langues finales: {lyrics}")
+    print(f"  Clé: {key}")
 
     html += "<tr>"
     html += f"<td>{base}</td>"
+    html += f"<td>{key}</td>"
 
     if status == "public-domain" or status == "public domain":
         print(f"  ✓ Fichiers PDF affichés (domaine public)")
         html += f"<td><a href='{d}'>PDF</a></td>"
         html += f"<td><a href='{c}'>PDF</a></td>"
+        # html += f"<td><a href='{m}'>MIDI</a></td>"
         html += f"<td><a href='{z}'>MP3</a></td>"
     else:
         print(f"  ⚠️  Fichiers PDF masqués (status: {status})")
@@ -233,8 +249,6 @@ for d, c, m, z in zip(partitions_diat, partitions_chro, midis, mp3s):
         html += "<td class='hidden'>non affiché</td>"
         html += "<td class='hidden'>non affiché</td>"
 
-    # html += f"<td><a href='{m}'>MIDI</a></td>"
-    # html += f"<td><a href='{z}'>MP3</a></td>"
     html += f"<td class='badge'>{lyrics_icon(lyrics)}</td>"
     html += f"<td class='badge'>{copyright_icon(status)}</td>"
     html += "</tr>\n"
@@ -258,7 +272,44 @@ print("RÉSUMÉ FINAL")
 print("=" * 60)
 print(f"✓ Nombre de partitions diatoniques: {len(partitions_diat)}")
 print(f"✓ Nombre de partitions chromatiques: {len(partitions_chro)}")
+
+# MIDI is not necessary, so we can skip this count
 #print(f"✓ Nombre de fichiers MIDI: {len(midis)}")
+
+# Count the number of parts per key
+key_counts = {}
+for d in partitions_diat:
+    base = d.replace("_diatonique.pdf", "")
+    meta = parse_ly_metadata(base)
+    key = meta.get("key", "unknown")
+    key_counts[key] = key_counts.get(key, 0) + 1
+print("\n✓ Répartition des clés:")
+for key, count in key_counts.items():
+    print(f"  - {key}: {count} partitions")
+
+# Count the number of public domain vs copyrighted
+status_counts = {}
+for d in partitions_diat:
+    base = d.replace("_diatonique.pdf", "")
+    meta = parse_ly_metadata(base)
+    status = meta.get("copyrightStatus", "unknown")
+    status_counts[status] = status_counts.get(status, 0) + 1
+print("\n✓ Répartition des statuts de copyright:")
+for status, count in status_counts.items():
+    print(f"  - {status}: {count} partitions")
+
+# Count the number of languages
+lang_counts = {}
+for d in partitions_diat:
+    base = d.replace("_diatonique.pdf", "")
+    meta = parse_ly_metadata(base)
+    for lang in meta.get("lyricsLang", []):
+        lang_counts[lang] = lang_counts.get(lang, 0) + 1
+print("\n✓ Répartition des langues de paroles:")
+for lang, count in lang_counts.items():
+    print(f"  - {lang}: {count} partitions")
+
+# Final summary
 print(f"✓ Nombre de fichiers MP3: {len(mp3s)}")
 print(f"✓ Nombre de lignes dans le tableau: {ligne_count}")
 print(f"\n✓ index.html généré avec succès!")
