@@ -71,8 +71,11 @@ melodie = {
   'Cross the wide Missouri.
 }
 
-
 accords = \chordmode {
+  s4 re1 s s s
+  sol s re s sol
+  s s s re si:m
+  fad:m re sol la:7 re s
 }
 
 % ============================
