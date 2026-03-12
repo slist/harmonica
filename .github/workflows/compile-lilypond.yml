@@ -16,12 +16,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Cache apt packages
-        uses: actions/cache@v4
-        with:
-          path: /var/cache/apt/archives
-          key: apt-lilypond-${{ runner.os }}
-
       - name: Install LilyPond, fluidsynth and lame
         run: |
           sudo apt-get update
@@ -53,9 +47,9 @@ jobs:
           }
           export -f compile_file
 
-          # Compile up to 4 files in parallel
+          # Compile multiple files in parallel (depending on the number of CPU cores)
           find partitions -type f -name "*.ly" -print0 \
-            | xargs -0 -P4 -I{} bash -c 'compile_file "$@"' _ {}
+            | xargs -0 -P$(nproc) -I{} bash -c 'compile_file "$@"' _ {}
 
       - name: Generate MP3 files from MIDI
         run: |
