@@ -5,40 +5,29 @@
   composer = "The Dubliners"
   date = "1964"
   lyricsLang = #'(en)
-  % ?? copyrightStatus = "copyrighted"
+  copyrightStatus = "copyrighted"
   tagline = ##f
 }
-
-%Source: http://harmonicacomte.blogspot.com/2012/10/amazing-grace.html
 
 \include "harmonica.ly"
 \include "style.ly"
 
-
 % Options de compilation personnalisées
-
 #(define compile-diatonique (ly:get-option 'compile-diatonique))
 #(define compile-chromatique (ly:get-option 'compile-chromatique))
 #(define compile-midi (ly:get-option 'compile-midi))
 
 melodie = {
-  \time 3/4                  % Définit la mesure
-  %\key g \major  % Sol majeur (un dièse : fa♯)
+  \time 3/4
   \key f \major
   
-   % Afficher le numéro de mesure seulement au début de chaque ligne sauf la première
-  %\override Score.BarNumber.break-visibility = #'#(#f #t #t)
-  %\override Score.BarNumber.stencil = #ly:text-interface::print
-  %\set Score.barNumberVisibility = #all-bar-numbers-visible
-  %\set Score.measurePosition = #0
-
-  r2
+  \partial 4
   f4 | f g f | d c a' | a g a | bes2. | r2 c8 c |
   c4 a c | bes g e | c a' g | f2 r8 f8 | f4 g f |
   d c a' | a g a | bes2. | r2 c8 c | c4 a c | bes g e | c a' g | f e f |
-  g2. | g2. e4 c2 ~ | c2. |
+  g2. | g2. e4 c2~ | c2. |
   r4 a'4 a | a g a | bes2. | r4 a bes | c2. |
-  r4 a4 f | e d2 | r2 d4 | c a'2 ~ | a g4 f2. ~ | f2 
+  r4 a4 f | e d2 | r2 d4 | c a'2~ | a g4 f2.~ | f2 
   
   \bar "|."
 }
@@ -48,8 +37,6 @@ melodie = {
   turn -- ing with gold in great store, and I ne -- ver will play the wild ro -- ver no more.
   And it's no, nay, ne -- ver!
   No, nay, ne -- ver, no more, will I play the wild ro -- ver. No ne -- ver no more!
-  
-  
 }
 
 % ============================
