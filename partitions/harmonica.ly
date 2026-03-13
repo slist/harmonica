@@ -115,6 +115,54 @@ dip =
     ((36) (blow "10"))
     (else (markup "X"))))
 
+#(define* (get-diatonic-ritcher-tab NoteEvent #:optional (root-semitones 0))
+   (let ((semitones (- (ly:pitch-semitones (ly:music-property NoteEvent 'pitch)) root-semitones)))
+     (case semitones
+       ((0) (blow "1"))
+       ((1) (draw "1" 1))
+       ((2) (draw "1"))
+       ((3) (overblow "1"))
+       ((4) (blow "2"))
+       ((5) (draw "2" 2))
+       ((6) (draw "2" 1))
+       ((7) (draw "2")) ; can be (draw "2") or (blow "3")
+       ((8) (draw "3" 3))
+       ((9) (draw "3" 2))
+       ((10) (draw "3" 1))
+       ((11) (draw "3"))
+       ((12) (blow "4"))
+       ((13) (draw "4" 1))
+       ((14) (draw "4"))
+       ((15) (overblow "4"))
+       ((16) (blow "5"))
+       ((17) (draw "5"))
+       ((18) (overblow "5"))
+       ((19) (blow "6"))
+       ((20) (draw "6" 1))
+       ((21) (draw "6"))
+       ((22) (overblow "6"))
+       ((23) (draw "7"))
+       ((24) (blow "7"))
+       ((25) (overdraw "7"))
+       ((26) (draw "8"))
+       ((27) (blow "8" 1))
+       ((28) (blow "8"))
+       ((29) (draw "9"))
+       ((30) (blow "9" 1))
+       ((31) (blow "9"))
+       ((32) (overdraw "9"))
+       ((33) (draw "10"))
+       ((34) (blow "10" 2))
+       ((35) (blow "10" 1))
+       ((36) (blow "10"))
+       (else (markup "X")))))
+
+#(define (get-diatonic-d-ritcher-tab NoteEvent) (get-diatonic-ritcher-tab NoteEvent 2))
+#(define (get-diatonic-g-ritcher-tab NoteEvent) (get-diatonic-ritcher-tab NoteEvent 7))
+#(define (get-diatonic-a-ritcher-tab NoteEvent) (get-diatonic-ritcher-tab NoteEvent 9))
+#(define (get-diatonic-f-ritcher-tab NoteEvent) (get-diatonic-ritcher-tab NoteEvent 5))
+#(define (get-diatonic-bb-ritcher-tab NoteEvent) (get-diatonic-ritcher-tab NoteEvent 10))
+
 #(define (get-chromatic-c-solo-tab NoteEvent)
    (case (ly:pitch-semitones (ly:music-property NoteEvent 'pitch))
     ((-12) (blow (low-register "1")))          
@@ -129,7 +177,7 @@ dip =
     ((-3) (draw (low-register "3")))           
     ((-2) (draw (slide (low-register "3"))))   
     ((-1) (draw (low-register "4")))           
-    
+
     ((0) (blow "1"))           
     ((1) (slide (blow "1")))   
     ((2) (draw "1"))           
@@ -142,11 +190,11 @@ dip =
     ((9) (draw "3"))           
     ((10) (slide (draw "3")))  
     ((11) (draw "4"))          
-    
+
     ((12) (blow "5"))          
     ((13) (slide (blow "5")))   
     ((14) (draw "5"))           
-    ((15) (slide (draw "5")) )   
+    ((15) (slide (draw "5")))   
     ((16) (blow "6"))           
     ((17) (draw "6"))           
     ((18) (slide (draw "6")))   
@@ -155,7 +203,7 @@ dip =
     ((21) (draw "7"))           
     ((22) (slide (draw "7")))  
     ((23) (draw "8"))          
-    
+
     ((24) (blow "9"))           
     ((25) (slide (blow "9")))    
     ((26) (draw "9"))            
@@ -168,11 +216,12 @@ dip =
     ((33) (draw "11"))           
     ((34) (slide (draw "11")))  
     ((35) (draw "12"))          
-    
+
     ((36) (blow "12"))          
     ((37) (slide (blow "12")))  
     ((38) (slide (draw "12")))  
     (else (markup "X"))))
+
 
 #(define (make-textscript dir txt)
    (make-music 'TextScriptEvent
@@ -208,6 +257,11 @@ New version for multiple notes
   (let ((tab-markup
          (case tuning
            ((diatonic-c-ritcher) (get-diatonic-c-ritcher-tab music))
+           ((diatonic-d-ritcher) (get-diatonic-d-ritcher-tab music))
+           ((diatonic-g-ritcher) (get-diatonic-g-ritcher-tab music))
+           ((diatonic-a-ritcher) (get-diatonic-a-ritcher-tab music))
+           ((diatonic-f-ritcher) (get-diatonic-f-ritcher-tab music))
+           ((diatonic-bb-ritcher) (get-diatonic-bb-ritcher-tab music))
            ((chromatic-c-solo) (get-chromatic-c-solo-tab music))
            (else (get-diatonic-c-ritcher-tab music)))))
     (make-textscript DOWN tab-markup)))
@@ -250,6 +304,71 @@ New version for multiple notes
     )
     m)
 
+#(define* (add-diatonic-d-ritcher-tabs m)
+   (cond ((music-is-of-type? m 'event-chord)
+       (set! (ly:music-property m 'elements)
+             (append (ly:music-property m 'elements)
+                     (reverse (make-tab-numbers m 'diatonic-d-ritcher)))))
+         ((music-is-of-type? m 'note-event)
+       (set! (ly:music-property m 'articulations)
+             (append (ly:music-property m 'articulations)
+                     (list (make-tab-number m 'diatonic-d-ritcher)))))
+	(else #f)
+    )
+    m)
+
+#(define* (add-diatonic-g-ritcher-tabs m)
+   (cond ((music-is-of-type? m 'event-chord)
+       (set! (ly:music-property m 'elements)
+             (append (ly:music-property m 'elements)
+                     (reverse (make-tab-numbers m 'diatonic-g-ritcher)))))
+         ((music-is-of-type? m 'note-event)
+       (set! (ly:music-property m 'articulations)
+             (append (ly:music-property m 'articulations)
+                     (list (make-tab-number m 'diatonic-g-ritcher)))))
+	(else #f)
+    )
+    m)
+
+#(define* (add-diatonic-a-ritcher-tabs m)
+   (cond ((music-is-of-type? m 'event-chord)
+       (set! (ly:music-property m 'elements)
+             (append (ly:music-property m 'elements)
+                     (reverse (make-tab-numbers m 'diatonic-a-ritcher)))))
+         ((music-is-of-type? m 'note-event)
+       (set! (ly:music-property m 'articulations)
+             (append (ly:music-property m 'articulations)
+                     (list (make-tab-number m 'diatonic-a-ritcher)))))
+	(else #f)
+    )
+    m)
+
+#(define* (add-diatonic-f-ritcher-tabs m)
+   (cond ((music-is-of-type? m 'event-chord)
+       (set! (ly:music-property m 'elements)
+             (append (ly:music-property m 'elements)
+                     (reverse (make-tab-numbers m 'diatonic-f-ritcher)))))
+         ((music-is-of-type? m 'note-event)
+       (set! (ly:music-property m 'articulations)
+             (append (ly:music-property m 'articulations)
+                     (list (make-tab-number m 'diatonic-f-ritcher)))))
+	(else #f)
+    )
+    m)
+
+#(define* (add-diatonic-bb-ritcher-tabs m)
+   (cond ((music-is-of-type? m 'event-chord)
+       (set! (ly:music-property m 'elements)
+             (append (ly:music-property m 'elements)
+                     (reverse (make-tab-numbers m 'diatonic-bb-ritcher)))))
+         ((music-is-of-type? m 'note-event)
+       (set! (ly:music-property m 'articulations)
+             (append (ly:music-property m 'articulations)
+                     (list (make-tab-number m 'diatonic-bb-ritcher)))))
+	(else #f)
+    )
+    m)
+
 #(define* (add-chromatic-c-solo-tabs m)
    (cond ((music-is-of-type? m 'event-chord)
        (set! (ly:music-property m 'elements)
@@ -268,6 +387,36 @@ diatonicHarmonicaTab =
   (parser location music)
   (ly:music?)
   (music-map add-diatonic-c-ritcher-tabs music))
+
+diatonicDHarmonicaTab =
+#(define-music-function
+  (parser location music)
+  (ly:music?)
+  (music-map add-diatonic-d-ritcher-tabs music))
+
+diatonicGHarmonicaTab =
+#(define-music-function
+  (parser location music)
+  (ly:music?)
+  (music-map add-diatonic-g-ritcher-tabs music))
+
+diatonicAHarmonicaTab =
+#(define-music-function
+  (parser location music)
+  (ly:music?)
+  (music-map add-diatonic-a-ritcher-tabs music))
+
+diatonicFHarmonicaTab =
+#(define-music-function
+  (parser location music)
+  (ly:music?)
+  (music-map add-diatonic-f-ritcher-tabs music))
+
+diatonicBbHarmonicaTab =
+#(define-music-function
+  (parser location music)
+  (ly:music?)
+  (music-map add-diatonic-bb-ritcher-tabs music))
 
 chromaticHarmonicaTab =
 #(define-music-function
