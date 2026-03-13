@@ -67,7 +67,7 @@ diatoniqueScore =
 \score {
   <<
     \new Staff { 
-      \diatonicHarmonicaTab \relative do''' {
+      \diatonicHarmonicaTab \relative do'' {
         \melodie
       }
     }

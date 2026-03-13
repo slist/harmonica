@@ -2,13 +2,11 @@
 
 \header {
   title = "Dirty old town"
-  %instrument = "Harmonicas diatoniques en D et G, ou plus simplement chromatique"
   composer = "Ewan MacColl (1915-1989)"
   lyricsLang = #'(en)
-  % ??? copyrightStatus = "public-domain"
+  copyrightStatus = "copyrighted"
   tagline = ##f
 }
-
 
 % From: https://musescore.com/user/28111512/scores/6520909
 
@@ -25,7 +23,6 @@
 melodieD = {
   \time 4/4
   \tempo "swing" 4 = 120
-  %\clef "treble^8"
   \key re \major % Ré majeur (fa♯, do♯)
   
   r4 ^\markup \box { \italic "Harmonica Diatonique en D" }
