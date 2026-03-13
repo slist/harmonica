@@ -41,7 +41,7 @@ melodie = {
   \break
   la2.~ | la | r4 r re, | re fad la | la2.
   \break
-  mi | r4 r fad | sol fad mi | re2.~ | re2 re4
+  mi | r4 r fad | sol fad mi | re2.~ | re2
   \bar "|."
 }
 \addlyrics {
