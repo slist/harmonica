@@ -1,8 +1,19 @@
 \version "2.24.3"
 
+% Options de compilation personnalisées
+#(define compile-diatonique (ly:get-option 'compile-diatonique))
+#(define compile-chromatique (ly:get-option 'compile-chromatique))
+#(define compile-midi (ly:get-option 'compile-midi))
+
 \header {
   title = "On top of Old Smokey"
   composer = "Traditional"
+  
+    instrument = \markup { 
+    \override #'(font-encoding . latin1) 
+    #(if compile-diatonique "Harmonica en D" "")
+  }
+  
   lyricsLang = #'(en)
   copyrightStatus = "public-domain" % Mélodie traditionnelle
   tagline = ##f
@@ -12,11 +23,6 @@
 \include "style.ly"
 
 \language "français"
-
-% Options de compilation personnalisées
-#(define compile-diatonique (ly:get-option 'compile-diatonique))
-#(define compile-chromatique (ly:get-option 'compile-chromatique))
-#(define compile-midi (ly:get-option 'compile-midi))
 
 \layout {
   \context {
@@ -64,7 +70,8 @@ diatoniqueScore =
 \score {
   <<
     \new Staff { 
-      \diatonicHarmonicaTab \relative do'' {
+      \diatonicDHarmonicaTab \relative do'' {
+      %\diatonicHarmonicaTab \relative do'' {
         \melodie
       }
     }
@@ -116,6 +123,6 @@ midiScore =
 #(if compile-midi
      (ly:parser-include-string "\\midiScore"))
 
-%diatoniqueScore
+\diatoniqueScore
 %\chromatiqueScore
 %\midiScore
