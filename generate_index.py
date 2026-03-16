@@ -116,6 +116,44 @@ def lyrics_icon(langs):
         print(f"    Icônes langues: {langs} -> {result}")
     return result
 
+def key_to_french(key):
+    """Retourne la clé en notation française (Do, Ré, Mi, ...).
+
+    - Si la clé n'est pas trouvée, on considère que c'est du Do.
+    - Prend en charge les altérations utilisées dans LilyPond (e.g. "bes", "cis").
+    """
+
+    if not key or key == "unknown":
+        return "Do"
+
+    k = key.strip().lower()
+    mapping = {
+        "c": "Do",
+        "d": "Ré",
+        "e": "Mi",
+        "f": "Fa",
+        "g": "Sol",
+        "a": "La",
+        "b": "Si",
+        # Flats (bémol)
+        "ces": "Do bémol",
+        "des": "Ré bémol",
+        "ees": "Mi bémol",
+        "fes": "Fa bémol",
+        "ges": "Sol bémol",
+        "aes": "La bémol",
+        "bes": "Si bémol",
+        # Sharps (dièse)
+        "cis": "Do dièse",
+        "dis": "Ré dièse",
+        "eis": "Mi dièse",
+        "fis": "Fa dièse",
+        "gis": "Sol dièse",
+        "ais": "La dièse",
+        "bis": "Si dièse",
+    }
+
+    return mapping.get(k, key.capitalize())
 
 # --------- Collecte fichiers ---------
 
@@ -211,11 +249,12 @@ for d, c, m, z in zip(partitions_diat, partitions_chro, midis, mp3s):
     meta = metadata_cache[base]
     status = meta["copyrightStatus"]
     lyrics = meta["lyricsLang"]
-    key = meta["key"]
+    raw_key = meta["key"]
+    key = key_to_french(raw_key)
 
     print(f"  Status final: {status}")
     print(f"  Langues finales: {lyrics}")
-    print(f"  Clé: {key}")
+    print(f"  Clé: {raw_key} -> {key}")
 
     html += "<tr>"
     html += f"<td>{base}</td>"
@@ -262,7 +301,7 @@ status_counts = {}
 lang_counts = {}
 
 for meta in metadata_cache.values():
-    key = meta.get("key", "unknown")
+    key = key_to_french(meta.get("key", "unknown"))
     key_counts[key] = key_counts.get(key, 0) + 1
 
     status = meta.get("copyrightStatus", "unknown")
