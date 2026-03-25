@@ -34,7 +34,8 @@ print()
 def parse_ly_metadata(base_name):
     """
     Cherche un fichier .ly correspondant et extrait
-    copyrightStatus, lyricsLang et key depuis le \\header
+    copyrightStatus, lyricsLang depuis le \\header
+    pui la key depuis la partie musicale.
     """
     print(f"\n--- Analyse de '{base_name}' ---")
 
@@ -151,6 +152,10 @@ def key_to_french(key):
         "gis": "Sol dièse",
         "ais": "La dièse",
         "bis": "Si dièse",
+        # Correction accent du Ré, qui est re dans lilypond mais doit être Ré en français
+        "re": "Ré",
+        "reb": "Ré bémol",
+        "red": "Ré dièse",
     }
 
     return mapping.get(k, key.capitalize())
