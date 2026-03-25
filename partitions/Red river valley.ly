@@ -47,12 +47,6 @@ melodie = {
   do2 sib4 la | sol1~ | sol2 do4 sib | la2 la4 sol | fa2 sol4 la |
   \break
   do4 sib2.~ | sib2 re,4 reb | do2 mi4 fa | sol2 la4 sol | fa1~ | fa2
-  
-  %re4 | re fad la | re2. | si | r4 r4 sol | sol la si
-  \break
-  %la2.~ | la | r4 r re, | re fad la | la2.
-  \break
-  %mi | r4 r fad | sol fad mi | re2.~ | re2
   \bar "|."
 }
 \addlyrics {
@@ -76,8 +70,8 @@ diatoniqueScore =
 \score {
   <<
     \new Staff { 
-      \diatonicDHarmonicaTab \relative do'' {
-      %\diatonicHarmonicaTab \relative do'' {
+      %\diatonicDHarmonicaTab \relative do'' {
+      \diatonicHarmonicaTab \relative do'' {
         \melodie
       }
     }
