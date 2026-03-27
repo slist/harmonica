@@ -63,3 +63,18 @@
              \override TextScript.font-size = #-2
 }
 %}
+
+% Fonction personnalisée pour les titres de sections
+sectionTitle =
+#(define-music-function (label) (string?)
+   #{
+     \textMark \markup {
+       \column {
+         " "
+         " "
+         \bold #label
+         " "
+         " "
+       }
+     }
+   #})
