@@ -135,6 +135,6 @@ midiScore =
 #(if compile-midi
      (ly:parser-include-string "\\midiScore"))
 
-\diatoniqueScore
-\chromatiqueScore
-\midiScore
+%\diatoniqueScore
+%\chromatiqueScore
+%\midiScore
