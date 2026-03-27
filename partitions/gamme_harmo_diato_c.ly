@@ -2,7 +2,7 @@
 
 \header {
   title = "Cartographie de l'Harmonica en Do (C)"
-  subtitle = "Étude complète des notes" % et altérations"
+  subtitle = "Étude complète des notes et altérations"
   opus = "Op. 1"
   lyricsLang = #'(fr)
   copyrightStatus = "public-domain"
@@ -25,8 +25,8 @@
 }
 
 \paper {
-  markup-system-spacing.basic-distance = #30 % Espace entre titre et première portée
-  system-system-spacing.basic-distance = #30 % Espace entre les portées
+  markup-system-spacing.basic-distance = #8 % Espace entre titre et première portée
+  system-system-spacing.basic-distance = #24 % Espace entre les portées
 }
 
 melodie = {
@@ -41,7 +41,13 @@ melodie = {
   \break
 
   \sectionTitle "Altérations"
-  % TODO
+  reb,,, solb fa sib la lab reb mi lab si mib re solb fa si sib
+  \break
+
+  \sectionTitle "Toutes les notes"
+  do,,, reb re mib mi fa solb sol lab la sib si
+  do    reb re mib mi fa solb sol lab la sib si
+  do    reb re mib mi fa solb sol lab la sib si do
   
   \bar "|."
 }
@@ -49,6 +55,11 @@ melodie = {
   \override LyricText.font-size = #1  % Augmente la taille (0 est la taille normale)
   Do Mi Sol Do Mi Sol Do Mi Sol Do
   "Ré" Sol Si "Ré" Fa La Si "Ré" Fa La
+  "Ré♭" Sol♭ Fa Si♭ La La♭ "Ré♭" Mi La♭ Si Mi♭ "Ré" Sol♭ Fa Si Si♭
+  
+  Do "Ré♭" "Ré" Mi♭ Mi Fa Sol♭ Sol La♭ La Si♭ Si
+  Do "Ré♭" "Ré" Mi♭ Mi Fa Sol♭ Sol La♭ La Si♭ Si
+  Do "Ré♭" "Ré" Mi♭ Mi Fa Sol♭ Sol La♭ La Si♭ Si Do
 }
 
 % ============================
