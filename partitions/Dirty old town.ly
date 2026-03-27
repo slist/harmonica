@@ -32,7 +32,12 @@ melodieD = {
   \break
   mi1~ | mi | re |
 }
-
+\addlyrics {
+  I found my love by the gas -- works croft,
+  Dreamed a dream by the old ca -- nal,
+  Kissed my girl by the fac -- to -- ry wall,
+  Dir -- ty old town, dir -- ty old town.
+}
 melodieG = {
   \time 4/4  
   \key sol \major % Sol majeur (un dièse : fa♯)
@@ -49,6 +54,24 @@ melodieG = {
   \break
   la1 | r2 la8 sol mi4 | mi1 |
   \bar "|."
+}
+\addlyrics {
+  I found my love by the gas -- works croft,
+  Dreamed a dream by the old ca -- nal,
+  Kissed my girl by the fac -- to -- ry wall,
+  Dir -- ty old town, dir -- ty old town.
+  I heard a si -- ren from the docks,
+  Saw a train set the night on fire,
+  Smelled the spring on the smo -- ky wind,
+  Dir -- ty old town, dir -- ty old town.
+  Clouds are drif -- ting a -- cross the moon,
+  Cats are prowl -- ing up -- on their beat,
+  Spring's a girl in the streets at night,
+  Dir -- ty old town, dir -- ty old town.
+  I'm gon -- na make a good sharp axe,
+  Shi -- ning steel tem -- pered in the fire,
+  We'll chop you down like an old dead tree,
+  Dir -- ty old town, dir -- ty old town.
 }
 
 melodieChromatique = {
@@ -77,32 +100,32 @@ melodieChromatique = {
   \bar "|."
 }
 \addlyrics {
+  I found my love by the gas -- works croft,
+  Dreamed a dream by the old ca -- nal,
+  Kissed my girl by the fac -- to -- ry wall,
+  Dir -- ty old town, dir -- ty old town.
+  I heard a si -- ren from the docks,
+  Saw a train set the night on fire,
+  Smelled the spring on the smo -- ky wind,
+  Dir -- ty old town, dir -- ty old town.
+  Clouds are drif -- ting a -- cross the moon,
+  Cats are prowl -- ing up -- on their beat,
+  Spring's a girl in the streets at night,
+  Dir -- ty old town, dir -- ty old town.
+  I'm gon -- na make a good sharp axe,
+  Shi -- ning steel tem -- pered in the fire,
+  We'll chop you down like an old dead tree,
+  Dir -- ty old town, dir -- ty old town.
 }
 
-% ============================
-% SCORE DIATONIQUE D
-% ============================
-
-diatoniqueDScore = 
+diatoniqueScore =
 \score {
   <<
-    \new Staff { 
+    \new Staff {
       \diatonicDHarmonicaTab \relative do'' {
         \melodieD
       }
-    }
-  >>
-  \layout { }
-}
-
-% ============================
-% SCORE DIATONIQUE G
-% ============================
-
-diatoniqueGScore = 
-\score {
-  <<
-    \new Staff { 
+      \break
       \diatonicGHarmonicaTab \relative do'' {
         \melodieG
       }
@@ -146,14 +169,13 @@ midiScore =
 
 % Inclusion conditionnelle des scores
 #(if compile-diatonique
-     (begin
-       (ly:parser-include-string "\\diatoniqueDScore")
-       (ly:parser-include-string "\\diatoniqueGScore")))
+       (ly:parser-include-string "\\diatoniqueScore"))
 #(if compile-chromatique
      (ly:parser-include-string "\\chromatiqueScore"))
 #(if compile-midi
      (ly:parser-include-string "\\midiScore"))
 
+%\diatoniqueScore
 %\diatoniqueDScore
 %\diatoniqueGScore
 %\chromatiqueScore

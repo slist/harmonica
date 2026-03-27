@@ -4,17 +4,34 @@ on:
   push:
     paths:
       - '**.ly'
+      - '.github/workflows/**'
+      - '**.py'
+      - 'requirements.txt'
   pull_request:
     paths:
       - '**.ly'
+      - '.github/workflows/**'
+      - '**.py'
+      - 'requirements.txt'
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
+    env:
+      # Avoid warnings about missing DISPLAY variable when running fluidsynth
+      DISPLAY: ":99"
+      # Set a fixed locale to avoid issues with non-ASCII characters in LilyPond files
+      LC_ALL: "C.UTF-8"
+      LANG: "C.UTF-8"
+      LANGUAGE: "C.UTF-8"
+      # Prevent warnings about JavaScript actions when using Node 24 in GitHub Actions (June 2026 update)
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Install LilyPond, fluidsynth and lame
         run: |
@@ -23,7 +40,7 @@ jobs:
           lilypond --version
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.14"
 
@@ -73,7 +90,7 @@ jobs:
         run: python merge_pdf.py
 
       - name: Upload compiled files as artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: lilypond-outputs
           path: output/
@@ -84,9 +101,17 @@ jobs:
     permissions:
       contents: write
       pages: write
+
+    env:
+      # Set a fixed locale to avoid issues with non-ASCII characters in generated HTML
+      LC_ALL: "C.UTF-8"
+      LANG: "C.UTF-8"
+      LANGUAGE: "C.UTF-8"
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
     steps:
       - name: Download build artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: lilypond-outputs
           path: site
