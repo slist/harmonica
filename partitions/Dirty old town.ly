@@ -44,7 +44,7 @@ melodieG = {
   
   r4 ^\markup \box { \italic "Harmonica Diatonique en G" }
   
-  re4 sol8 la4 si8~ \bar "||"
+  re'4 sol8 la4 si8~ \bar "||"
   \break
   si1 | r4 sol4 si8 sol4 re8~ | re1 | r2 si'4 re
   \break
