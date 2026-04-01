@@ -97,7 +97,7 @@ midiScore =
 \score {
   \new Staff {
     \set Staff.midiInstrument = #"harmonica"
-    \relative c' {
+    \relative c''' {
       \melodie
     }
   }
