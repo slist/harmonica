@@ -98,4 +98,4 @@ midiScore =
 #(if compile-midi
      (ly:parser-include-string "\\midiScore"))
 
-\diatoniqueScore
+%\diatoniqueScore
