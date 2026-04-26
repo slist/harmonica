@@ -31,7 +31,7 @@ melodie = {
   \break
   la'16 re la re  la2 sol4 | re4 re2. |
   \break
-  r2 r4 la8 r8 | re8 la' fa do'2~ do8~ | do2. r8 la,8 | re la' fa do'2~ do8~ | do2. r8 la,8 |
+  r2 r4 la'8 r8 | re8 la fa do'2~ do8~ | do2. r8 la8 | re la fa do'2~ do8~ | do2. r8 la,8 |
   \break
   re8 la' fa do'2~ do8~ | do2.
   
