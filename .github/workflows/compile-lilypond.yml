@@ -15,6 +15,11 @@ on:
       - 'requirements.txt'
   workflow_dispatch:
 
+# Cancel in-progress runs when a new commit is pushed to the same ref
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -26,15 +31,14 @@ jobs:
       LC_ALL: "C.UTF-8"
       LANG: "C.UTF-8"
       LANGUAGE: "C.UTF-8"
-      # Prevent warnings about JavaScript actions when using Node 24 in GitHub Actions (June 2026 update)
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Install LilyPond, fluidsynth and lame
         run: |
+          set -euo pipefail
           sudo apt-get update
           sudo apt-get install -y lilypond fluidsynth fluid-soundfont-gm lame
           lilypond --version
@@ -43,6 +47,7 @@ jobs:
         uses: actions/setup-python@v6
         with:
           python-version: "3.14"
+          cache: "pip"
 
       - name: Install Python dependencies
         run: pip install -r requirements.txt
@@ -90,7 +95,7 @@ jobs:
         run: python merge_pdf.py
 
       - name: Upload compiled files as artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: lilypond-outputs
           path: output/
@@ -107,11 +112,10 @@ jobs:
       LC_ALL: "C.UTF-8"
       LANG: "C.UTF-8"
       LANGUAGE: "C.UTF-8"
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
       - name: Download build artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: lilypond-outputs
           path: site
