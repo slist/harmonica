@@ -7,7 +7,7 @@
 
 \header {
   title = "Bilitis"
-  composer = "Francis Lai"
+  composer = "Francis Lai (1932-2018)"
   copyrightStatus = "public-domain" % ???
   tagline = ##f
 }
@@ -24,26 +24,50 @@ melodie = {
   %\key fa \major % Tonalité de Fa majeur (sib♯)
   \time 4/4
   \tempo 4 = 80
-  \clef "treble^8"
-
-  <do mi sol do>1-^-.\arpeggio
-  ^\markup { \hspace #2 \italic "arpeggio" }
-
-  %\partial 2
-  %fa4 la fa do | fa la fa2 | fa4 la2. | fa4 la2 do4 |
+  %\clef "treble^8"
+  
+  r4 mi8 fa sol4 mi' | la,1 | r8 la la si si do do re | sol,1 | 
   \break
-  %sib4. la8 sol4 fa | mi sol do,2 | fa4 la do4. do8 | la4 fa2
+  r8 sol sol la la si si do | fa,1 | r8 fa fa sol sol la la si | mi,1 |
+  \break
+  r4 mi8 fa sol4 mi' | fa,1 | r8 la la si si do do re | sol,1 |
+  \break
+  r4 mi8 fa sol4 mi'
+  \repeat volta 2
+  { la,1 | r8 la la si si do do re | sol,1
+    \break
+    r8sol sol la la si si do | fa,1 | r8 fa fa sol sol la la si |
+    \alternative {
+      {
+        mi,1
+        \break
+        r4 mi8 fa sol4 mi'  % cas 1
+      }
+      {
+        do1   % cas 2
+      }
+    }
+    <do mi sol do>1-^-.\arpeggio
+    ^\markup { \hspace #2 \italic "arpeggio" }
+  }
+  r8 sol sol la la si si do |
+  \break
+  do1 | r8 la la si si do do re | re1 | mi8 fa sol4~ sol8 fa mi sol |
+  \break
+  fa la,~ la2. | re8 mi fa4~ fa8 mi re fa | mi sol,~ sol2. | la8 si do4~ do8 si do mi |
+  \break
+  re8 la4. si8 do mi re | la2~ la8 fa sol la | la1
   \bar "|."
 }
 \addlyrics {
-  Bilitis, Bilitis, what a beautiful name!
-  Bilitis, Bilitis, what a beautiful name!
+  % Bilitis, Bilitis, what a beautiful name!
+  % Bilitis, Bilitis, what a beautiful name!
 }
 
 
 accords = \chordmode {
- % fa1 s re:m s
- % do s fa2 do2 fa4
+  % fa1 s re:m s
+  % do s fa2 do2 fa4
 }
 
 % ============================
@@ -54,7 +78,7 @@ diatoniqueScore =
 \score {
   <<
     \new Staff { 
-      \diatonicHarmonicaTab \relative do'' {
+      \diatonicHarmonicaTab \relative do' {
         \melodie
       }
     }
@@ -73,7 +97,7 @@ chromatiqueScore =
       \accords
     }
     \new Staff { 
-      \chromaticHarmonicaTab \relative do'' {
+      \chromaticHarmonicaTab \relative do' {
         \melodie
       }
     }
@@ -89,12 +113,12 @@ midiScore =
 \score {
   \new Staff {
     \set Staff.midiInstrument = #"harmonica"
-    \relative do'' {
+    \relative do' {
       \melodie
     }
   }
   \midi {
-    \tempo 4 = 100
+    \tempo 4 = 80
   }
 }
 
