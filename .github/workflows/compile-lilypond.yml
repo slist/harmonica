@@ -69,17 +69,40 @@ jobs:
           }
           export -f compile_file
 
-          # Compile multiple files in parallel (depending on the number of CPU cores)
-          find partitions -type f -name "*.ly" ! -name "harmonica.ly" ! -name "style.ly" -print0 \
+          # Compile partitions (exclude library files and gammes/ subdir)
+          find partitions -maxdepth 1 -type f -name "*.ly" \
+            ! -name "harmonica.ly" ! -name "style.ly" -print0 \
             | xargs -0 -P$(nproc) -I{} bash -c 'compile_file "$@"' _ {}
+
+      - name: Compile gamme scores (PDF + MIDI)
+        run: |
+          set -euo pipefail
+          mkdir -p output/gammes
+
+          compile_gamme() {
+            local file="$1"
+            local base
+            base=$(basename "${file}" .ly)
+            echo "Compiling gamme ${base}..."
+
+            lilypond -dcompile-diatonique  -o "output/gammes/${base}_diatonique" "${file}" || { echo "❌ Failed: ${base} (diatonique)";  return 1; }
+            lilypond -dcompile-chromatique -o "output/gammes/${base}_chromatique" "${file}" || { echo "❌ Failed: ${base} (chromatique)"; return 1; }
+            lilypond --formats=midi -dcompile-midi -o "output/gammes/${base}" "${file}"    || { echo "❌ Failed: ${base} (midi)";        return 1; }
+          }
+          export -f compile_gamme
+
+          find partitions/gammes -type f -name "*.ly" -print0 \
+            | xargs -0 -P$(nproc) -I{} bash -c 'compile_gamme "$@"' _ {}
 
       - name: Generate MP3 files from MIDI
         run: |
           set -euo pipefail
+          # Converts all .midi files found anywhere under output/ (including output/gammes/)
           find output -type f -name "*.midi" -print0 | while IFS= read -r -d '' midi_file; do
+            dir=$(dirname "${midi_file}")
             base=$(basename "${midi_file}" .midi)
-            wav_file="output/${base}.wav"
-            mp3_file="output/${base}.mp3"
+            wav_file="${dir}/${base}.wav"
+            mp3_file="${dir}/${base}.mp3"
 
             echo "Converting ${base}.midi → MP3..."
             fluidsynth -ni /usr/share/sounds/sf2/FluidR3_GM.sf2 "${midi_file}" -F "${wav_file}" -r 44100 \
@@ -92,6 +115,8 @@ jobs:
         run: python merge_pdf.py
 
       - name: Generate index.html
+        env:
+          PRIVATE_PASSWORD: ${{ secrets.PRIVATE_PASSWORD }}
         run: python generate_index.py
 
       - name: Upload compiled files as artifact

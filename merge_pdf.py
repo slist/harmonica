@@ -8,44 +8,35 @@ from reportlab.lib.pagesizes import A4
 from reportlab.lib.units import cm
 from reportlab.pdfgen import canvas
 
-DOSSIER = "output"
+DOSSIER        = "output"
+GAMMES_DOSSIER = os.path.join(DOSSIER, "gammes")
 SUFFIXES = ("_diatonique", "_chromatique")
 
-fichiers = os.listdir(DOSSIER)
 
-# Filtrer les fichiers à inclure
-partitions_diat = sorted(f for f in fichiers if f.endswith("_diatonique.pdf"))
-partitions_chro = sorted(f for f in fichiers if f.endswith("_chromatique.pdf"))
-
-
-def nom_propre(pdf):
-    """Retire l'extension .pdf et le suffixe _diatonique / _chromatique."""
+def nom_propre(pdf: str) -> str:
+    """Retire l'extension .pdf et les suffixes _diatonique / _chromatique."""
     nom = os.path.splitext(pdf)[0]
     for suffixe in SUFFIXES:
         nom = nom.removesuffix(suffixe)
     return nom
 
 
-def creer_page_index(titre, liste_pdfs, fichier_sortie):
+def creer_page_index(titre: str, liste_pdfs: list[str], fichier_sortie: str) -> None:
     """Crée une page PDF élégante contenant la liste des fichiers."""
     c = canvas.Canvas(fichier_sortie, pagesize=A4)
     largeur, hauteur = A4
 
-    # Bandeau titre coloré
     c.setFillColor(HexColor("#e0e0e0"))
     c.rect(0, hauteur - 80, largeur, 80, fill=1, stroke=0)
     c.setFillColor(HexColor("#000000"))
 
-    # Titre principal
     c.setFont("Helvetica-Bold", 22)
     c.drawCentredString(largeur / 2, hauteur - 55, titre)
 
-    # Ligne de séparation
     c.setStrokeColor(HexColor("#999999"))
     c.setLineWidth(0.5)
     c.line(2 * cm, hauteur - 90, largeur - 2 * cm, hauteur - 90)
 
-    # Liste des morceaux
     c.setFont("Helvetica", 12)
     y = hauteur - 120
 
@@ -53,34 +44,31 @@ def creer_page_index(titre, liste_pdfs, fichier_sortie):
         texte = f"{numero:>2}. {nom_propre(pdf)}"
         c.drawString(2 * cm, y, texte)
         y -= 16
-
         if y < 80:
             c.showPage()
             c.setFont("Helvetica", 12)
             y = hauteur - 80
 
-    # Pied de page
-    # c.setFont("Helvetica-Oblique", 10)
-    # c.setFillColor(HexColor("#555555"))
-    # c.drawCentredString(largeur / 2, 40, "Généré automatiquement avec amour 💙")
-
     c.save()
 
 
-def fusionner_avec_index(liste_pdfs, sortie, titre_index):
+def fusionner_avec_index(
+    liste_pdfs: list[str],
+    sortie: str,
+    titre_index: str,
+    base_dir: str = DOSSIER,
+) -> None:
     """Fusionne une liste de PDFs en ajoutant une page d'index et des signets."""
     writer = PdfWriter()
     page_offset = 0
 
-    # 1️⃣ Crée la page d'index temporaire
-    index_pdf = os.path.join(DOSSIER, "temp_index.pdf")
+    index_pdf = os.path.join(base_dir, "temp_index.pdf")
     creer_page_index(titre_index, liste_pdfs, index_pdf)
     writer.append(index_pdf)
     page_offset += len(PdfReader(index_pdf).pages)
 
-    # 2️⃣ Ajoute les fichiers un par un
     for pdf in liste_pdfs:
-        chemin_pdf = os.path.join(DOSSIER, pdf)
+        chemin_pdf = os.path.join(base_dir, pdf)
         try:
             reader = PdfReader(chemin_pdf)
             num_pages = len(reader.pages)
@@ -93,7 +81,6 @@ def fusionner_avec_index(liste_pdfs, sortie, titre_index):
         writer.add_outline_item(nom_propre(pdf), page_offset)
         page_offset += num_pages
 
-    # 3️⃣ Écrit le résultat final, en s'assurant de nettoyer le temporaire même en cas d'erreur
     try:
         writer.write(sortie)
     finally:
@@ -102,18 +89,47 @@ def fusionner_avec_index(liste_pdfs, sortie, titre_index):
     print(f"✅ PDF généré avec page d'index : {sortie}")
 
 
-# Fusionne les diatoniques
+# --------- Partitions (chansons) ---------
+
+fichiers = os.listdir(DOSSIER)
+
+partitions_diat = sorted(f for f in fichiers if f.endswith("_diatonique.pdf"))
+partitions_chro = sorted(f for f in fichiers if f.endswith("_chromatique.pdf"))
+
 fusionner_avec_index(
     partitions_diat,
     os.path.join(DOSSIER, "all_diatonique.pdf"),
     "Index des partitions pour harmonica diatonique",
 )
 
-# Fusionne les chromatiques
 fusionner_avec_index(
     partitions_chro,
     os.path.join(DOSSIER, "all_chromatique.pdf"),
     "Index des partitions pour harmonica chromatique",
 )
 
-print("🎶 Fusion terminée avec succès avec page d'index et signets cliquables !")
+# --------- Gammes ---------
+
+if os.path.isdir(GAMMES_DOSSIER):
+    gammes_fichiers = os.listdir(GAMMES_DOSSIER)
+
+    gammes_diat = sorted(f for f in gammes_fichiers if f.endswith("_diatonique.pdf"))
+    gammes_chro = sorted(f for f in gammes_fichiers if f.endswith("_chromatique.pdf"))
+
+    if gammes_diat:
+        fusionner_avec_index(
+            gammes_diat,
+            os.path.join(GAMMES_DOSSIER, "all_gammes_diatonique.pdf"),
+            "Gammes pour harmonica diatonique",
+            base_dir=GAMMES_DOSSIER,
+        )
+
+    if gammes_chro:
+        fusionner_avec_index(
+            gammes_chro,
+            os.path.join(GAMMES_DOSSIER, "all_gammes_chromatique.pdf"),
+            "Gammes pour harmonica chromatique",
+            base_dir=GAMMES_DOSSIER,
+        )
+
+print("🎶 Fusion terminée avec succès !")
