@@ -34,6 +34,12 @@ COUNTRY_FLAGS: dict[str, str] = {
     'ie': '🇮🇪', 'it': '🇮🇹', 'ru': '🇷🇺', 'us': '🇺🇸',
 }
 
+COUNTRY_NAMES: dict[str, str] = {
+    'ar': 'Argentine', 'at': 'Autriche', 'de': 'Allemagne', 'fr': 'France',
+    'gb': 'Royaume-Uni', 'ie': 'Irlande', 'it': 'Italie', 'ru': 'Russie',
+    'us': 'États-Unis',
+}
+
 OUTPUT_DIR     = "output"
 PARTITIONS_DIR = "partitions"
 GAMMES_DIR     = "gammes"
@@ -184,13 +190,13 @@ def difficulty_cell(diff: dict) -> str:
     details = [level_label]
     if bends:
         parts.append(f'↕{bends}')
-        details.append(f'{bends} bend(s)')
+        details.append(f"{bends} altération(s) / bend(s)")
     if overblows:
         parts.append(f'⊕{overblows}')
-        details.append(f'{overblows} overblow(s)')
+        details.append(f"{overblows} overblow(s)")
     if overdraws:
         parts.append(f'⊗{overdraws}')
-        details.append(f'{overdraws} overdraw(s)')
+        details.append(f"{overdraws} overdraw(s)")
     parts.append(speed_badge)
     details.append(f'{speed_label} (♩={tempo}, 1/{fastest})')
 
@@ -241,6 +247,24 @@ def copyright_icon(status: str) -> str:
         "public-domain": "🆓", "copyrighted": "©",
         "arrangement-copyrighted": "©✍️", "unknown": "⚠️", "forbidden": "🚫",
     }.get(status, "⚠️")
+
+
+def copyright_cell(status: str, composer: str) -> str:
+    icon = copyright_icon(status)
+    if status in ("public-domain", "public domain"):
+        tooltip = "Domaine public — libre de droits"
+    elif status == "unknown":
+        tooltip = "Statut inconnu"
+    elif status == "forbidden":
+        tooltip = "Reproduction interdite"
+    else:
+        m = re.search(r'\((?:\d{4})[–\-](\d{4})\)', composer)
+        if m:
+            free_year = int(m.group(1)) + 71
+            tooltip = f"Sous droits — libre à partir du 1er janvier {free_year} (70 ans après la mort de l'auteur)"
+        else:
+            tooltip = "Sous droits — libre 70 ans après la mort de l'auteur"
+    return f"<td class='badge' data-sort='{escape(status)}' title='{escape(tooltip)}'>{icon}</td>"
 
 
 def lyrics_icon(langs: list) -> str:
@@ -412,13 +436,15 @@ def _song_row(meta: dict, public_only: bool, pdf_prefix: str = "") -> str:
     key       = key_to_french(meta['key'])
     composer  = meta['composer']
     title     = meta['title'] or base
-    nat       = meta['composerNationality'].lower()
-    flag      = COUNTRY_FLAGS.get(nat, '')
-    diff      = meta['difficulty']
-    outputs   = meta['outputs']
-    diat      = outputs['diat']
-    chro      = outputs['chro']
-    mp3s      = outputs['mp3s']
+    nat        = meta['composerNationality'].lower()
+    flag_emoji = COUNTRY_FLAGS.get(nat, '')
+    country    = COUNTRY_NAMES.get(nat, '')
+    flag       = f"<span title='{escape(country)}'>{flag_emoji}</span>" if flag_emoji and country else flag_emoji
+    diff       = meta['difficulty']
+    outputs    = meta['outputs']
+    diat       = outputs['diat']
+    chro       = outputs['chro']
+    mp3s       = outputs['mp3s']
 
     composer_cell = f"{flag} {escape(composer)}".strip() if composer else flag
     key_num = {
@@ -443,7 +469,7 @@ def _song_row(meta: dict, public_only: bool, pdf_prefix: str = "") -> str:
         row += "<td class='hidden'>non affiché</td>"
         row += "<td class='hidden'>non affiché</td>"
     row += f"<td class='badge'>{lyrics_icon(lyrics)}</td>"
-    row += f"<td class='badge' data-sort='{escape(status)}'>{copyright_icon(status)}</td>"
+    row += copyright_cell(status, composer)
     row += "</tr>\n"
     return row
 
@@ -528,7 +554,7 @@ def generate_gammes_html(gammes: list[dict]) -> None:
         rows += f"<td>{_pdf_links(diat)}</td>"
         rows += f"<td>{_pdf_links(chro)}</td>"
         rows += f"<td>{_mp3_link(mp3s)}</td>"
-        rows += f"<td class='badge'>{copyright_icon(status)}</td>"
+        rows += copyright_cell(status, instru)
         rows += "</tr>\n"
 
     # links to merged gamme PDFs (if they exist)
