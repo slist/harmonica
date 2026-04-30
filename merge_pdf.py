@@ -93,11 +93,11 @@ def fusionner_avec_index(liste_pdfs, sortie, titre_index):
         writer.add_outline_item(nom_propre(pdf), page_offset)
         page_offset += num_pages
 
-    # 3️⃣ Écrit le résultat final
-    writer.write(sortie)
-
-    # 4️⃣ Supprime la page d'index temporaire
-    os.remove(index_pdf)
+    # 3️⃣ Écrit le résultat final, en s'assurant de nettoyer le temporaire même en cas d'erreur
+    try:
+        writer.write(sortie)
+    finally:
+        os.remove(index_pdf)
 
     print(f"✅ PDF généré avec page d'index : {sortie}")
 
