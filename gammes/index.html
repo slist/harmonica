@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head><meta charset="UTF-8"><title>Gammes Harmonica</title><style>
+*{box-sizing:border-box}
+body{font-family:sans-serif;max-width:1400px;margin:0 auto;padding:1em;background:#fafafa}
+h1{color:#333}
+nav a{margin-right:1em;text-decoration:none;color:#1565c0;font-weight:bold}
+nav a:hover{text-decoration:underline}
+table{border-collapse:collapse;width:100%;font-size:0.88em;background:#fff}
+thead th{background:#f0f0f0;cursor:pointer;user-select:none;white-space:nowrap;
+         padding:7px 9px;border:1px solid #ccc;text-align:center}
+thead th:hover{background:#dde}
+thead th.sort-asc::after{content:" ▲";font-size:.8em}
+thead th.sort-desc::after{content:" ▼";font-size:.8em}
+tbody td{border:1px solid #ccc;padding:5px 8px;text-align:center}
+tbody td:first-child{text-align:left}
+tbody td:nth-child(2){text-align:left;font-size:0.85em}
+tbody tr:hover{background:#f5f5f5}
+.hidden{color:#bbb;font-style:italic}
+.badge{font-size:1.1em}
+/* login form */
+#login-section{max-width:340px;margin:4em auto;padding:2em;background:#fff;
+               border:1px solid #ccc;border-radius:8px;text-align:center;box-shadow:0 2px 8px #0001}
+#login-section h2{margin-top:0}
+#pwd-input{width:100%;padding:.5em;font-size:1em;margin:.5em 0;border:1px solid #aaa;border-radius:4px}
+#login-btn{padding:.5em 1.5em;font-size:1em;background:#1565c0;color:#fff;border:none;
+           border-radius:4px;cursor:pointer}
+#login-btn:hover{background:#0d47a1}
+#login-error{color:#c62828;margin-top:.5em;display:none}
+</style></head>
+<body>
+<h1>Gammes &amp; Références</h1>
+<nav>
+  <a href="../">← Partitions</a>
+</nav>
+<br>
+<ul><li><a href="all_gammes_diatonique.pdf">Toutes les gammes diatoniques (PDF)</a></li>
+<li><a href="all_gammes_chromatique.pdf">Toutes les gammes chromatiques (PDF)</a></li>
+</ul>
+<p>5 fiches de gammes</p>
+<table id="data-table">
+<thead><tr><th onclick='sortTable(this)'>Titre</th><th onclick='sortTable(this)'>Instrument</th><th onclick='sortTable(this)'>Diatonique</th><th onclick='sortTable(this)'>Chromatique</th><th onclick='sortTable(this)'>MP3</th><th onclick='sortTable(this)'>Droits</th></tr></thead>
+<tbody>
+<tr><td data-sort='gammes blues'>Gammes Blues</td><td></td><td><a href='gamme-blues_diatonique.pdf'>PDF</a></td><td><a href='gamme-blues_chromatique.pdf'>PDF</a></td><td><a href='gamme-blues.mp3'>MP3</a></td><td class='badge'>🆓</td></tr>
+<tr><td data-sort='cartographie de l&#x27;harmonica en do (c)'>Cartographie de l&#x27;Harmonica en Do (C)</td><td></td><td><a href='gamme-harmo-diato-c_diatonique.pdf'>PDF</a></td><td><a href='gamme-harmo-diato-c_chromatique.pdf'>PDF</a></td><td><a href='gamme-harmo-diato-c.mp3'>MP3</a></td><td class='badge'>🆓</td></tr>
+<tr><td data-sort='cartographie de l&#x27;harmonica en ré (d)'>Cartographie de l&#x27;Harmonica en Ré (D)</td><td></td><td><a href='gamme-harmo-diato-d_diatonique.pdf'>PDF</a></td><td><a href='gamme-harmo-diato-d_chromatique.pdf'>PDF</a></td><td><a href='gamme-harmo-diato-d.mp3'>MP3</a></td><td class='badge'>🆓</td></tr>
+<tr><td data-sort='cartographie de l&#x27;harmonica en sol (g)'>Cartographie de l&#x27;Harmonica en Sol (G)</td><td></td><td><a href='gamme-harmo-diato-g_diatonique.pdf'>PDF</a></td><td><a href='gamme-harmo-diato-g_chromatique.pdf'>PDF</a></td><td><a href='gamme-harmo-diato-g.mp3'>MP3</a></td><td class='badge'>🆓</td></tr>
+<tr><td data-sort='gammes pentatoniques'>Gammes Pentatoniques</td><td></td><td><a href='gamme-pentatonique_diatonique.pdf'>PDF</a></td><td><a href='gamme-pentatonique_chromatique.pdf'>PDF</a></td><td><a href='gamme-pentatonique.mp3'>MP3</a></td><td class='badge'>🆓</td></tr>
+
+</tbody>
+</table>
+<script>
+(function(){
+  var _col=-1,_asc=true;
+  window.sortTable=function(th){
+    var table=th.closest('table');
+    var tbody=table.tBodies[0];
+    var rows=Array.from(tbody.rows);
+    var col=th.cellIndex;
+    if(_col===col){_asc=!_asc;}else{_col=col;_asc=true;}
+    rows.sort(function(a,b){
+      var va=(a.cells[col]&&a.cells[col].dataset.sort!==undefined)?a.cells[col].dataset.sort:a.cells[col].textContent.trim();
+      var vb=(b.cells[col]&&b.cells[col].dataset.sort!==undefined)?b.cells[col].dataset.sort:b.cells[col].textContent.trim();
+      var na=parseFloat(va),nb=parseFloat(vb);
+      if(!isNaN(na)&&!isNaN(nb)){return _asc?na-nb:nb-na;}
+      return _asc?va.localeCompare(vb,'fr'):vb.localeCompare(va,'fr');
+    });
+    rows.forEach(function(r){tbody.appendChild(r);});
+    table.querySelectorAll('thead th').forEach(function(t,i){
+      t.classList.remove('sort-asc','sort-desc');
+      if(i===col){t.classList.add(_asc?'sort-asc':'sort-desc');}
+    });
+  };
+})();
+</script>
+</body>
+</html>
