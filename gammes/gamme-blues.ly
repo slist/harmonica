@@ -32,19 +32,19 @@ melodie = {
   \break
 
   \sectionTitle "Gamme blues de Sol — 2e position (cross-harp)"
-  sol, sib do reb re fa sol fa re reb do sib sol,2
+  sol,4 sib do reb re fa sol fa re reb do sib sol,2
   \break
 
   \sectionTitle "Gamme blues de Ré — 3e position"
-  re, fa sol solb la do re do la solb sol fa re,2
+  re,4 fa sol solb la do re do la solb sol fa re,2
   \break
 
   \sectionTitle "Gamme blues de La — 4e position"
-  la,, do re mib mi sol la sol mi mib re do la,,2
+  la,,4 do re mib mi sol la sol mi mib re do la,,2
   \break
 
   \sectionTitle "Gamme blues de Mi — 5e position"
-  mi,, sol la sib si re mi re si sib la sol mi,,2
+  mi,,4 sol la sib si re mi re si sib la sol mi,,2
   \break
 
   \sectionTitle "Blues shuffle rythmique (Do)"
