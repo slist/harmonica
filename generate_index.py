@@ -45,7 +45,7 @@ PARTITIONS_DIR = "partitions"
 GAMMES_DIR     = "gammes"
 
 # Password hash for the private page (override with PRIVATE_PASSWORD env var)
-_pw = os.environ.get("PRIVATE_PASSWORD", "harmonica")
+_pw = os.environ.get("PRIVATE_PASSWORD") or "harmonica"
 PRIVATE_HASH = hashlib.sha256(_pw.encode()).hexdigest()
 
 
