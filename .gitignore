@@ -417,6 +417,9 @@ FodyWeavers.xsd
 *.msm
 *.msp
 
+# Generated output directory
+output/
+
 # Added file types for harmonica project
 # From LilyPond: https://github.com/github/gitignore/blob/main/Lilypond.gitignore
 *.ps

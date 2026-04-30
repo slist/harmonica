@@ -477,10 +477,10 @@ def _song_row(meta: dict, public_only: bool, pdf_prefix: str = "") -> str:
         row += f"<td>{_pdf_links(chro, pdf_prefix)}</td>"
         row += f"<td>{_mp3_link(mp3s, pdf_prefix)}</td>"
     else:
-        row += "<td class='hidden'>non affiché</td>"
+        row += "<td class='hidden'>—</td>"
         row += difficulty_cell(diff)
-        row += "<td class='hidden'>non affiché</td>"
-        row += "<td class='hidden'>non affiché</td>"
+        row += "<td class='hidden'>—</td>"
+        row += "<td class='hidden'>—</td>"
     row += f"<td class='badge'>{lyrics_icon(lyrics)}</td>"
     row += copyright_cell(status, composer)
     row += "</tr>\n"
@@ -518,11 +518,6 @@ def generate_index_html(songs: list[dict]) -> None:
   <a href="gammes/">📖 Gammes &amp; Scales</a>
 </nav>
 <br>
-<h2>Compilation PDF complète</h2>
-<ul>
-  <li><a href="all_diatonique.pdf">Toutes les partitions diatoniques (PDF)</a></li>
-  <li><a href="all_chromatique.pdf">Toutes les partitions chromatiques (PDF)</a></li>
-</ul>
 <p>
   {len(songs)} partitions · {len(free)} libres de droits · {len(locked)} sous droits
   <span title="{escape(_DIFFICULTY_HELP)}" style="cursor:help;margin-left:.5em">ℹ️</span>
@@ -534,6 +529,9 @@ def generate_index_html(songs: list[dict]) -> None:
 </tbody>
 </table>
 {_SORT_JS}
+<p style="margin-top:2em;text-align:right;font-size:0.8em">
+  <a href="private.html" style="color:#bbb;text-decoration:none" title="Accès complet">🔒</a>
+</p>
 </body>
 </html>
 """
