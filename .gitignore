@@ -427,3 +427,5 @@ FodyWeavers.xsd
 *.mp3
 *.log
 *~
+# macOS
+.DS_Store
