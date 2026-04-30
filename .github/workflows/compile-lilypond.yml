@@ -70,7 +70,7 @@ jobs:
           export -f compile_file
 
           # Compile multiple files in parallel (depending on the number of CPU cores)
-          find partitions -type f -name "*.ly" -print0 \
+          find partitions -type f -name "*.ly" ! -name "harmonica.ly" ! -name "style.ly" -print0 \
             | xargs -0 -P$(nproc) -I{} bash -c 'compile_file "$@"' _ {}
 
       - name: Generate MP3 files from MIDI

@@ -1,5 +1,9 @@
 \version "2.24.3"
 
+#(define compile-diatonique (ly:get-option 'compile-diatonique))
+#(define compile-chromatique (ly:get-option 'compile-chromatique))
+#(define compile-midi (ly:get-option 'compile-midi))
+
 \header {
   title = "Cartographie de l'Harmonica en Sol (G)"
   subtitle = "Étude complète des notes et altérations"
@@ -83,8 +87,33 @@ midiScore =
   }
 }
 
-\diatoniqueScore
-\midiScore
+% ============================
+% SCORE CHROMATIQUE
+% ============================
+
+chromatiqueScore =
+\score {
+  <<
+    \new Staff {
+      \chromaticHarmonicaTab \relative c'' {
+        \melodie
+      }
+    }
+  >>
+  \layout { }
+}
+
+% Inclusion conditionnelle des scores
+#(if compile-diatonique
+     (ly:parser-include-string "\\diatoniqueScore"))
+#(if compile-chromatique
+     (ly:parser-include-string "\\chromatiqueScore"))
+#(if compile-midi
+     (ly:parser-include-string "\\midiScore"))
+
+%\diatoniqueScore
+%\chromatiqueScore
+%\midiScore
 
 % ============================
 % HISTOIRE DU BÉMOL
