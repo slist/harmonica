@@ -34,10 +34,9 @@ COUNTRY_FLAGS: dict[str, str] = {
     'ie': '🇮🇪', 'it': '🇮🇹', 'ru': '🇷🇺', 'us': '🇺🇸',
 }
 
-LIBRARY_FILES  = {"harmonica.ly", "style.ly"}
 OUTPUT_DIR     = "output"
 PARTITIONS_DIR = "partitions"
-GAMMES_SUBDIR  = "gammes"
+GAMMES_DIR     = "gammes"
 
 # Password hash for the private page (override with PRIVATE_PASSWORD env var)
 _pw = os.environ.get("PRIVATE_PASSWORD", "harmonica")
@@ -286,13 +285,13 @@ def collect_outputs(base: str, output_dir: str) -> dict:
 
 
 def collect_songs() -> list[dict]:
-    """Scan partitions/*.ly (not gammes/) and return enriched song list."""
+    """Scan partitions/*.ly and return enriched song list."""
     if not os.path.isdir(PARTITIONS_DIR):
         logger.warning(f"⚠️  Dossier '{PARTITIONS_DIR}' introuvable")
         return []
     songs = []
     for fname in sorted(os.listdir(PARTITIONS_DIR)):
-        if fname in LIBRARY_FILES or not fname.endswith(".ly"):
+        if not fname.endswith(".ly"):
             continue
         full = os.path.join(PARTITIONS_DIR, fname)
         if not os.path.isfile(full):
@@ -306,16 +305,15 @@ def collect_songs() -> list[dict]:
 
 
 def collect_gammes() -> list[dict]:
-    """Scan partitions/gammes/*.ly and return enriched gamme list."""
-    gammes_src = os.path.join(PARTITIONS_DIR, GAMMES_SUBDIR)
-    gammes_out = os.path.join(OUTPUT_DIR, GAMMES_SUBDIR)
-    if not os.path.isdir(gammes_src):
+    """Scan gammes/*.ly and return enriched gamme list."""
+    gammes_out = os.path.join(OUTPUT_DIR, "gammes")
+    if not os.path.isdir(GAMMES_DIR):
         return []
     gammes = []
-    for fname in sorted(os.listdir(gammes_src)):
+    for fname in sorted(os.listdir(GAMMES_DIR)):
         if not fname.endswith(".ly"):
             continue
-        full = os.path.join(gammes_src, fname)
+        full = os.path.join(GAMMES_DIR, fname)
         if not os.path.isfile(full):
             continue
         base = fname[:-3]
@@ -507,7 +505,7 @@ def generate_index_html(songs: list[dict]) -> None:
 
 
 def generate_gammes_html(gammes: list[dict]) -> None:
-    gammes_out = os.path.join(OUTPUT_DIR, GAMMES_SUBDIR)
+    gammes_out = os.path.join(OUTPUT_DIR, "gammes")
     os.makedirs(gammes_out, exist_ok=True)
 
     cols = [
