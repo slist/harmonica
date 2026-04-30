@@ -9,8 +9,7 @@
   title = "Tom Sawyer"
   composer = "Geddy Lee (1953–), Alex Lifeson (1953–)"
   poet = "Neil Peart (1952–2020), Pye Dubois (1947–)"
-  lyricsLang = #'(en)
-  %copyright = "Public Domain"
+  lyricsLang = #'(fr)
   copyrightStatus = "copyrighted"
   tagline = ##f
   composerNationality = "ca"
@@ -84,8 +83,6 @@ melodie = {
 
 
 accords = \chordmode {
-  fa1 s re:m s
-  do s fa2 do2 fa4
 }
 
 % ============================
