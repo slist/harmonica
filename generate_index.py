@@ -221,14 +221,27 @@ def parse_ly_metadata(ly_path: str) -> dict:
     with open(ly_path, encoding="utf-8") as f:
         content = f.read()
 
+    _QUOTED = r'((?:[^"\\]|\\.)*)'  # matches content inside "..." tolerating \"
+
     def find(pattern, flags=0):
         m = re.search(pattern, content, flags)
-        return m.group(1).strip() if m else ""
+        if not m:
+            return ""
+        return m.group(1).strip().replace('\\"', '"')
 
-    metadata["copyrightStatus"]      = find(r'copyrightStatus\s*=\s*"([^"]+)"') or "unknown"
-    metadata["composer"]             = find(r'^\s*composer\s*=\s*"([^"]*)"', re.MULTILINE)
-    metadata["title"]                = find(r'^\s*title\s*=\s*"([^"]*)"', re.MULTILINE)
-    metadata["composerNationality"]  = find(r'composerNationality\s*=\s*"([^"]*)"')
+    metadata["copyrightStatus"]      = find(rf'copyrightStatus\s*=\s*"{_QUOTED}"') or "unknown"
+    metadata["composer"]             = find(rf'^\s*composer\s*=\s*"{_QUOTED}"', re.MULTILINE)
+    if not metadata["composer"]:
+        # Fallback: extract text from \markup { ... } form (skip URL strings)
+        m_markup = re.search(r'composer\s*=\s*\\markup\s*\{', content)
+        if m_markup:
+            block = _brace_block(content, m_markup.end())
+            for s in re.findall(r'"([^"]+)"', block):
+                if not s.startswith('http') and s.strip():
+                    metadata["composer"] = s.strip()
+                    break
+    metadata["title"]                = find(rf'^\s*title\s*=\s*"{_QUOTED}"', re.MULTILINE)
+    metadata["composerNationality"]  = find(rf'composerNationality\s*=\s*"{_QUOTED}"')
 
     m = re.search(r'lyricsLang\s*=\s*#\'\(([^)]*)\)', content)
     if m:
@@ -258,7 +271,7 @@ def copyright_cell(status: str, composer: str) -> str:
     elif status == "forbidden":
         tooltip = "Reproduction interdite"
     else:
-        m = re.search(r'\((?:\d{4})[–\-](\d{4})\)', composer)
+        m = re.search(r'\((?:\d{4})\s*[–\-]\s*(\d{4})\)', composer)
         if m:
             free_year = int(m.group(1)) + 71
             tooltip = f"Sous droits — libre à partir du 1er janvier {free_year} (70 ans après la mort de l'auteur)"
