@@ -2,7 +2,7 @@
 
 \header {
   title = "Oh! Susanna"
-  composer = "Stephen Foster"
+  composer = "Stephen Foster (1826-1864)"
   date = "1848"
   lyricsLang = #'(en)
   copyrightStatus = "public-domain"
