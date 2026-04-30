@@ -13,7 +13,7 @@
     \column {
       \line { 
         \with-url #"https://fr.wikipedia.org/wiki/Vivaldi" 
-        "Antonio Lucio Vivaldi (1678 - 1741)"
+        "Antonio Lucio Vivaldi (1678-1741)"
       }
       %\line { \epsfile #X #5 #"uk-flag.eps" }  % must be local EPS
         %convert images/gb.png images/gb.eps   # using ImageMagick

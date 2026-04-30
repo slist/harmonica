@@ -378,7 +378,7 @@ thead th.sort-asc::after{content:" ▲";font-size:.8em}
 thead th.sort-desc::after{content:" ▼";font-size:.8em}
 tbody td{border:1px solid #ccc;padding:5px 8px;text-align:center}
 tbody td:first-child{text-align:left}
-tbody td:nth-child(2){text-align:left;font-size:0.85em}
+tbody td:nth-child(2){text-align:left}
 tbody tr:hover{background:#f5f5f5}
 .hidden{color:#bbb;font-style:italic}
 .badge{font-size:1.1em}

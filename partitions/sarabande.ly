@@ -6,7 +6,7 @@
     \column {
       \line { 
         \with-url #"https://fr.wikipedia.org/wiki/Georg_Friedrich_Haendel" 
-        "Georg Friedrich Haendel (1685 - 1759)"
+        "Georg Friedrich Haendel (1685-1759)"
       }
     }
   }

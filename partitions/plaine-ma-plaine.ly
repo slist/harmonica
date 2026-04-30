@@ -3,7 +3,7 @@
 \header {
   title = "Plaine, ma plaine"
   subtitle = "Polyushka Polye from Symphony No.4 in D Major, Op.41"
-  composer = "Lev Knipper (Dec 3, 1898 - Jul 30, 1974)"
+  composer = "Lev Knipper (1898-1974)" % (Dec 3, 1898 - Jul 30, 1974)
   lyricsLang = #'(fr)
   copyrightStatus = "copyrighted"
   date = "1934"
