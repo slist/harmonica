@@ -13,8 +13,8 @@
 
 % Source: https://www.harmonica12.fr/Folkloriques/Greensleeves.pdf
 
-\include "harmonica.ly"
-\include "style.ly"
+\include "../include/harmonica.ly"
+\include "../include/style.ly"
 
 
 % Options de compilation personnalisées

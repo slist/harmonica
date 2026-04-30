@@ -14,8 +14,8 @@
 %Source: harmonica12.fr
 % Chant soviétique populaire dont le titre original est : "Polyushko Pole")
 
-\include "harmonica.ly"
-\include "style.ly"
+\include "../include/harmonica.ly"
+\include "../include/style.ly"
 
 
 % Options de compilation personnalisées

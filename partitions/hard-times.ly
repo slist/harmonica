@@ -12,8 +12,8 @@
 %From https://www.wedesoft.de/software/2021/12/19/lilypond-bluesharp-tabs/
 
 
-\include "harmonica.ly"
-\include "style.ly"
+\include "../include/harmonica.ly"
+\include "../include/style.ly"
 
 % Options de compilation personnalisées
 

@@ -11,8 +11,8 @@
   composerNationality = "ru"
 }
 
-\include "harmonica.ly"
-\include "style.ly"
+\include "../include/harmonica.ly"
+\include "../include/style.ly"
 
 \language "français"
 

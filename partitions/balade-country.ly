@@ -6,8 +6,8 @@
   tagline = ##f
   composerNationality = "us"
 }
-\include "harmonica.ly"
-\include "style.ly"
+\include "../include/harmonica.ly"
+\include "../include/style.ly"
 
 % vib. comme vibrato != trille qui serait plus un enchainement rapide
 % entre les notes do et mi par exemple.

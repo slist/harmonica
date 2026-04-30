@@ -13,8 +13,8 @@
 
 % Source: https://www.partitions-domaine-public.fr/pdf/533/noel-il-est-ne-le-divin-enfant.html
 
-\include "harmonica.ly"
-\include "style.ly"
+\include "../include/harmonica.ly"
+\include "../include/style.ly"
 
 % Options de compilation personnalisées
 

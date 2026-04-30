@@ -11,8 +11,8 @@
 
 % From: https://www.sheetmusicdirect.com/de-DE/se/ID_No/1444188/Product.aspx
 
-\include "harmonica.ly"
-\include "style.ly"
+\include "../include/harmonica.ly"
+\include "../include/style.ly"
 
 \language "français"
 

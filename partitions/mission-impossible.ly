@@ -10,9 +10,9 @@
 
 % From: https://www.free-scores.com/PDF_FR/anderson-gustav-mission-impossible-89474.pdf
 
-\include "harmonica.ly"
+\include "../include/harmonica.ly"
 %\include "lilypond-book-preamble.ly"
-\include "style.ly"
+\include "../include/style.ly"
 
 \language "français"
 

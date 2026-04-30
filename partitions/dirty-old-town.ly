@@ -11,8 +11,8 @@
 
 % From: https://musescore.com/user/28111512/scores/6520909
 
-\include "harmonica.ly"
-\include "style.ly"
+\include "../include/harmonica.ly"
+\include "../include/style.ly"
 
 \language "français"
 

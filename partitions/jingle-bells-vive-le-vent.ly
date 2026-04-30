@@ -18,8 +18,8 @@ Jingle Bells est un chant de Noël  traditionnel américain, plus connu en Franc
 Source, partition/Tab : https://tinyurl.com/52u6d8aw
 %}
 
-\include "harmonica.ly"
-\include "style.ly"
+\include "../include/harmonica.ly"
+\include "../include/style.ly"
 
 % Options de compilation personnalisées
 #(define compile-diatonique (ly:get-option 'compile-diatonique))

@@ -5,8 +5,8 @@
   tagline = ##f
 }
 
-\include "harmonica.ly"
-\include "style.ly"
+\include "../include/harmonica.ly"
+\include "../include/style.ly"
 
 % Options de compilation personnalisées
 #(define compile-diatonique (ly:get-option 'compile-diatonique))

@@ -9,8 +9,8 @@
   composerNationality = "gb"
 }
 
-\include "harmonica.ly"
-\include "style.ly"
+\include "../include/harmonica.ly"
+\include "../include/style.ly"
 
 % Pour avoir la première phrase entièrement sur une ligne.
 % Supprime l'indentation de la première ligne.

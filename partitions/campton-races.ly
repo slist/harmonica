@@ -15,8 +15,8 @@
 %Source: https://riffspot.com/music/camptown-races-harmonica/681/
 % https://en.wikipedia.org/wiki/Camptown_Races
 
-\include "harmonica.ly"
-\include "style.ly"
+\include "../include/harmonica.ly"
+\include "../include/style.ly"
 
 
 % Options de compilation personnalisées

@@ -13,8 +13,8 @@
 
 %Source: http://harmonicacomte.blogspot.com/2012/10/amazing-grace.html
 
-\include "harmonica.ly"
-\include "style.ly"
+\include "../include/harmonica.ly"
+\include "../include/style.ly"
 
 
 % Options de compilation personnalisées

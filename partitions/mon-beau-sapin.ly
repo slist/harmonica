@@ -14,8 +14,8 @@
 %notes: http://harmonicacomte.blogspot.com/search/label/pour%20d%C3%A9buter
 %rythme et paroles: https://www.petiteguitare.fr/mon-beau-sapin/
 
-\include "harmonica.ly"
-\include "style.ly"
+\include "../include/harmonica.ly"
+\include "../include/style.ly"
 
 
 % Options de compilation personnalisées

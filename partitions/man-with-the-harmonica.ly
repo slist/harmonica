@@ -12,8 +12,8 @@
 
 % From: https://www.youtube.com/watch?v=cHsQw_CXdtc
 
-\include "harmonica.ly"
-\include "style.ly"
+\include "../include/harmonica.ly"
+\include "../include/style.ly"
 
 \language "français"
 

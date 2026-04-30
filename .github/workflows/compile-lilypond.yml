@@ -63,9 +63,9 @@ jobs:
             base=$(basename "${file}" .ly)
             echo "Compiling ${base}..."
 
-            lilypond -I include -dcompile-diatonique  -o "output/${base}_diatonique" "${file}" || { echo "❌ Failed: ${base} (diatonique)";  return 1; }
-            lilypond -I include -dcompile-chromatique -o "output/${base}_chromatique" "${file}" || { echo "❌ Failed: ${base} (chromatique)"; return 1; }
-            lilypond -I include --formats=midi -dcompile-midi -o "output/${base}" "${file}"     || { echo "❌ Failed: ${base} (midi)";        return 1; }
+            lilypond -dcompile-diatonique  -o "output/${base}_diatonique" "${file}" || { echo "❌ Failed: ${base} (diatonique)";  return 1; }
+            lilypond -dcompile-chromatique -o "output/${base}_chromatique" "${file}" || { echo "❌ Failed: ${base} (chromatique)"; return 1; }
+            lilypond --formats=midi -dcompile-midi -o "output/${base}" "${file}"     || { echo "❌ Failed: ${base} (midi)";        return 1; }
           }
           export -f compile_file
 
@@ -84,9 +84,9 @@ jobs:
             base=$(basename "${file}" .ly)
             echo "Compiling gamme ${base}..."
 
-            lilypond -I include -dcompile-diatonique  -o "output/gammes/${base}_diatonique" "${file}" || { echo "❌ Failed: ${base} (diatonique)";  return 1; }
-            lilypond -I include -dcompile-chromatique -o "output/gammes/${base}_chromatique" "${file}" || { echo "❌ Failed: ${base} (chromatique)"; return 1; }
-            lilypond -I include --formats=midi -dcompile-midi -o "output/gammes/${base}" "${file}"    || { echo "❌ Failed: ${base} (midi)";        return 1; }
+            lilypond -dcompile-diatonique  -o "output/gammes/${base}_diatonique" "${file}" || { echo "❌ Failed: ${base} (diatonique)";  return 1; }
+            lilypond -dcompile-chromatique -o "output/gammes/${base}_chromatique" "${file}" || { echo "❌ Failed: ${base} (chromatique)"; return 1; }
+            lilypond --formats=midi -dcompile-midi -o "output/gammes/${base}" "${file}"    || { echo "❌ Failed: ${base} (midi)";        return 1; }
           }
           export -f compile_gamme
 

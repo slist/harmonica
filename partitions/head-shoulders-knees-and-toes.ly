@@ -12,8 +12,8 @@
 
 %Source: https://itsybitsykidsmusic.com/head-shoulders-knees-and-toes/
 
-\include "harmonica.ly"
-\include "style.ly"
+\include "../include/harmonica.ly"
+\include "../include/style.ly"
 
 
 % Options de compilation personnalisées
