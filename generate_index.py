@@ -30,12 +30,12 @@ OVERBLOW_OFFSETS = {3, 15, 18, 22}
 OVERDRAW_OFFSETS = {25, 32}
 
 COUNTRY_FLAGS: dict[str, str] = {
-    'ar': '🇦🇷', 'at': '🇦🇹', 'de': '🇩🇪', 'fr': '🇫🇷', 'gb': '🇬🇧',
+    'ar': '🇦🇷', 'at': '🇦🇹', 'ca': '🇨🇦', 'de': '🇩🇪', 'fr': '🇫🇷', 'gb': '🇬🇧',
     'ie': '🇮🇪', 'it': '🇮🇹', 'ru': '🇷🇺', 'us': '🇺🇸',
 }
 
 COUNTRY_NAMES: dict[str, str] = {
-    'ar': 'Argentine', 'at': 'Autriche', 'de': 'Allemagne', 'fr': 'France',
+    'ar': 'Argentine', 'at': 'Autriche', 'ca': 'Canada', 'de': 'Allemagne', 'fr': 'France',
     'gb': 'Royaume-Uni', 'ie': 'Irlande', 'it': 'Italie', 'ru': 'Russie',
     'us': 'États-Unis',
 }
