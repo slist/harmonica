@@ -25,7 +25,7 @@ melodie = {
   \key sol \major % Tonalité de Sol majeur (fa♯)
   \time 2/4
   %\tempo 4 = 80
-  \tempo "Andantino."
+  \tempo "Andantino." 4 = 84
   %\clef "treble^8"
   %r8 sol' sol fad | re2 | re8 fad fad mi | do2 | do8 fad fad mi |
   %\break
@@ -109,7 +109,7 @@ midiScore =
     }
   }
   \midi {
-    \tempo 4 = 100
+    \tempo 4 = 84
   }
 }
 
