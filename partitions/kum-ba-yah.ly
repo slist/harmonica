@@ -4,7 +4,6 @@
   title = "Kum ba yah"
   composer = ""
   date = ""
-  tagline = ##f
   composerNationality = "us"
 }
 

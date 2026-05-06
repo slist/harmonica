@@ -5,7 +5,6 @@
   composer = "Ewan MacColl (1915-1989)"
   lyricsLang = #'(en)
   copyrightStatus = "copyrighted"
-  tagline = ##f
   composerNationality = "gb"
 }
 

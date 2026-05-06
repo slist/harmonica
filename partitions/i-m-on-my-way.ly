@@ -4,7 +4,6 @@
   title = "I'm on my way"
   lyricsLang = #'(en)
   copyrightStatus = "public-domain"
-  tagline = ##f
   composerNationality = "us"
 }
 

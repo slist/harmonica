@@ -7,7 +7,6 @@
   %opus = ""
   %arranger = ""
   %instrument = "Harmonica chromatique"
-  tagline = ##f
   composerNationality = "fr"
 }
 

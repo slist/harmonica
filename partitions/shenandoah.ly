@@ -5,7 +5,6 @@
   composer = "Traditional"
   lyricsLang = #'(en)
   copyrightStatus = "public-domain" % Mélodie traditionnelle
-  tagline = ##f
   composerNationality = "us"
 }
 

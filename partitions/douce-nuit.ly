@@ -5,7 +5,6 @@
   composer = "Franz Xaver Gruber (1787-1863)"
   lyricsLang = #'(fr)
   copyrightStatus = "public-domain"
-  tagline = ##f
   composerNationality = "at"
 }
 

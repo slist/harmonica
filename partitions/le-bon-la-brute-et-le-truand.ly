@@ -4,7 +4,6 @@
   title = "Le Bon, la Brute et le Truand"
   composer = "Ennio Morricone (1928-2020)"
   copyrightStatus = "copyrighted"
-  tagline = ##f
   composerNationality = "it"
 }
 

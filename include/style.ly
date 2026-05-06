@@ -1,5 +1,9 @@
 \version "2.24.0"
 
+\header {
+  tagline = ##f
+}
+
 \layout {
   #(layout-set-staff-size 20)
 

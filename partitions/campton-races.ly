@@ -8,7 +8,6 @@
   customDate = \markup { "February 1850" }  % Pour l'affichage personnalisé
   lyricsLang = #'(en)
   copyrightStatus = "public-domain"
-  tagline = ##f
   composerNationality = "us"
 }
 

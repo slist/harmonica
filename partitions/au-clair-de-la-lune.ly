@@ -7,7 +7,6 @@
   copyrightStatus = "public-domain"
   lyricsLang = #'(fr)
   date = ""
-  tagline = ##f
   composerNationality = "fr"
 }
 

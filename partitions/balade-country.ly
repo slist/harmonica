@@ -3,7 +3,6 @@
 \header {
   title = "Balade country"
   copyrightStatus = "copyrighted"
-  tagline = ##f
   composerNationality = "us"
 }
 \include "../include/harmonica.ly"

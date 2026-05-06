@@ -5,7 +5,6 @@
   composer = "Auteur original inconnu"
   lyricsLang = #'(en)
   copyrightStatus = "public-domain"
-  tagline = ##f
   composerNationality = "gb"
 }
 

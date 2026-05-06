@@ -4,7 +4,6 @@
   %Ce chant n'est pas sous copyright : https://fr.scoutwiki.org/Dans_la_troupe
   lyricsLang = #'(fr)
   copyrightStatus = "public-domain"
-  tagline = ##f
   composerNationality = "fr"
 }
 

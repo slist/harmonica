@@ -3,7 +3,6 @@
 \header {
   title = "Un éléphant qui se balançait"
   %composer = ""
-  tagline = ##f
   composerNationality = "fr"
 }
 

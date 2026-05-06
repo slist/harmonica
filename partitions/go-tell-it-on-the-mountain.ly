@@ -4,7 +4,6 @@
   title = "Go, tell it on the mountain"
   composer = ""
   date = ""
-  tagline = ##f
   composerNationality = "us"
 }
 

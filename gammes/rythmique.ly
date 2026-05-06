@@ -8,7 +8,6 @@
   copyrightStatus = "public-domain"
   lyricsLang = #'(fr)
   date = ""
-  tagline = ##f
 }
 
 %Source: https://www.rhapsody.fr/wp-content/uploads/2021/08/Anonyme-Au-Clair-de-la-Lune-1.pdf

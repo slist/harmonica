@@ -11,7 +11,6 @@
   poet = "Neil Peart (1952–2020), Pye Dubois (1947–)"
   lyricsLang = #'(fr)
   copyrightStatus = "copyrighted"
-  tagline = ##f
   composerNationality = "ca"
 }
 

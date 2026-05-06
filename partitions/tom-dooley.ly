@@ -4,7 +4,6 @@
   title = "Tom Dooley"
   composer = ""
   date = ""
-  tagline = ##f
   composerNationality = "us"
 }
 

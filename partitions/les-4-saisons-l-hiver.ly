@@ -28,7 +28,6 @@
   arranger = ""
   %instrument = "Harmonica chromatique"
   copyrightStatus = "public-domain"
-  tagline = ##f
   composerNationality = "it"
 }
 

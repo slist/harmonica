@@ -7,7 +7,6 @@
   opus = "Opus 20"
   arranger = ""
   instrument = ""
-  tagline = ##f
   composerNationality = "ru"
 }
 

@@ -4,7 +4,6 @@
   title = "Trois petits chats"
   lyricsLang = #'(fr)
   copyrightStatus = "public-domain" % Chanson traditionnelle française
-  tagline = ##f
   composerNationality = "fr"
 }
 

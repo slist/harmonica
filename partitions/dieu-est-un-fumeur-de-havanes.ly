@@ -10,7 +10,6 @@
   composer = "Serge Gainsbourg (1928-1991)"
   lyricsLang = #'(fr)
   copyrightStatus = "copyrighted"
-  tagline = ##f
   composerNationality = "fr"
 }
 

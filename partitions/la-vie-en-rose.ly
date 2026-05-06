@@ -6,7 +6,6 @@
   poet = "Edit Piaf (1915-1963)"
   lyricsLang = #'(fr)
   copyrightStatus = "copyrighted"
-  tagline = ##f
   composerNationality = "fr"
 }
 

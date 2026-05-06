@@ -7,7 +7,6 @@
   lyricsLang = #'(fr)
   copyrightStatus = "copyrighted"
   date = "1934"
-  tagline = ##f
   composerNationality = "ru"
 }
 

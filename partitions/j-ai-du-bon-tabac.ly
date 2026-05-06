@@ -6,7 +6,6 @@
   date = "1697-1779"
   lyricsLang = #'(fr)
   copyrightStatus = "public-domain" % Chanson traditionnelle française
-  tagline = ##f
   composerNationality = "fr"
 }
 

@@ -2,7 +2,6 @@
 
 \header {
   title = "Western JuJu"
-  tagline = ##f
 }
 
 \include "../include/harmonica.ly"

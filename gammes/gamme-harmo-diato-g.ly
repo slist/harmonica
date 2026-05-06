@@ -11,7 +11,6 @@
   lyricsLang = #'(en)
   copyrightStatus = "public-domain"
   instrument = "Harmonica diatonique en G"
-  tagline = ##f
 }
 
 \include "../include/harmonica.ly"

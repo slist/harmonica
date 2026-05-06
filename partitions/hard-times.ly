@@ -5,7 +5,6 @@
   composer = "Stephen Foster (1826-1864)"
   lyricsLang = #'(en)
   copyrightStatus = "public-domain"
-  tagline = ##f
   composerNationality = "us"
 }
 

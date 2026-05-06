@@ -4,7 +4,6 @@
   title = "Ah! Les Crocodiles"
   lyricsLang = #'(fr)
   copyrightStatus = "public-domain"
-  tagline = ##f
   composerNationality = "fr"
 }
 

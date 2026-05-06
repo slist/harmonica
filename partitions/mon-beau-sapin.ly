@@ -6,7 +6,6 @@
   composer = "Ernst Anschütz (1780-1861)"
   lyricsLang = #'(fr)
   copyrightStatus = "public-domain"
-  tagline = ##f
   composerNationality = "de"
 }
 

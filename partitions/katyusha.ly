@@ -8,7 +8,6 @@
   lyricsLang = #'()
   copyrightStatus = "copyrighted"
   date = ""
-  tagline = ##f
   composerNationality = "ru"
 }
 

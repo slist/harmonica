@@ -4,7 +4,6 @@
   composer = "Traditionnel français"
   lyricsLang = #'(fr)
   copyrightStatus = "public-domain"
-  tagline = ##f
   composerNationality = "fr"
 }
 

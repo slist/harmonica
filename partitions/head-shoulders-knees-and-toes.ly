@@ -6,7 +6,6 @@
   composer = "Gilbert DeBenedetti (1946-)"
   lyricsLang = #'(en)
   copyrightStatus = "copyrighted"
-  tagline = ##f
   composerNationality = "fr"
 }
 

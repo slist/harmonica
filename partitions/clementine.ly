@@ -4,7 +4,6 @@
   title = "My Darling Clementine - La poursuite infernale"
   composer = ""
   date = ""
-  tagline = ##f
   composerNationality = "us"
 }
 

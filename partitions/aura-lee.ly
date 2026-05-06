@@ -6,7 +6,6 @@
   composer = "George R. Poulton (1828-1867)"
   lyricsLang = #'(en)
   copyrightStatus = "public-domain"
-  tagline = ##f
   composerNationality = "us"
 }
 

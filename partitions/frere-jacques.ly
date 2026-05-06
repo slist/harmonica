@@ -4,7 +4,6 @@
   title = "Frère Jacques"
   lyricsLang = #'(fr)
   copyrightStatus = "public-domain"
-  tagline = ##f
   composerNationality = "fr"
 }
 

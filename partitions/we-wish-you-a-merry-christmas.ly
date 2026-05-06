@@ -4,7 +4,6 @@
   title = "We wish you a Merry Christmas"
   lyricsLang = #'(en)
   copyrightStatus = "public-domain"
-  tagline = ##f
   composerNationality = "gb"
 }
 

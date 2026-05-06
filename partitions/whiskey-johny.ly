@@ -13,7 +13,6 @@
   lyricsLang = #'(en)
   %copyright = "Public Domain"
   copyrightStatus = "public-domain" % Mélodie traditionnelle
-  tagline = ##f
   composerNationality = "us"
 }
 

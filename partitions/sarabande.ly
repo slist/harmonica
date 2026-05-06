@@ -15,7 +15,6 @@
   opus = "HWV 437"
   lyricsLang = #'()
   copyrightStatus = "public-domain"
-  tagline = ##f
   composerNationality = "gb"
 }
 

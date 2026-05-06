@@ -6,7 +6,6 @@
   composer = "Ennio Morricone (1928-2020)"
   %lyricsLang = #'(en)
   copyrightStatus = "copyrighted"
-  tagline = ##f
   composerNationality = "it"
 }
 

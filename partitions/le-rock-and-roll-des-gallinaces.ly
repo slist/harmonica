@@ -6,7 +6,6 @@
   lyricsLang = #'(fr)
   copyright = "© Steve Waring — Tous droits réservés"
   copyrightStatus = "copyrighted"
-  tagline = ##f
   composerNationality = "fr"
 }
 

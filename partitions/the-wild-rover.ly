@@ -6,7 +6,6 @@
   date = "1964"
   lyricsLang = #'(en)
   copyrightStatus = "copyrighted"
-  tagline = ##f
   composerNationality = "ie"
 }
 

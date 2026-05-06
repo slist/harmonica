@@ -7,7 +7,6 @@
   %date = ""
   lyricsLang = #'(en)
   copyrightStatus = "public-domain" % Chanson traditionnelle anglaise (XVIe siècle)
-  tagline = ##f
   composerNationality = "gb"
 }
 

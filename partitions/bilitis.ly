@@ -9,7 +9,6 @@
   title = "Bilitis"
   composer = "Francis Lai (1932-2018)"
   copyrightStatus = "copyrighted"
-  tagline = ##f
   composerNationality = "fr"
 }
 

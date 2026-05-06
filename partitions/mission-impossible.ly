@@ -4,7 +4,6 @@
   title = "Mission Impossible"
   composer = "Gustav Anderson (1920-1989) ou Lalo Schifrin (1932-)"
   copyrightStatus = "copyrighted"
-  tagline = ##f
   composerNationality = "ar"
 }
 

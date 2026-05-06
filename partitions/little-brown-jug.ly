@@ -3,7 +3,6 @@
 \header {
   title = "Little brown jug"
   composer = "Glenn Miller Orchestra (1940)"
-  tagline = ##f
   composerNationality = "us"
 }
 

@@ -4,7 +4,6 @@
   title = "Il court, il court, le furet"
   lyricsLang = #'(fr)
   copyrightStatus = "public-domain"
-  tagline = ##f
   composerNationality = "fr"
 }
 

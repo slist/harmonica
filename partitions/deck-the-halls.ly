@@ -5,7 +5,6 @@
   %composer = ""
   lyricsLang = #'(en)
   copyrightStatus = "public-domain" % Mélodie galloise traditionnelle (XVIe siècle)
-  tagline = ##f
   composerNationality = "gb"
 }
 
