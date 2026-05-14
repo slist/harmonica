@@ -17,20 +17,6 @@
 #(define compile-chromatique (ly:get-option 'compile-chromatique))
 #(define compile-midi (ly:get-option 'compile-midi))
 
-\layout {
-  \context {
-    \Lyrics
-    \override LyricText.font-size = #-1
-    \override LyricHyphen.minimum-distance = #0.5
-    \override LyricSpace.minimum-distance = #0.6
-  }
-}
-
-\paper {
-  markup-system-spacing.basic-distance = #20 % Espace entre titre et première portée
-  system-system-spacing.basic-distance = #20 % Espace entre les portées
-}
-
 melodie = {
   \time 4/4
   \clef "treble^8"
@@ -49,7 +35,6 @@ melodie = {
   J'ai vu le loup, le re -- nard, la belette, J' les ai vus ta --
   per du pied; J'ai vu le loup, le re -- nard dan -- ser.
 }
-
 
 accords = \chordmode {
 }
