@@ -7,7 +7,7 @@
 
 \header {
   title = "Yellow Submarine"
-  composer = "John Lennon (1940 – 1980) - Paul McCartney (1942 – )"
+  composer = "John Lennon (1940 – 1980) - Paul McCartney (1942 - )"
   lyricsLang = #'(en)
   copyrightStatus = "copyrighted"
   composerNationality = "GB"
