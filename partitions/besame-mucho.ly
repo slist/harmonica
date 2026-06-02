@@ -68,7 +68,7 @@ melodie = {
   %\tempo "Presto"       4 = 180
   %\tempo "Prestissimo"  4 = 220
 
-  \tempo "Bolero (swing léger)" 4 = 78
+  \tempo "Bolero (swing léger)" 4 = 110
   %\set Score.swingRatio = 0.58
 
   \time 4/4
@@ -79,8 +79,12 @@ melodie = {
   
   %\partial 4 % anacrouse
 
-  %r1 r r r r 
+  r1 r r r r 
 
+\repeat volta 2 {
+  
+  \bar ".|:"
+  
 % SEGNO
   \mark \markup { \musicglyph #"scripts.segno" }
 
@@ -97,30 +101,17 @@ melodie = {
   \tuplet 3/2 { sol4 sol sol } \tuplet 3/2 { sol fa mi } | \tuplet 3/2 { fa fa fa } \tuplet 3/2 { fa mi re } | mi mi8 mi \tuplet 3/2 { mi4 fa sol } | la1 | \tuplet 3/2 { sol4 sol sol } \tuplet 3/2 { sol4 fa mi } |
   %\break
   \tuplet 3/2 { fa fa fa } \tuplet 3/2 { fa mi re } | \tuplet 3/2 { mi mi mi } \tuplet 3/2 { mi fa re } | mi1^\markup { \italic "D.S. al Coda" }|
+  }
   \break
-  \tuplet 3/2 { re'4 la fa } \tuplet 3/2 { la fa re } | \tuplet 3/2 { fa mi re } \tuplet 3/2 { mi re dod } | re1~ | re
-  %r0
+  \repeat volta 2 {
   
-  %\repeat volta 3 {
-  %  r1 | r4\mp dod,8 dod~ dod4 dod | dod dod8 dod8~ dod4 dod | dod dod8 dod~ dod mi4  dod8~ ( dod2 si8 la4.) | r8 do8 dod do dod4 dod | 
-  %  \break
-  %  dod8 do4 dod8~ dod dod4. | re4 re re8 re4 dod8~ | dod1 | r4 do4 dod dod | dod dod8 dod~ dod dod4. | dod4 dod dod mi8 dod~ ( |
-  %  \break
-  %  dod2 si8 la4. ) | r8 dod8 dod do dod4. do8 | dod8 do dod2 r8 la8 | re4 re re re8 dod~ | dod1 
-  %}
-  %\alternative {
-  %  {  }
-  %  {  }
-  %  {  }
-  %}
-  %mi4 mi mi mi |
-  %\break
-  %mi8 ( re ) re4 dod si | re2 ( dod8 si4.~ | si2 ) dod8 re4 mi8~ | mi4 mi mi mi8 mi~ | mi4 re dod8 si4 re8~ (  | re2 dod8 si4.~ | si1 ) 
-
+  \tuplet 3/2 { re'4\coda la fa } \tuplet 3/2 { la fa re } | \tuplet 3/2 { fa mi re } \tuplet 3/2 { mi re dod } | re1~ | re
+  %r0
+}
   % TODO : gérer les 3 répétitions
   % gérer des paroles différentes selon l'alternative
 
-  \bar "|."
+  \bar ":|."
 }
 \addlyrics {
   % \lyricmode {
@@ -181,7 +172,7 @@ midiScore =
     }
   }
   \midi {
-    \tempo 4 = 78
+    \tempo 4 = 110
   }
 }
 
@@ -197,15 +188,24 @@ midiScore =
 %\chromatiqueScore
 %\midiScore
 
+\pageBreak % Force la partition à tenir sur une page
+
+\markup {
+  \column {
+    \vspace #1
+    \fill-line { \bold "Commentaires" }
+  }
+}
+
 \markup {
   \column {
     \vspace #1
     \bold "Les chemins musicaux : Segno, D.S. al Coda, Coda"
     \vspace #0.5
     \line { "Tu joues normal… jusqu’à lire : D.S. al Coda (= Dal Segno à la Coda)" }
-    \line { "Tu reviens au symbole 𝄋 (Segno)" }
+    \line { "Tu reviens au symbole $ (Segno)" }
     \line { "Tu rejoues à partir du Segno jusqu’à voir : To Coda" }
-    \line { "Tu sautes vers la Coda, symbole 𝄌 placé plus loin (dernière ligne pour Mission Impossible)" }
+    \line { "Tu sautes vers la Coda, symbole 'O' avec une croix,  placé plus loin (dernière ligne dans ce morceau)" }
     \line { "Tu joues la Coda jusqu'à la fin." }
     \line { " " }
     \line { "La Coda est une fin alternative, un \"bout spécial\" pour conclure le morceau." }
