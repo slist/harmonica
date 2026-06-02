@@ -69,7 +69,6 @@ melodie = {
   %\tempo "Prestissimo"  4 = 220
 
   \tempo "Bolero (swing léger)" 4 = 110
-  %\set Score.swingRatio = 0.58
 
   \time 4/4
   
@@ -81,45 +80,26 @@ melodie = {
 
   r1 r r r r 
 
-\repeat volta 2 {
+  \repeat volta 2 {
   
-  \bar ".|:"
-  
-% SEGNO
-  \mark \markup { \musicglyph #"scripts.segno" }
-
-
-  re4 re8 re~ re2~ |
-  %\break
-  re4 r4 \tuplet 3/2 { re4 mi fa } | la~ la8 sol~ sol2~ | sol2 r2 | \tuplet 3/2 { sol4 sol sol } \tuplet 3/2 { la la la } | \tuplet 3/2 { sib sib sib } \tuplet 3/2 { dod re mi } |
-  %\break
-  la,1~ | la2 r2 | re4 re8 re~ re2~ | re \tuplet 3/2 { re4 do sib } | la~ la8 sol~ sol2~ |
-  %\break
-  sol r2 | \tuplet 3/2 { re'4 la fa } \tuplet 3/2 { la fa re } | \tuplet 3/2 { fa mi re } \tuplet 3/2 { mi re dod } | re1~ | re^\markup { \italic "To Coda" } |   % TO CODA
-  
-  \break
-  \tuplet 3/2 { sol4 sol sol } \tuplet 3/2 { sol fa mi } | \tuplet 3/2 { fa fa fa } \tuplet 3/2 { fa mi re } | mi mi8 mi \tuplet 3/2 { mi4 fa sol } | la1 | \tuplet 3/2 { sol4 sol sol } \tuplet 3/2 { sol4 fa mi } |
-  %\break
-  \tuplet 3/2 { fa fa fa } \tuplet 3/2 { fa mi re } | \tuplet 3/2 { mi mi mi } \tuplet 3/2 { mi fa re } | mi1^\markup { \italic "D.S. al Coda" }|
+    \bar ".|:"
+    \mark \markup { \musicglyph #"scripts.segno" }
+    re4 re8 re~ re2~ |
+    re4 r4 \tuplet 3/2 { re4 mi fa } | la~ la8 sol~ sol2~ | sol2 r2 | \tuplet 3/2 { sol4 sol sol } \tuplet 3/2 { la la la } | \tuplet 3/2 { sib sib sib } \tuplet 3/2 { dod re mi } |
+    la,1~ | la2 r2 | re4 re8 re~ re2~ | re \tuplet 3/2 { re4 do sib } | la~ la8 sol~ sol2~ |
+    sol r2 | \tuplet 3/2 { re'4 la fa } \tuplet 3/2 { la fa re } | \tuplet 3/2 { fa mi re } \tuplet 3/2 { mi re dod } | re1~ | re^\markup { \italic "To Coda" } |   % TO CODA
+    \break
+    \tuplet 3/2 { sol4 sol sol } \tuplet 3/2 { sol fa mi } | \tuplet 3/2 { fa fa fa } \tuplet 3/2 { fa mi re } | mi mi8 mi \tuplet 3/2 { mi4 fa sol } | la1 | \tuplet 3/2 { sol4 sol sol } \tuplet 3/2 { sol4 fa mi } |
+    \tuplet 3/2 { fa fa fa } \tuplet 3/2 { fa mi re } | \tuplet 3/2 { mi mi mi } \tuplet 3/2 { mi fa re } | mi1^\markup { \italic "D.S. al Coda" }|
   }
   \break
   \repeat volta 2 {
-  
-  \tuplet 3/2 { re'4\coda la fa } \tuplet 3/2 { la fa re } | \tuplet 3/2 { fa mi re } \tuplet 3/2 { mi re dod } | re1~ | re
-  %r0
-}
-  % TODO : gérer les 3 répétitions
-  % gérer des paroles différentes selon l'alternative
-
+    \tuplet 3/2 { re'4\coda la fa } \tuplet 3/2 { la fa re } | \tuplet 3/2 { fa mi re } \tuplet 3/2 { mi re dod } | re1~ | re
+  }
   \bar ":|."
 }
 \addlyrics {
-  % \lyricmode {
-  %   Bésame mucho, como si fuera esta noche la última vez
-  %   Bésame mucho, que tengo miedo a perderte, perderte después
-  % }
 }
-
 
 accords = \chordmode {
 }
@@ -132,7 +112,7 @@ diatoniqueScore =
 \score {
   <<
     \new Staff { 
-      \diatonicHarmonicaTab \relative do'' {
+      \diatonicHarmonicaTab \relative do' {
         \melodie
       }
     }
@@ -167,7 +147,7 @@ midiScore =
 \score {
   \new Staff {
     \set Staff.midiInstrument = #"harmonica"
-    \relative do'' {
+    \relative do' {
       \melodie
     }
   }
@@ -209,6 +189,6 @@ midiScore =
     \line { "Tu joues la Coda jusqu'à la fin." }
     \line { " " }
     \line { "La Coda est une fin alternative, un \"bout spécial\" pour conclure le morceau." }
-    %\vspace #1
+    \line { "Le Segno est un point de départ alternatif, un \"bout spécial\" pour recommencer une section."}
   }
-}
+} 
