@@ -97,5 +97,5 @@ midiScore =
      (ly:parser-include-string "\\midiScore"))
 
 %diatoniqueScore
-\chromatiqueScore
-\midiScore
+%\chromatiqueScore
+%\midiScore
