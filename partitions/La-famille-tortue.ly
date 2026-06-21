@@ -22,13 +22,15 @@ melodie = {
   \clef "treble^8"
   r2 r4 la8 sib | do4 la' la8 sol fa mi | sol4 re re sol,8 la |
   \break
-  sib
-  
+  sib4 sol' sol8 fa8 mi8 re8 | fa4 do4 do4 la8 sib do4 la'4 la8 sol8 fa8 mi8 |
+  \break
+  re4 sib' sib8 la8 sol8 fa8 mi4 do'4 do8 sib8 la8 sol8 fa4 la4 fa4 r4
   \bar "|."
 }
 \addlyrics {
   Ja -- mais on n'a vu, Ja -- mais on ne ver -- ra, La fa --
-  mille
+  mille tor -- tue cour -- rir a -- près les rats. Le pa -- pa tor -- tue, et la ma --
+  man tor -- tue, Et les en -- fants tor -- tues, i -- ront tou -- jours au pas.
 }
 
 accords = \chordmode {
@@ -95,5 +97,5 @@ midiScore =
      (ly:parser-include-string "\\midiScore"))
 
 %diatoniqueScore
-%\chromatiqueScore
-%\midiScore
+\chromatiqueScore
+\midiScore
