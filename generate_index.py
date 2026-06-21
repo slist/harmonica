@@ -5,6 +5,7 @@ import logging
 import os
 import re
 import sys
+import unicodedata
 from html import escape
 
 logging.basicConfig(level=logging.INFO, format="%(message)s")
@@ -306,6 +307,11 @@ def key_to_french(key: str) -> str:
 
 # --------- File collection ---------
 
+def title_sort_key(s: str) -> str:
+    """Accent- and case-insensitive sort key for French titles."""
+    return unicodedata.normalize('NFD', s or '').encode('ascii', 'ignore').decode('ascii').lower()
+
+
 def collect_outputs(base: str, output_dir: str) -> dict:
     """Return lists of diatonic PDFs, chromatic PDFs, and MP3s for a base name."""
     if not os.path.exists(output_dir):
@@ -338,6 +344,7 @@ def collect_songs() -> list[dict]:
         meta['base'] = base
         meta['outputs'] = collect_outputs(base, OUTPUT_DIR)
         songs.append(meta)
+    songs.sort(key=lambda s: title_sort_key(s.get('title') or s['base']))
     return songs
 
 
@@ -358,6 +365,7 @@ def collect_gammes() -> list[dict]:
         meta['base'] = base
         meta['outputs'] = collect_outputs(base, gammes_out)
         gammes.append(meta)
+    gammes.sort(key=lambda g: title_sort_key(g.get('title') or g['base']))
     return gammes
 
 
