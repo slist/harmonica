@@ -253,22 +253,46 @@ New version for multiple notes
                (ly:music-property music 'elements))))))
 %}
 
-#(define (make-tab-number music tuning)
-  (let ((tab-markup
-         (case tuning
-           ((diatonic-c-ritcher) (get-diatonic-c-ritcher-tab music))
-           ((diatonic-d-ritcher) (get-diatonic-d-ritcher-tab music))
-           ((diatonic-g-ritcher) (get-diatonic-g-ritcher-tab music))
-           ((diatonic-a-ritcher) (get-diatonic-a-ritcher-tab music))
-           ((diatonic-f-ritcher) (get-diatonic-f-ritcher-tab music))
-           ((diatonic-bb-ritcher) (get-diatonic-bb-ritcher-tab music))
-           ((chromatic-c-solo) (get-chromatic-c-solo-tab music))
-           (else (get-diatonic-c-ritcher-tab music)))))
-    (make-textscript DOWN tab-markup)))
+%% Symbole affiché à la place du numéro pour une note liée / tenue.
+%% Modifiable ici une seule fois : s'applique à toutes les partitions.
+#(define tie-hold-markup (markup "~"))
 
-#(define (make-tab-numbers EventChord tuning)
-   (let ((elts (ly:music-property EventChord 'elements)))
-     (map (lambda (note) (make-tab-number note tuning)) (filter NoteEvent? elts))))
+#(define (tab-markup-for-note note tuning)
+  (case tuning
+    ((diatonic-c-ritcher) (get-diatonic-c-ritcher-tab note))
+    ((diatonic-d-ritcher) (get-diatonic-d-ritcher-tab note))
+    ((diatonic-g-ritcher) (get-diatonic-g-ritcher-tab note))
+    ((diatonic-a-ritcher) (get-diatonic-a-ritcher-tab note))
+    ((diatonic-f-ritcher) (get-diatonic-f-ritcher-tab note))
+    ((diatonic-bb-ritcher) (get-diatonic-bb-ritcher-tab note))
+    ((chromatic-c-solo) (get-chromatic-c-solo-tab note))
+    (else (get-diatonic-c-ritcher-tab note))))
+
+%% mode : 'number (numéro normal) ou 'hold (note liée/tenue → symbole)
+#(define (make-tab-textscript note tuning mode)
+   (make-textscript DOWN
+     (if (eq? mode 'hold)
+         tie-hold-markup
+         (tab-markup-for-note note tuning))))
+
+%% --- Détection des liaisons portées par une note ---
+#(define (note-has-tie? note)
+   (let loop ((arts (ly:music-property note 'articulations)))
+     (cond ((null? arts) #f)
+           ((eq? (ly:music-property (car arts) 'name) 'TieEvent) #t)
+           (else (loop (cdr arts))))))
+
+%% Renvoie -1 (début de slur), 1 (fin de slur), ou #f
+#(define (note-slur-dir note)
+   (let loop ((arts (ly:music-property note 'articulations)))
+     (cond ((null? arts) #f)
+           ((eq? (ly:music-property (car arts) 'name) 'SlurEvent)
+            (ly:music-property (car arts) 'span-direction))
+           (else (loop (cdr arts))))))
+
+#(define (note-semitones note)
+   (let ((p (ly:music-property note 'pitch)))
+     (if (ly:pitch? p) (ly:pitch-semitones p) #f)))
 
 %{
 #(define (make-tab-numbers EventChord tuning)
@@ -291,66 +315,112 @@ New version for multiple notes
 		                    (list element)))
 				         music)
 
-#(define (make-add-tabs tuning)
-   (lambda (m)
-     (cond
-       ((music-is-of-type? m 'event-chord)
-        (set! (ly:music-property m 'elements)
-              (append (ly:music-property m 'elements)
-                      (reverse (make-tab-numbers m tuning)))))
-       ((music-is-of-type? m 'note-event)
-        (set! (ly:music-property m 'articulations)
-              (append (ly:music-property m 'articulations)
-                      (list (make-tab-number m tuning)))))
-       (else #f))
-     m))
+%% Parcours séquentiel à état : ajoute les numéros de tablature en tenant
+%% compte des liaisons.
+%%   - note prolongée par une liaison ~ (la précédente portait un ~)  -> symbole
+%%   - note sous un slur ( ) ET de même hauteur que la précédente     -> symbole
+%%   - sinon                                                          -> numéro
+%% La 1re note d'un slur garde son numéro (vraie attaque) ; un silence
+%% réinitialise l'état (la note suivante est une attaque fraîche).
+#(define (make-tab-adder tuning)
+   (lambda (top-music)
+     (let ((prev-pitch #f)   ; demi-tons de la note précédente, ou #f
+           (prev-tie?  #f)   ; la note précédente portait-elle un ~
+           (in-slur?   #f))  ; sommes-nous à l'intérieur d'un slur
 
-#(define add-diatonic-c-ritcher-tabs  (make-add-tabs 'diatonic-c-ritcher))
-#(define add-diatonic-d-ritcher-tabs  (make-add-tabs 'diatonic-d-ritcher))
-#(define add-diatonic-g-ritcher-tabs  (make-add-tabs 'diatonic-g-ritcher))
-#(define add-diatonic-a-ritcher-tabs  (make-add-tabs 'diatonic-a-ritcher))
-#(define add-diatonic-f-ritcher-tabs  (make-add-tabs 'diatonic-f-ritcher))
-#(define add-diatonic-bb-ritcher-tabs (make-add-tabs 'diatonic-bb-ritcher))
-#(define add-chromatic-c-solo-tabs    (make-add-tabs 'chromatic-c-solo))
+       (define (attach-note! note mode)
+         (set! (ly:music-property note 'articulations)
+               (append (ly:music-property note 'articulations)
+                       (list (make-tab-textscript note tuning mode)))))
+
+       (define (process-note! note)
+         (let* ((p  (note-semitones note))
+                (sd (note-slur-dir note))
+                (mode (cond
+                        (prev-tie? 'hold)
+                        ((and in-slur? prev-pitch p (= p prev-pitch)) 'hold)
+                        (else 'number))))
+           (attach-note! note mode)
+           ;; bornes de slur : mises à jour APRÈS le calcul du mode,
+           ;; pour que la note d'ouverture garde son numéro.
+           (cond ((eqv? sd -1) (set! in-slur? #t))
+                 ((eqv? sd 1)  (set! in-slur? #f)))
+           (set! prev-pitch p)
+           (set! prev-tie? (note-has-tie? note))))
+
+       (define (process-chord! chord)
+         (let ((notes (filter NoteEvent? (ly:music-property chord 'elements))))
+           (set! (ly:music-property chord 'elements)
+                 (append (ly:music-property chord 'elements)
+                         (reverse (map (lambda (n) (make-tab-textscript n tuning 'number))
+                                       notes)))))
+         (set! prev-pitch #f)
+         (set! prev-tie? #f))
+
+       (define (visit m)
+         (cond
+           ((not (ly:music? m)) #f)
+           ((music-is-of-type? m 'event-chord) (process-chord! m))
+           ((music-is-of-type? m 'note-event)  (process-note! m))
+           ;; silences, skips… : rompent la continuité mélodique
+           ((music-is-of-type? m 'rhythmic-event)
+            (set! prev-pitch #f)
+            (set! prev-tie?  #f))
+           (else
+            (let ((els (ly:music-property m 'elements)))
+              (if (pair? els) (for-each visit els)))
+            (let ((el (ly:music-property m 'element)))
+              (if (ly:music? el) (visit el))))))
+
+       (visit top-music)
+       top-music)))
+
+#(define add-diatonic-c-ritcher-tabs  (make-tab-adder 'diatonic-c-ritcher))
+#(define add-diatonic-d-ritcher-tabs  (make-tab-adder 'diatonic-d-ritcher))
+#(define add-diatonic-g-ritcher-tabs  (make-tab-adder 'diatonic-g-ritcher))
+#(define add-diatonic-a-ritcher-tabs  (make-tab-adder 'diatonic-a-ritcher))
+#(define add-diatonic-f-ritcher-tabs  (make-tab-adder 'diatonic-f-ritcher))
+#(define add-diatonic-bb-ritcher-tabs (make-tab-adder 'diatonic-bb-ritcher))
+#(define add-chromatic-c-solo-tabs    (make-tab-adder 'chromatic-c-solo))
 
 diatonicHarmonicaTab =
 #(define-music-function
   (parser location music)
   (ly:music?)
-  (music-map add-diatonic-c-ritcher-tabs music))
+  (add-diatonic-c-ritcher-tabs music))
 
 diatonicDHarmonicaTab =
 #(define-music-function
   (parser location music)
   (ly:music?)
-  (music-map add-diatonic-d-ritcher-tabs music))
+  (add-diatonic-d-ritcher-tabs music))
 
 diatonicGHarmonicaTab =
 #(define-music-function
   (parser location music)
   (ly:music?)
-  (music-map add-diatonic-g-ritcher-tabs music))
+  (add-diatonic-g-ritcher-tabs music))
 
 diatonicAHarmonicaTab =
 #(define-music-function
   (parser location music)
   (ly:music?)
-  (music-map add-diatonic-a-ritcher-tabs music))
+  (add-diatonic-a-ritcher-tabs music))
 
 diatonicFHarmonicaTab =
 #(define-music-function
   (parser location music)
   (ly:music?)
-  (music-map add-diatonic-f-ritcher-tabs music))
+  (add-diatonic-f-ritcher-tabs music))
 
 diatonicBbHarmonicaTab =
 #(define-music-function
   (parser location music)
   (ly:music?)
-  (music-map add-diatonic-bb-ritcher-tabs music))
+  (add-diatonic-bb-ritcher-tabs music))
 
 chromaticHarmonicaTab =
 #(define-music-function
   (parser location music)
   (ly:music?)
-  (music-map add-chromatic-c-solo-tabs music))
+  (add-chromatic-c-solo-tabs music))

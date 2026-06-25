@@ -99,7 +99,38 @@ melodie = {
   \bar ":|."
 }
 \addlyrics {
+  Bé -- sa  -- me, bé -- sa -- me mu -- cho
+  
+  Co -- mo si fue -- "ra es" -- ta no -- che
+  La úl -- ti -- ma vez
+  Bé -- sa -- me, bé -- sa -- me mu -- cho
+
+  Que ten -- go mie -- do per -- der -- te, per -- der -- "te o" -- tra vez.
+
+
+
+}  
+%{
+\addlyrics { %TODO fix with https://musescore.com/user/498481/scores/6527152?srsltid=AfmBOorBek_nMMLYV2le2Vg--NpumIMhynRgOxjAMXlRiyqxOlUXxiyH
+  Bé -- sa  -- me, bé -- sa -- me mu -- cho
+Co -- mo si fue -- "ra es" -- ta no -- che
+La úl -- ti -- ma vez
+Bé -- sa -- me, bé -- sa -- me mu -- cho
+
+Que ten -- go mie -- do per -- der -- te, per -- der -- "te o" -- tra vez.
+Quie -- ro te -- ner te muy cer -- ca, mi -- rar -- me -- en tus o -- jos, ver -- te jun -- to a mi,
+pien -- sa que tal vez ma -- na - na yo ya es -- ta --re le -- jos, muy le -- jos de ti.
+
+%Que ten -- go mie -- do a te -- ner -- te
+%Y per -- der -- te después
+
+Bé -- sa -- me, bé -- sa -- me mu -- cho
+Co -- mo si fue -- "ra es" -- ta no -- che
+La úl -- ti -- ma vez
+Bé -- sa -- me, bé -- sa -- me mu -- cho
+Que ten -- go mie
 }
+%}
 
 accords = \chordmode {
 }
