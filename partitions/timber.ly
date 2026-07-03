@@ -40,10 +40,12 @@ melodie = {
   si4 r4. fad'8 red16 ( dod si8) | red fad~ fad2 r4 | fad2. red16 ( dod si8 ) |
   \break
   sold8 si4. r8 sold8 si16 si8. | si4 r4. fad'8 red16 ( dod si8) | red fad~ fad2 r4 | fad2. red16 ( dod si8 ) |
-    \break
+  \break
   sold8 si4. r8 fad'8 r16 red8. | %\mark \markup \box "Interlude" 
   si4 r4. fad'8 red16 ( dod si8) | red fad~ fad2 r4 | fad2. red16 ( dod si8 ) |
-  
+  \break
+
+  sold8 si4. % To confirm
   
   \bar "|."
 }
@@ -125,5 +127,5 @@ midiScore =
 
 % CI-IGNORE-BELOW : lignes de test manuel local, toujours ignorées par la compilation GitHub Actions
 %\diatoniqueScore
-%\chromatiqueScore
-%\midiScore
+\chromatiqueScore
+\midiScore
