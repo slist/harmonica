@@ -195,10 +195,6 @@ midiScore =
 #(if compile-midi
      (ly:parser-include-string "\\midiScore"))
 
-%\diatoniqueScore
-%\chromatiqueScore
-%\midiScore
-
 \pageBreak % Force la partition à tenir sur une page
 
 \markup {
@@ -223,3 +219,8 @@ midiScore =
     \line { "Le Segno est un point de départ alternatif, un \"bout spécial\" pour recommencer une section."}
   }
 } 
+
+% CI-IGNORE-BELOW : lignes de test manuel local, toujours ignorées par la compilation GitHub Actions
+%\diatoniqueScore
+%\chromatiqueScore
+%\midiScore
