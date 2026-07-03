@@ -110,10 +110,6 @@ chromatiqueScore =
 #(if compile-midi
      (ly:parser-include-string "\\midiScore"))
 
-%\diatoniqueScore
-%\chromatiqueScore
-%\midiScore
-
 % ============================
 % HISTOIRE DU BÉMOL
 % ============================
@@ -144,3 +140,8 @@ chromatiqueScore =
     \italic \fill-line { "" "— Tiré de l'histoire de la notation musicale —" }
   }
 }
+
+% CI-IGNORE-BELOW : lignes de test manuel local, toujours ignorées par la compilation GitHub Actions
+%\diatoniqueScore
+%\chromatiqueScore
+%\midiScore

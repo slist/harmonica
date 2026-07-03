@@ -131,10 +131,6 @@ midiScore =
 #(if compile-midi
      (ly:parser-include-string "\\midiScore"))
 
-%\diatoniqueScore
-%\chromatiqueScore
-%\midiScore
-
 \pageBreak
 
 \markup {
@@ -209,3 +205,7 @@ Selon le contexte, cela peut vouloir dire :
   }
 }
 
+% CI-IGNORE-BELOW : lignes de test manuel local, toujours ignorées par la compilation GitHub Actions
+%\diatoniqueScore
+%\chromatiqueScore
+%\midiScore

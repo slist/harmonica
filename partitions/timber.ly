@@ -6,14 +6,12 @@
 #(define compile-midi (ly:get-option 'compile-midi))
 
 \header {
-  title = "Whiskey Johny"
-  subtitle = "Traditional American Folk Song"
-  %composer = "Traditional (author unknown)"
-  %poet = "Traditional"
+  title = "Timber"
+  composer = "Pitbull (1981 – ) - Kesha (1987 - )"
   lyricsLang = #'(en)
-  %copyright = "Public Domain"
-  copyrightStatus = "public-domain" % Mélodie traditionnelle
-  composerNationality = "us"
+  copyrightStatus = "copyrighted"
+  composerNationality = "GB"
+  instrument = "Harmonica en E"
 }
 
 \include "../include/harmonica.ly"
@@ -21,57 +19,64 @@
 
 \language "français"
 
-\layout {
-  \context {
-    \Lyrics
-    \override LyricText.font-size = #-1
-    \override LyricHyphen.minimum-distance = #0.5
-    \override LyricSpace.minimum-distance = #0.6
-  }
-}
-
-\paper {
-  markup-system-spacing.basic-distance = #20 % Espace entre titre et première portée
-  system-system-spacing.basic-distance = #20 % Espace entre les portées
-}
-
 melodie = {
   %\key re \major % Tonalité de Ré majeur (fa♯, do♯)
-  \key fa \major % Tonalité de Fa majeur (sib♯)
+  %\key fa \major % Tonalité de Fa majeur (sib♯)
+  %\key sol \major % Tonalité de Sol majeur (fa♯)
   \time 4/4
-  \tempo 4 = 100
-  \clef "treble^8"
-  %\partial 2
-  fa4 la fa do | fa la fa2 | fa4 la2. | fa4 la2 do4 |
+  %\tempo "Andantino rubato" 4 = 80
+  \tempo 4 = 130
+  %\clef "treble^8"
+  \dynamicUp % forcer toutes les dynamiques au-dessus
+  
+  %r2 r4
+  %\partial 4 % anacrouse
+  
+  %\mark \markup \box "Intro"
+  r2 r8 sold8\mf si16 si8. | si4 r4. fad'8 red16 ( dod si8) | red fad~ fad2 r4 | fad2. red16 ( dod si8 ) |
   \break
-  sib4. la8 sol4 fa | mi sol do,2 | fa4 la do4. do8 | la4 fa2
+  sold8 si4. r8 sold8 si16 si8. |
+  %\mark \markup \box "Chorus"
+  si4 r4. fad'8 red16 ( dod si8) | red fad~ fad2 r4 | fad2. red16 ( dod si8 ) |
+  \break
+  sold8 si4. r8 sold8 si16 si8. | si4 r4. fad'8 red16 ( dod si8) | red fad~ fad2 r4 | fad2. red16 ( dod si8 ) |
+    \break
+  sold8 si4. r8 fad'8 r16 red8. | %\mark \markup \box "Interlude" 
+  si4 r4. fad'8 red16 ( dod si8) | red fad~ fad2 r4 | fad2. red16 ( dod si8 ) |
+  
+  
   \bar "|."
 }
 \addlyrics {
-  Whis -- key is the life of man. Whis -- key, John -- ny!
-  Al -- ways was since the world be -- gan, Whis -- key for my John -- ny!
+
+
+  %So we sailed up to the sun
+  %Till we found the sea of green
+  %And we lived beneath the waves
+  %In our yellow submarine
 }
 
 
 accords = \chordmode {
-  fa1 s re:m s
-  do s fa2 do2 fa4
 }
 
 % ============================
 % SCORE DIATONIQUE
 % ============================
 
-diatoniqueScore = 
+diatoniqueScore =
 \score {
   <<
-    \new Staff { 
-      \diatonicHarmonicaTab \relative do'' {
+    \new Staff {
+      %\set Staff.instrumentName = "Harmonica en E"
+      \diatonicEHarmonicaTab \relative do'' {
         \melodie
       }
     }
   >>
-  \layout { }
+  \layout {
+    %indent = 2.5\cm
+  }
 }
 
 % ============================
@@ -106,7 +111,7 @@ midiScore =
     }
   }
   \midi {
-    \tempo 4 = 100
+    \tempo 4 = 130
   }
 }
 

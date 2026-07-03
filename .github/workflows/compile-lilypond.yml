@@ -62,15 +62,34 @@ jobs:
           set -euo pipefail
           mkdir -p output
 
+          # Toute ligne à partir d'un marqueur "% CI-IGNORE-BELOW" (et les lignes suivantes)
+          # est retirée avant compilation, quel que soit son contenu (commenté ou non).
+          # Cela protège contre un oubli de commentaire sur les lignes de test manuel
+          # laissées en bas des fichiers .ly.
+          strip_ci_ignored() {
+            local file="$1"
+            local dir tmp_file
+            dir=$(dirname "${file}")
+            tmp_file=$(mktemp -p "${dir}" "ci-tmp.XXXXXX")
+            mv "${tmp_file}" "${tmp_file}.ly"
+            tmp_file="${tmp_file}.ly"
+            awk '/^%[[:space:]]*CI-IGNORE-BELOW/{exit} {print}' "${file}" > "${tmp_file}"
+            echo "${tmp_file}"
+          }
+          export -f strip_ci_ignored
+
           compile_file() {
             local file="$1"
-            local base
+            local base tmp_file
             base=$(basename "${file}" .ly)
             echo "Compiling ${base}..."
 
-            lilypond -dcompile-diatonique  -o "output/${base}_diatonique" "${file}" || { echo "❌ Failed: ${base} (diatonique)";  return 1; }
-            lilypond -dcompile-chromatique -o "output/${base}_chromatique" "${file}" || { echo "❌ Failed: ${base} (chromatique)"; return 1; }
-            lilypond --formats=midi -dcompile-midi -o "output/${base}" "${file}"     || { echo "❌ Failed: ${base} (midi)";        return 1; }
+            tmp_file=$(strip_ci_ignored "${file}")
+            trap 'rm -f "${tmp_file}"' RETURN
+
+            lilypond -dcompile-diatonique  -o "output/${base}_diatonique" "${tmp_file}" || { echo "❌ Failed: ${base} (diatonique)";  return 1; }
+            lilypond -dcompile-chromatique -o "output/${base}_chromatique" "${tmp_file}" || { echo "❌ Failed: ${base} (chromatique)"; return 1; }
+            lilypond --formats=midi -dcompile-midi -o "output/${base}" "${tmp_file}"     || { echo "❌ Failed: ${base} (midi)";        return 1; }
           }
           export -f compile_file
 
@@ -83,15 +102,31 @@ jobs:
           set -euo pipefail
           mkdir -p output/gammes
 
+          # Voir l'étape précédente pour le rôle du marqueur CI-IGNORE-BELOW.
+          strip_ci_ignored() {
+            local file="$1"
+            local dir tmp_file
+            dir=$(dirname "${file}")
+            tmp_file=$(mktemp -p "${dir}" "ci-tmp.XXXXXX")
+            mv "${tmp_file}" "${tmp_file}.ly"
+            tmp_file="${tmp_file}.ly"
+            awk '/^%[[:space:]]*CI-IGNORE-BELOW/{exit} {print}' "${file}" > "${tmp_file}"
+            echo "${tmp_file}"
+          }
+          export -f strip_ci_ignored
+
           compile_gamme() {
             local file="$1"
-            local base
+            local base tmp_file
             base=$(basename "${file}" .ly)
             echo "Compiling gamme ${base}..."
 
-            lilypond -dcompile-diatonique  -o "output/gammes/${base}_diatonique" "${file}" || { echo "❌ Failed: ${base} (diatonique)";  return 1; }
-            lilypond -dcompile-chromatique -o "output/gammes/${base}_chromatique" "${file}" || { echo "❌ Failed: ${base} (chromatique)"; return 1; }
-            lilypond --formats=midi -dcompile-midi -o "output/gammes/${base}" "${file}"    || { echo "❌ Failed: ${base} (midi)";        return 1; }
+            tmp_file=$(strip_ci_ignored "${file}")
+            trap 'rm -f "${tmp_file}"' RETURN
+
+            lilypond -dcompile-diatonique  -o "output/gammes/${base}_diatonique" "${tmp_file}" || { echo "❌ Failed: ${base} (diatonique)";  return 1; }
+            lilypond -dcompile-chromatique -o "output/gammes/${base}_chromatique" "${tmp_file}" || { echo "❌ Failed: ${base} (chromatique)"; return 1; }
+            lilypond --formats=midi -dcompile-midi -o "output/gammes/${base}" "${tmp_file}"    || { echo "❌ Failed: ${base} (midi)";        return 1; }
           }
           export -f compile_gamme
 

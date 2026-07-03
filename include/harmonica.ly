@@ -158,6 +158,7 @@ dip =
        (else (markup "X")))))
 
 #(define (get-diatonic-d-ritcher-tab NoteEvent) (get-diatonic-ritcher-tab NoteEvent 2))
+#(define (get-diatonic-e-ritcher-tab NoteEvent) (get-diatonic-ritcher-tab NoteEvent 4))
 #(define (get-diatonic-g-ritcher-tab NoteEvent) (get-diatonic-ritcher-tab NoteEvent 7))
 #(define (get-diatonic-a-ritcher-tab NoteEvent) (get-diatonic-ritcher-tab NoteEvent 9))
 #(define (get-diatonic-f-ritcher-tab NoteEvent) (get-diatonic-ritcher-tab NoteEvent 5))
@@ -261,6 +262,7 @@ New version for multiple notes
   (case tuning
     ((diatonic-c-ritcher) (get-diatonic-c-ritcher-tab note))
     ((diatonic-d-ritcher) (get-diatonic-d-ritcher-tab note))
+    ((diatonic-e-ritcher) (get-diatonic-e-ritcher-tab note))
     ((diatonic-g-ritcher) (get-diatonic-g-ritcher-tab note))
     ((diatonic-a-ritcher) (get-diatonic-a-ritcher-tab note))
     ((diatonic-f-ritcher) (get-diatonic-f-ritcher-tab note))
@@ -377,6 +379,7 @@ New version for multiple notes
 
 #(define add-diatonic-c-ritcher-tabs  (make-tab-adder 'diatonic-c-ritcher))
 #(define add-diatonic-d-ritcher-tabs  (make-tab-adder 'diatonic-d-ritcher))
+#(define add-diatonic-e-ritcher-tabs  (make-tab-adder 'diatonic-e-ritcher))
 #(define add-diatonic-g-ritcher-tabs  (make-tab-adder 'diatonic-g-ritcher))
 #(define add-diatonic-a-ritcher-tabs  (make-tab-adder 'diatonic-a-ritcher))
 #(define add-diatonic-f-ritcher-tabs  (make-tab-adder 'diatonic-f-ritcher))
@@ -394,6 +397,12 @@ diatonicDHarmonicaTab =
   (parser location music)
   (ly:music?)
   (add-diatonic-d-ritcher-tabs music))
+
+diatonicEHarmonicaTab =
+#(define-music-function
+  (parser location music)
+  (ly:music?)
+  (add-diatonic-e-ritcher-tabs music))
 
 diatonicGHarmonicaTab =
 #(define-music-function
