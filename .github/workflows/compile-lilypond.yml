@@ -159,7 +159,7 @@ jobs:
         run: python generate_index.py
 
       - name: Upload compiled files as artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: lilypond-outputs
           path: output/
