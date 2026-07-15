@@ -24,16 +24,20 @@ melodie = {
   
   %\partial 8 % anacrouse
     
-  sol4 re si' sol | la8 
-  %re8 | sol4. sol8 sol4 r8 sol8 | la8 sol8 fad8 mi8 re4 r8 re8 
-  %\break
-  %sol8 sol8 sol8 sol8 sol4 r8 sol8 | la8 sol8 fad mi re4 r8 re'8 |do8 do do do do4 r8 do8 |
-  %\break
-  %la8 sol la si sol sol sol si|la8 sol la si sol4 r4
+  sol4 re si' sol | la8 la re, re si' si sol4 sol re si' sol |
+  \break
+  la8 la re, re sol4 r4 | sol8 sol sol si re,4 re | sol8 sol sol si re re re4 |
+  \break
+  sol,8 sol sol si re,4 re | si'8 si la la sol4 r4 | sol8 sol sol si re,4 re |
+  \break
+  sol8 sol sol si re re re4 | sol,8 sol sol si re,4 re | si'8 si la la sol4 r4 |
   \bar "|."
 }
 \addlyrics {
-Une puce, un pou...
+Une puce, un pou, as -- sis sur un ta -- bou -- ret, Jou -- aient aux cartes,
+La pu -- ce per -- dait, La puce en co -- lè -- re, At -- tra -- pa le pou, pou, pou,
+Le je -- ta par ter -- re, Lui tor -- dit le cou. Ma -- da -- me la pu -- ce,
+Qu'a -- vez -- vous fait là, là, là? J'ai com -- mis un cri -- me, Un as -- sas -- si -- nat.
 }
 
 accords = \chordmode {
@@ -91,6 +95,10 @@ midiScore =
   }
 }
 
+\markup {
+  \vspace #2
+}
+
 % Inclusion conditionnelle des scores
 #(if compile-diatonique
      (ly:parser-include-string "\\diatoniqueScore"))
@@ -99,6 +107,8 @@ midiScore =
 #(if compile-midi
      (ly:parser-include-string "\\midiScore"))
 
+% CI-IGNORE-BELOW : lignes de test manuel local, toujours ignorées par la compilation GitHub Actions
+
 %diatoniqueScore
-%\chromatiqueScore
-%\midiScore
+\chromatiqueScore
+\midiScore
