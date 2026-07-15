@@ -53,7 +53,6 @@ melodie = {
   Je rê -- vais d'un au -- tre mon -- de où la ter -- re se -- rait ronde
   où la lu -- ne se -- rait blon -- de et la vie se -- rait fé -- con -- de Je dor -- mais à poings fer -- més
   je ne vo -- yais plus en pieds je rê -- vais ré -- a -- li -- té ma ré -- a -- li -- té 
-  
 }
 
 
@@ -111,7 +110,7 @@ midiScore =
     }
   }
   \midi {
-    \tempo 4 = 130
+    \tempo 4 = 132
   }
 }
 
