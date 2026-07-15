@@ -20,13 +20,13 @@
 melodie = {
   \time 4/4
   \clef "treble^8"
-  fa8 fa8 fa8 fa8 fa4 do8 fa8 la4 sol4 fa2 fa8 fa8 fa8 fa8 fa4 do8 fa8
+  fa8 fa8 fa8 fa8 fa4 do8 fa8 | la4 sol4 fa2 | fa8 fa8 fa8 fa8 fa4 do8 fa8 |
   \break
-  la4 sol4 fa2 fa8 fa8 fa8 fa8 fa4 do8 fa8 la4 sol4 fa2
+  la4 sol4 fa2 | fa8 fa8 fa8 fa8 fa4 do8 fa8 | la4 sol4 fa2 |
   \break
-  fa8 fa8 fa8 fa8 sol4 fa4 fa4 sol4 do4 fa,2 fa8 sol fa sol do fa, r4
+  fa8 fa8 fa8 fa8 sol4 fa8 fa8 | sol4 do4 fa,2 | fa8 sol fa sol do fa, r4 |
   \break
-  fa4 do fa2 
+  fa4 do fa2
   \bar "|."
 }
 \addlyrics {
@@ -102,5 +102,5 @@ midiScore =
 
 % CI-IGNORE-BELOW : lignes de test manuel local, toujours ignorées par la compilation GitHub Actions
 %diatoniqueScore
-%\chromatiqueScore
-%\midiScore
+\chromatiqueScore
+\midiScore
