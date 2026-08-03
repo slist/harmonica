@@ -4,7 +4,6 @@
   title = "Man With The Harmonica"
   subtitle = "from Once Upon a Time in The West"
   composer = "Ennio Morricone (1928-2020)"
-  %lyricsLang = #'(en)
   copyrightStatus = "copyrighted"
   composerNationality = "it"
 }
