@@ -1,7 +1,7 @@
 \version "2.24.3"
 
 \header {
-  title = "Le pont de la rivière Kwai"
+  title = "Le pont de la rivière Kwaï"
   arranger = "Robert Longfield (1947 - )" % US
   composer = "Malcolm Arnold (1921 - 2006)" % UK
   lyricsLang = #'(en)
