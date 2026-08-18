@@ -9,22 +9,18 @@
   composerNationality = "us"
 }
 
-%Source: http://harmonicacomte.blogspot.com/2012/10/amazing-grace.html
-
 \include "../include/harmonica.ly"
 \include "../include/style.ly"
 
 \language "français"
 
 % Options de compilation personnalisées
-
 #(define compile-diatonique (ly:get-option 'compile-diatonique))
 #(define compile-chromatique (ly:get-option 'compile-chromatique))
 #(define compile-midi (ly:get-option 'compile-midi))
 
 melodie = {
   \time 4/4
-  %\key sol \major % fa♯
   \key lab \major % 4b - sib, mib, lab, reb
   
   r2 sib8 do do4 | do8 do do4 do lab | 
@@ -35,7 +31,7 @@ melodie = {
   \break
   lab4 r4 sib8 do do4 | mib8 reb do4 do8 sib lab fa~ | fa4. r8 sib8 do4. | reb2 do8 lab r8 lab8
   \break
-  reb4 reb do8 lab r8 lab | sib2 do8 lab4. | reb2 r4. lab8 | fa'4. mib4 reb do8~ | do4. sib4 la sol8 | 
+  reb4 reb do8 lab r8 lab | sib2 do8 lab4. | reb2 r4. lab8 | fa'4. mib4 reb do8~ | do4. sib4 lab sol8 | 
   \break
   sol4.
 
