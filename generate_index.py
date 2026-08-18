@@ -49,6 +49,11 @@ GAMMES_DIR     = "gammes"
 _pw = os.environ.get("PRIVATE_PASSWORD") or "harmonica"
 PRIVATE_HASH = hashlib.sha256(_pw.encode()).hexdigest()
 
+# Cache-busting token: GitHub Pages / browsers cache PDFs and MP3s under the
+# same filename across recompiles, so append the commit SHA to force a fresh
+# fetch whenever the content actually changes.
+CACHE_BUST = os.environ.get("GITHUB_SHA", "")[:7]
+
 
 # --------- Difficulty analysis ---------
 
@@ -401,6 +406,13 @@ tbody tr:hover{background:#f5f5f5}
 #login-error{color:#c62828;margin-top:.5em;display:none}
 </style>"""
 
+# Hint browsers (notably mobile Chrome) not to serve a stale copy of the page
+# from disk cache. GitHub Pages doesn't let us set real Cache-Control headers.
+_NO_CACHE_META = """\
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">"""
+
 _SORT_JS = """\
 <script>
 (function(){
@@ -428,17 +440,21 @@ _SORT_JS = """\
 </script>"""
 
 
+def _cache_bust(url: str) -> str:
+    return f"{url}?v={CACHE_BUST}" if CACHE_BUST else url
+
+
 def _pdf_links(files: list[str], prefix: str = "") -> str:
     if not files:
         return "<span class='hidden'>—</span>"
-    links = [f"<a href='{escape(prefix + f)}'>PDF</a>" for f in files]
+    links = [f"<a href='{escape(_cache_bust(prefix + f))}'>PDF</a>" for f in files]
     return " ".join(links)
 
 
 def _mp3_link(files: list[str], prefix: str = "") -> str:
     if not files:
         return "<span class='hidden'>—</span>"
-    return f"<a href='{escape(prefix + files[0])}'>MP3</a>"
+    return f"<a href='{escape(_cache_bust(prefix + files[0]))}'>MP3</a>"
 
 
 def _table_header(cols: list[tuple]) -> str:
@@ -519,7 +535,7 @@ def generate_index_html(songs: list[dict]) -> None:
 
     html = f"""<!DOCTYPE html>
 <html lang="fr">
-<head><meta charset="UTF-8"><title>Partitions Harmonica</title>{_CSS}</head>
+<head><meta charset="UTF-8"><title>Partitions Harmonica</title>{_NO_CACHE_META}{_CSS}</head>
 <body>
 <h1>Partitions Harmonica</h1>
 <nav>
@@ -583,11 +599,11 @@ def generate_gammes_html(gammes: list[dict]) -> None:
         ("all_gammes_chromatique.pdf", "Toutes les gammes chromatiques (PDF)"),
     ]:
         if os.path.exists(os.path.join(gammes_out, fname)):
-            merged_links += f'<li><a href="{escape(fname)}">{escape(label)}</a></li>\n'
+            merged_links += f'<li><a href="{escape(_cache_bust(fname))}">{escape(label)}</a></li>\n'
 
     html = f"""<!DOCTYPE html>
 <html lang="fr">
-<head><meta charset="UTF-8"><title>Gammes Harmonica</title>{_CSS}</head>
+<head><meta charset="UTF-8"><title>Gammes Harmonica</title>{_NO_CACHE_META}{_CSS}</head>
 <body>
 <h1>Gammes &amp; Références</h1>
 <nav>
@@ -623,8 +639,8 @@ def generate_private_html(songs: list[dict], sha256_hash: str) -> None:
 </nav>
 <br>
 <ul>
-  <li><a href="all_diatonique.pdf">Toutes les partitions diatoniques (PDF)</a></li>
-  <li><a href="all_chromatique.pdf">Toutes les partitions chromatiques (PDF)</a></li>
+  <li><a href="{escape(_cache_bust("all_diatonique.pdf"))}">Toutes les partitions diatoniques (PDF)</a></li>
+  <li><a href="{escape(_cache_bust("all_chromatique.pdf"))}">Toutes les partitions chromatiques (PDF)</a></li>
 </ul>
 <p>{len(songs)} partitions (toutes, y compris sous droits)</p>
 <table id="data-table">
@@ -679,6 +695,7 @@ def generate_private_html(songs: list[dict], sha256_hash: str) -> None:
 <meta charset="UTF-8">
 <title>Partitions — Accès privé</title>
 <meta name="robots" content="noindex,nofollow">
+{_NO_CACHE_META}
 {_CSS}
 </head>
 <body>
