@@ -488,7 +488,7 @@ def _player_page_html(title: str, mp3_file: str, pdf_files: list[str], back_href
 </head>
 <body>
 <div id="player-bar">
-  <a href="{escape(back_href)}">← Retour</a>
+  <a href="{escape(back_href)}" onclick="if(history.length>1){{history.back();return false;}}">← Retour</a>
   <h1>{escape(title)}</h1>
   {audio_html}
 </div>
