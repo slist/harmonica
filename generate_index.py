@@ -444,17 +444,86 @@ def _cache_bust(url: str) -> str:
     return f"{url}?v={CACHE_BUST}" if CACHE_BUST else url
 
 
-def _pdf_links(files: list[str], prefix: str = "") -> str:
-    if not files:
-        return "<span class='hidden'>—</span>"
-    links = [f"<a href='{escape(_cache_bust(prefix + f))}'>PDF</a>" for f in files]
-    return " ".join(links)
-
-
 def _mp3_link(files: list[str], prefix: str = "") -> str:
     if not files:
         return "<span class='hidden'>—</span>"
     return f"<a href='{escape(_cache_bust(prefix + files[0]))}'>MP3</a>"
+
+
+_PLAYER_CSS = """\
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:sans-serif;background:#fafafa}
+#player-bar{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid #ccc;
+            box-shadow:0 2px 4px #0002;padding:.6em 1em;display:flex;align-items:center;
+            gap:1em;flex-wrap:wrap}
+#player-bar a{color:#1565c0;text-decoration:none;font-weight:bold;white-space:nowrap}
+#player-bar a:hover{text-decoration:underline}
+#player-bar h1{margin:0;font-size:1em;flex:1 1 auto;min-width:150px}
+#player-bar audio{flex:2 1 260px;min-width:200px}
+#no-audio{color:#999;font-style:italic}
+embed.pdf-page{width:100%;height:95vh;border:none;display:block;margin-bottom:.5em}
+</style>"""
+
+
+def _player_page_html(title: str, mp3_file: str, pdf_files: list[str], back_href: str) -> str:
+    if mp3_file:
+        audio_html = (
+            f"<audio controls src='{escape(_cache_bust(mp3_file))}'>"
+            "Votre navigateur ne supporte pas la lecture audio.</audio>"
+        )
+    else:
+        audio_html = "<span id='no-audio'>Pas d'enregistrement audio disponible</span>"
+    pdf_html = "".join(
+        f"<embed class='pdf-page' src='{escape(_cache_bust(f))}' type='application/pdf'>"
+        for f in pdf_files
+    )
+    return f"""<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>{escape(title)}</title>
+{_NO_CACHE_META}
+{_PLAYER_CSS}
+</head>
+<body>
+<div id="player-bar">
+  <a href="{escape(back_href)}">← Retour</a>
+  <h1>{escape(title)}</h1>
+  {audio_html}
+</div>
+{pdf_html}
+</body>
+</html>
+"""
+
+
+def _write_player_page(
+    output_dir: str, base: str, tuning: str, title: str,
+    pdf_files: list[str], mp3_files: list[str], back_href: str, prefix: str = "",
+) -> str:
+    """Write a standalone page combining the sheet music PDF with a sticky audio player."""
+    fname = f"{base}_{tuning}.html"
+    mp3_file = prefix + mp3_files[0] if mp3_files else ""
+    html = _player_page_html(
+        title=f"{title} — {tuning.capitalize()}",
+        mp3_file=mp3_file,
+        pdf_files=[prefix + f for f in pdf_files],
+        back_href=back_href,
+    )
+    with open(os.path.join(output_dir, fname), "w", encoding="utf-8") as fh:
+        fh.write(html)
+    return fname
+
+
+def _pdf_cell(
+    files: list[str], mp3_files: list[str], output_dir: str, base: str, tuning: str,
+    title: str, back_href: str, prefix: str = "",
+) -> str:
+    if not files:
+        return "<span class='hidden'>—</span>"
+    fname = _write_player_page(output_dir, base, tuning, title, files, mp3_files, back_href, prefix)
+    return f"<a href='{escape(prefix + fname)}'>🎵 Écouter + partition</a>"
 
 
 def _table_header(cols: list[tuple]) -> str:
@@ -496,9 +565,9 @@ def _song_row(meta: dict, public_only: bool, pdf_prefix: str = "") -> str:
     row += f"<td data-sort='{escape(composer.lower())}'>{composer_cell}</td>"
     row += f"<td data-sort='{key_num}'>{escape(key)}</td>"
     if show_links:
-        row += f"<td>{_pdf_links(diat, pdf_prefix)}</td>"
+        row += f"<td>{_pdf_cell(diat, mp3s, OUTPUT_DIR, base, 'diatonique', title, 'index.html', pdf_prefix)}</td>"
         row += difficulty_cell(diff)
-        row += f"<td>{_pdf_links(chro, pdf_prefix)}</td>"
+        row += f"<td>{_pdf_cell(chro, mp3s, OUTPUT_DIR, base, 'chromatique', title, 'index.html', pdf_prefix)}</td>"
         row += f"<td>{_mp3_link(mp3s, pdf_prefix)}</td>"
     else:
         row += "<td class='hidden'>—</td>"
@@ -586,8 +655,8 @@ def generate_gammes_html(gammes: list[dict]) -> None:
         rows += "<tr>"
         rows += f"<td data-sort='{escape(title.lower())}'>{escape(title)}</td>"
         rows += f"<td>{escape(instru)}</td>"
-        rows += f"<td>{_pdf_links(diat)}</td>"
-        rows += f"<td>{_pdf_links(chro)}</td>"
+        rows += f"<td>{_pdf_cell(diat, mp3s, gammes_out, g['base'], 'diatonique', title, 'index.html')}</td>"
+        rows += f"<td>{_pdf_cell(chro, mp3s, gammes_out, g['base'], 'chromatique', title, 'index.html')}</td>"
         rows += f"<td>{_mp3_link(mp3s)}</td>"
         rows += copyright_cell(status, instru)
         rows += "</tr>\n"
