@@ -102,7 +102,7 @@ def fusionner_avec_index(
         try:
             reader = PdfReader(chemin_pdf)
             num_pages = len(reader.pages)
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # noqa: BLE001 — skip any unreadable PDF, keep merging the rest
             print(f"⚠️ Impossible de lire {pdf} : {e}")
             continue
 

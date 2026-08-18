@@ -158,6 +158,12 @@ jobs:
           PRIVATE_PASSWORD: ${{ secrets.PRIVATE_PASSWORD }}
         run: python generate_index.py
 
+      - name: Check for broken links in generated pages
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: --offline --no-progress 'output/**/*.html'
+          fail: true
+
       - name: Upload compiled files as artifact
         uses: actions/upload-artifact@v7
         with:
