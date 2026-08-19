@@ -37,7 +37,7 @@ melodie = {
   \break
   re8 la' r8 do, | si sol'8 r8 sol8 | do,2~ | do8 r8 r4 | do'4. ( re8 | mi4 ) sol | mi8 ( red mi red | mi ) fa mi4 | do4. (re8 | mi4 ) sol |
   \break
-  mi8  (red mi red | re ) do-. si4 | si4. (do8 | re4. ) re8-. |do4.( si8 | do8)do8-. mi4->
+  mi8  (red mi red | re ) do-. si4 | si4. (do8 | re4. ) re8-. | do4.( si8 | do8 ) do8-. mi4->
   
   \bar "|."
 }
