@@ -462,7 +462,7 @@ body{margin:0;font-family:sans-serif;background:#fafafa}
 #player-bar h1{margin:0;font-size:1em;flex:1 1 auto;min-width:150px}
 #player-bar audio{flex:2 1 260px;min-width:200px}
 #no-audio{color:#999;font-style:italic}
-embed.pdf-page{width:100%;height:95vh;border:none;display:block;margin-bottom:.5em}
+.pdf-page{width:100%;height:100vh;border:none}
 </style>"""
 
 
@@ -475,7 +475,7 @@ def _player_page_html(title: str, mp3_file: str, pdf_files: list[str], back_href
     else:
         audio_html = "<span id='no-audio'>Pas d'enregistrement audio disponible</span>"
     pdf_html = "".join(
-        f"<embed class='pdf-page' src='{escape(_cache_bust(f))}' type='application/pdf'>"
+        f"<iframe class='pdf-page' src='{escape(_cache_bust(f))}'></iframe>"
         for f in pdf_files
     )
     return f"""<!DOCTYPE html>
