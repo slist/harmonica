@@ -12,6 +12,8 @@ table{border-collapse:collapse;width:100%;font-size:0.88em;background:#fff}
 thead th{background:#f0f0f0;cursor:pointer;user-select:none;white-space:nowrap;
          padding:7px 9px;border:1px solid #ccc;text-align:center}
 thead th:hover{background:#dde}
+thead th.col-pdf{white-space:normal;word-break:break-word}
+td.col-pdf{width:3em;text-align:center}
 thead th.sort-asc::after{content:" ▲";font-size:.8em}
 thead th.sort-desc::after{content:" ▼";font-size:.8em}
 tbody td{border:1px solid #ccc;padding:5px 8px;text-align:center}
@@ -36,20 +38,20 @@ tbody tr:hover{background:#f5f5f5}
   <a href="../">← Partitions</a>
 </nav>
 <br>
-<ul><li><a href="all_gammes_diatonique.pdf?v=cc4cc44">Toutes les gammes diatoniques (PDF)</a></li>
-<li><a href="all_gammes_chromatique.pdf?v=cc4cc44">Toutes les gammes chromatiques (PDF)</a></li>
+<ul><li><a href="all_gammes_diatonique.pdf?v=99e6b30">Toutes les gammes diatoniques (PDF)</a></li>
+<li><a href="all_gammes_chromatique.pdf?v=99e6b30">Toutes les gammes chromatiques (PDF)</a></li>
 </ul>
 <p>7 fiches de gammes</p>
 <table id="data-table">
-<thead><tr><th onclick='sortTable(this)'>Titre</th><th onclick='sortTable(this)'>Instrument</th><th onclick='sortTable(this)'>Diatonique</th><th onclick='sortTable(this)'>Chromatique</th><th onclick='sortTable(this)'>MP3</th><th onclick='sortTable(this)'>Droits</th></tr></thead>
+<thead><tr><th onclick='sortTable(this)'>Titre</th><th onclick='sortTable(this)'>Instrument</th><th onclick='sortTable(this)' class='col-pdf'>Diatonique</th><th onclick='sortTable(this)' class='col-pdf'>Chromatique</th><th onclick='sortTable(this)'>MP3</th><th onclick='sortTable(this)'>Droits</th></tr></thead>
 <tbody>
-<tr><td data-sort='cartographie de l&#x27;harmonica en do (c)'>Cartographie de l&#x27;Harmonica en Do (C)</td><td></td><td><a href='gamme-harmo-diato-c_diatonique.html'>🎵 Écouter + partition</a></td><td><a href='gamme-harmo-diato-c_chromatique.html'>🎵 Écouter + partition</a></td><td><a href='gamme-harmo-diato-c.mp3?v=cc4cc44'>MP3</a></td><td class='badge' data-sort='public-domain' title='Domaine public — libre de droits'>🆓</td></tr>
-<tr><td data-sort='cartographie de l&#x27;harmonica en ré (d)'>Cartographie de l&#x27;Harmonica en Ré (D)</td><td></td><td><a href='gamme-harmo-diato-d_diatonique.html'>🎵 Écouter + partition</a></td><td><a href='gamme-harmo-diato-d_chromatique.html'>🎵 Écouter + partition</a></td><td><a href='gamme-harmo-diato-d.mp3?v=cc4cc44'>MP3</a></td><td class='badge' data-sort='public-domain' title='Domaine public — libre de droits'>🆓</td></tr>
-<tr><td data-sort='cartographie de l&#x27;harmonica en sol (g)'>Cartographie de l&#x27;Harmonica en Sol (G)</td><td></td><td><a href='gamme-harmo-diato-g_diatonique.html'>🎵 Écouter + partition</a></td><td><a href='gamme-harmo-diato-g_chromatique.html'>🎵 Écouter + partition</a></td><td><a href='gamme-harmo-diato-g.mp3?v=cc4cc44'>MP3</a></td><td class='badge' data-sort='public-domain' title='Domaine public — libre de droits'>🆓</td></tr>
-<tr><td data-sort='gammes blues'>Gammes Blues</td><td></td><td><a href='gamme-blues_diatonique.html'>🎵 Écouter + partition</a></td><td><a href='gamme-blues_chromatique.html'>🎵 Écouter + partition</a></td><td><a href='gamme-blues.mp3?v=cc4cc44'>MP3</a></td><td class='badge' data-sort='public-domain' title='Domaine public — libre de droits'>🆓</td></tr>
-<tr><td data-sort='gammes jazz'>Gammes Jazz</td><td></td><td><a href='gamme-jazz_diatonique.html'>🎵 Écouter + partition</a></td><td><a href='gamme-jazz_chromatique.html'>🎵 Écouter + partition</a></td><td><a href='gamme-jazz.mp3?v=cc4cc44'>MP3</a></td><td class='badge' data-sort='public-domain' title='Domaine public — libre de droits'>🆓</td></tr>
-<tr><td data-sort='gammes pentatoniques'>Gammes Pentatoniques</td><td></td><td><a href='gamme-pentatonique_diatonique.html'>🎵 Écouter + partition</a></td><td><a href='gamme-pentatonique_chromatique.html'>🎵 Écouter + partition</a></td><td><a href='gamme-pentatonique.mp3?v=cc4cc44'>MP3</a></td><td class='badge' data-sort='public-domain' title='Domaine public — libre de droits'>🆓</td></tr>
-<tr><td data-sort='harmonica en c - rythmique (diatonique)'>Harmonica en C - Rythmique (Diatonique)</td><td></td><td><a href='rythmique_diatonique.html'>🎵 Écouter + partition</a></td><td><a href='rythmique_chromatique.html'>🎵 Écouter + partition</a></td><td><a href='rythmique.mp3?v=cc4cc44'>MP3</a></td><td class='badge' data-sort='public-domain' title='Domaine public — libre de droits'>🆓</td></tr>
+<tr><td data-sort='cartographie de l&#x27;harmonica en do (c)'>Cartographie de l&#x27;Harmonica en Do (C)</td><td></td><td class='col-pdf'><a href='gamme-harmo-diato-c_diatonique.html' title='Écouter + partition'>🎵🎼</a></td><td class='col-pdf'><a href='gamme-harmo-diato-c_chromatique.html' title='Écouter + partition'>🎵🎼</a></td><td><a href='gamme-harmo-diato-c.mp3?v=99e6b30'>MP3</a></td><td class='badge' data-sort='public-domain' title='Domaine public — libre de droits'>🆓</td></tr>
+<tr><td data-sort='cartographie de l&#x27;harmonica en ré (d)'>Cartographie de l&#x27;Harmonica en Ré (D)</td><td></td><td class='col-pdf'><a href='gamme-harmo-diato-d_diatonique.html' title='Écouter + partition'>🎵🎼</a></td><td class='col-pdf'><a href='gamme-harmo-diato-d_chromatique.html' title='Écouter + partition'>🎵🎼</a></td><td><a href='gamme-harmo-diato-d.mp3?v=99e6b30'>MP3</a></td><td class='badge' data-sort='public-domain' title='Domaine public — libre de droits'>🆓</td></tr>
+<tr><td data-sort='cartographie de l&#x27;harmonica en sol (g)'>Cartographie de l&#x27;Harmonica en Sol (G)</td><td></td><td class='col-pdf'><a href='gamme-harmo-diato-g_diatonique.html' title='Écouter + partition'>🎵🎼</a></td><td class='col-pdf'><a href='gamme-harmo-diato-g_chromatique.html' title='Écouter + partition'>🎵🎼</a></td><td><a href='gamme-harmo-diato-g.mp3?v=99e6b30'>MP3</a></td><td class='badge' data-sort='public-domain' title='Domaine public — libre de droits'>🆓</td></tr>
+<tr><td data-sort='gammes blues'>Gammes Blues</td><td></td><td class='col-pdf'><a href='gamme-blues_diatonique.html' title='Écouter + partition'>🎵🎼</a></td><td class='col-pdf'><a href='gamme-blues_chromatique.html' title='Écouter + partition'>🎵🎼</a></td><td><a href='gamme-blues.mp3?v=99e6b30'>MP3</a></td><td class='badge' data-sort='public-domain' title='Domaine public — libre de droits'>🆓</td></tr>
+<tr><td data-sort='gammes jazz'>Gammes Jazz</td><td></td><td class='col-pdf'><a href='gamme-jazz_diatonique.html' title='Écouter + partition'>🎵🎼</a></td><td class='col-pdf'><a href='gamme-jazz_chromatique.html' title='Écouter + partition'>🎵🎼</a></td><td><a href='gamme-jazz.mp3?v=99e6b30'>MP3</a></td><td class='badge' data-sort='public-domain' title='Domaine public — libre de droits'>🆓</td></tr>
+<tr><td data-sort='gammes pentatoniques'>Gammes Pentatoniques</td><td></td><td class='col-pdf'><a href='gamme-pentatonique_diatonique.html' title='Écouter + partition'>🎵🎼</a></td><td class='col-pdf'><a href='gamme-pentatonique_chromatique.html' title='Écouter + partition'>🎵🎼</a></td><td><a href='gamme-pentatonique.mp3?v=99e6b30'>MP3</a></td><td class='badge' data-sort='public-domain' title='Domaine public — libre de droits'>🆓</td></tr>
+<tr><td data-sort='harmonica en c - rythmique (diatonique)'>Harmonica en C - Rythmique (Diatonique)</td><td></td><td class='col-pdf'><a href='rythmique_diatonique.html' title='Écouter + partition'>🎵🎼</a></td><td class='col-pdf'><a href='rythmique_chromatique.html' title='Écouter + partition'>🎵🎼</a></td><td><a href='rythmique.mp3?v=99e6b30'>MP3</a></td><td class='badge' data-sort='public-domain' title='Domaine public — libre de droits'>🆓</td></tr>
 
 </tbody>
 </table>
