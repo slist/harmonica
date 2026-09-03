@@ -387,6 +387,8 @@ table{border-collapse:collapse;width:100%;font-size:0.88em;background:#fff}
 thead th{background:#f0f0f0;cursor:pointer;user-select:none;white-space:nowrap;
          padding:7px 9px;border:1px solid #ccc;text-align:center}
 thead th:hover{background:#dde}
+thead th.col-pdf{white-space:normal;word-break:break-word}
+td.col-pdf{width:3em;text-align:center}
 thead th.sort-asc::after{content:" ▲";font-size:.8em}
 thead th.sort-desc::after{content:" ▼";font-size:.8em}
 tbody td{border:1px solid #ccc;padding:5px 8px;text-align:center}
@@ -462,7 +464,7 @@ body{margin:0;font-family:sans-serif;background:#fafafa}
 #player-bar h1{margin:0;font-size:1em;flex:1 1 auto;min-width:150px}
 #player-bar audio{flex:2 1 260px;min-width:200px}
 #no-audio{color:#999;font-style:italic}
-embed.pdf-page{width:100%;height:95vh;border:none;display:block;margin-bottom:.5em}
+.pdf-page{width:100%;height:100vh;border:none}
 </style>"""
 
 
@@ -475,7 +477,7 @@ def _player_page_html(title: str, mp3_file: str, pdf_files: list[str], back_href
     else:
         audio_html = "<span id='no-audio'>Pas d'enregistrement audio disponible</span>"
     pdf_html = "".join(
-        f"<embed class='pdf-page' src='{escape(_cache_bust(f))}' type='application/pdf'>"
+        f"<iframe class='pdf-page' src='{escape(_cache_bust(f))}'></iframe>"
         for f in pdf_files
     )
     return f"""<!DOCTYPE html>
@@ -523,15 +525,15 @@ def _pdf_cell(
     if not files:
         return "<span class='hidden'>—</span>"
     fname = _write_player_page(output_dir, base, tuning, title, files, mp3_files, back_href, prefix)
-    return f"<a href='{escape(prefix + fname)}'>🎵 Écouter + partition</a>"
+    return f"<a href='{escape(prefix + fname)}' title='Écouter + partition'>🎵🎼</a>"
 
 
 def _table_header(cols: list[tuple]) -> str:
-    """cols = list of (label, sort_type) where sort_type is unused but kept for data-sort."""
-    ths = "".join(
-        f"<th onclick='sortTable(this)'>{escape(label)}</th>"
-        for label, _ in cols
-    )
+    """cols = list of (label, css_class)."""
+    def _th(label: str, cls: str) -> str:
+        class_attr = f" class='{cls}'" if cls else ""
+        return f"<th onclick='sortTable(this)'{class_attr}>{escape(label)}</th>"
+    ths = "".join(_th(label, cls) for label, cls in cols)
     return f"<thead><tr>{ths}</tr></thead>"
 
 
@@ -565,14 +567,14 @@ def _song_row(meta: dict, public_only: bool, pdf_prefix: str = "") -> str:
     row += f"<td data-sort='{escape(composer.lower())}'>{composer_cell}</td>"
     row += f"<td data-sort='{key_num}'>{escape(key)}</td>"
     if show_links:
-        row += f"<td>{_pdf_cell(diat, mp3s, OUTPUT_DIR, base, 'diatonique', title, 'index.html', pdf_prefix)}</td>"
+        row += f"<td class='col-pdf'>{_pdf_cell(diat, mp3s, OUTPUT_DIR, base, 'diatonique', title, 'index.html', pdf_prefix)}</td>"
         row += difficulty_cell(diff)
-        row += f"<td>{_pdf_cell(chro, mp3s, OUTPUT_DIR, base, 'chromatique', title, 'index.html', pdf_prefix)}</td>"
+        row += f"<td class='col-pdf'>{_pdf_cell(chro, mp3s, OUTPUT_DIR, base, 'chromatique', title, 'index.html', pdf_prefix)}</td>"
         row += f"<td>{_mp3_link(mp3s, pdf_prefix)}</td>"
     else:
-        row += "<td class='hidden'>—</td>"
+        row += "<td class='hidden col-pdf'>—</td>"
         row += difficulty_cell(diff)
-        row += "<td class='hidden'>—</td>"
+        row += "<td class='hidden col-pdf'>—</td>"
         row += "<td class='hidden'>—</td>"
     row += f"<td class='badge'>{lyrics_icon(lyrics)}</td>"
     row += copyright_cell(status, composer)
@@ -583,10 +585,10 @@ def _song_row(meta: dict, public_only: bool, pdf_prefix: str = "") -> str:
 # --------- Page generators ---------
 
 _TABLE_COLS = [
-    ("Œuvre", "str"), ("Compositeur", "str"), ("Clé", "num"),
-    ("Diatonique", "str"), ("Difficulté 🎵", "num"),
-    ("Chromatique", "str"), ("MP3", "str"),
-    ("Paroles", "str"), ("Droits", "str"),
+    ("Œuvre", ""), ("Compositeur", ""), ("Clé", ""),
+    ("Diatonique", "col-pdf"), ("Difficulté 🎵", ""),
+    ("Chromatique", "col-pdf"), ("MP3", ""),
+    ("Paroles", ""), ("Droits", ""),
 ]
 
 _DIFFICULTY_HELP = (
@@ -639,8 +641,8 @@ def generate_gammes_html(gammes: list[dict]) -> None:
     os.makedirs(gammes_out, exist_ok=True)
 
     cols = [
-        ("Titre", "str"), ("Instrument", "str"),
-        ("Diatonique", "str"), ("Chromatique", "str"), ("MP3", "str"), ("Droits", "str"),
+        ("Titre", ""), ("Instrument", ""),
+        ("Diatonique", "col-pdf"), ("Chromatique", "col-pdf"), ("MP3", ""), ("Droits", ""),
     ]
     thead = _table_header(cols)
 
@@ -655,8 +657,8 @@ def generate_gammes_html(gammes: list[dict]) -> None:
         rows += "<tr>"
         rows += f"<td data-sort='{escape(title.lower())}'>{escape(title)}</td>"
         rows += f"<td>{escape(instru)}</td>"
-        rows += f"<td>{_pdf_cell(diat, mp3s, gammes_out, g['base'], 'diatonique', title, 'index.html')}</td>"
-        rows += f"<td>{_pdf_cell(chro, mp3s, gammes_out, g['base'], 'chromatique', title, 'index.html')}</td>"
+        rows += f"<td class='col-pdf'>{_pdf_cell(diat, mp3s, gammes_out, g['base'], 'diatonique', title, 'index.html')}</td>"
+        rows += f"<td class='col-pdf'>{_pdf_cell(chro, mp3s, gammes_out, g['base'], 'chromatique', title, 'index.html')}</td>"
         rows += f"<td>{_mp3_link(mp3s)}</td>"
         rows += copyright_cell(status, instru)
         rows += "</tr>\n"
