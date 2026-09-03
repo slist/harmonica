@@ -5,7 +5,7 @@
   subtitle = "Pour accompagner ma fille au violon"
   composer = "L. W. Beethoven (1770-1827)"
   lyricsLang = #'()
-  copyrightStatus = "public-domain" % Chanson traditionnelle anglaise (XVIe siècle)
+  copyrightStatus = "public-domain"
   composerNationality = "de"
 }
 
