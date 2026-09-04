@@ -19,7 +19,7 @@ body{margin:0;font-family:sans-serif;background:#fafafa}
 #no-audio{color:#999;font-style:italic}
 .pdf-page{width:100%;height:100vh;border:none}
 #yt-block{display:flex;align-items:center;gap:.5em}
-#yt-player{width:160px;height:90px}
+#yt-player{width:320px;height:180px}
 #yt-controls{display:flex;flex-direction:column;gap:.3em}
 #yt-controls button,#yt-controls select{font-size:.85em;padding:.15em .4em;cursor:pointer}
 </style>
@@ -28,9 +28,13 @@ body{margin:0;font-family:sans-serif;background:#fafafa}
 <div id="player-bar">
   <a href="index.html" onclick="if(history.length>1){history.back();return false;}">← Retour</a>
   <h1>Bilitis — Diatonique</h1>
-  <audio controls src='bilitis.mp3?v=9dd3d36'>Votre navigateur ne supporte pas la lecture audio.</audio>
+  <audio controls src='bilitis.mp3?v=80a6d13'>Votre navigateur ne supporte pas la lecture audio.</audio>
   <div id="yt-block">
-  <div id="yt-player"></div>
+  <iframe id="yt-player" width="320" height="180"
+    src="https://www.youtube.com/embed/X5jhIBkMQLA?enablejsapi=1&amp;rel=0"
+    title="Lecteur YouTube" frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
   <div id="yt-controls">
     <button onclick="ytRestart()" title="Retour au début de la vidéo">⏮ Début</button>
     <select onchange="ytSetSpeed(this.value)" title="Vitesse de lecture">
@@ -45,17 +49,23 @@ body{margin:0;font-family:sans-serif;background:#fafafa}
   </div>
 </div>
 </div>
-<iframe class='pdf-page' src='bilitis_diatonique.pdf?v=9dd3d36'></iframe>
+<iframe class='pdf-page' src='bilitis_diatonique.pdf?v=80a6d13'></iframe>
 <script src="https://www.youtube.com/iframe_api"></script>
 <script>
 var ytPlayer;
 function onYouTubeIframeAPIReady(){
   ytPlayer = new YT.Player('yt-player', {
-    height: '90',
-    width: '160',
-    videoId: 'X5jhIBkMQLA',
-    playerVars: {rel: 0}
+    events: {onError: ytOnError}
   });
+}
+function ytOnError(){
+  // La vidéo n'a pas pu être lue dans l'iframe (intégration désactivée par
+  // son propriétaire, vidéo privée/supprimée…) : on retombe sur un lien direct.
+  var block = document.getElementById('yt-block');
+  if(block){
+    block.innerHTML =
+      "<a href='https://www.youtube.com/watch?v=X5jhIBkMQLA' target='_blank' rel='noopener'>📺 Voir la vidéo sur YouTube</a>";
+  }
 }
 function ytRestart(){
   if(ytPlayer && ytPlayer.seekTo){ytPlayer.seekTo(0, true);ytPlayer.playVideo();}
