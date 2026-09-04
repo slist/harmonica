@@ -8,6 +8,7 @@
   copyrightStatus = "copyrighted"
   date = "1962"
   composerNationality = "us"
+  youtube = "https://www.youtube.com/watch?v=MMFj8uDubsE"
 }
 
 \include "../include/harmonica.ly"

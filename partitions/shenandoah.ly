@@ -6,6 +6,7 @@
   lyricsLang = #'(en)
   copyrightStatus = "public-domain" % Mélodie traditionnelle
   composerNationality = "us"
+  youtube = "https://www.youtube.com/watch?v=L64v0icD4ms"
 }
 
 \include "../include/harmonica.ly"

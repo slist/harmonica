@@ -5,6 +5,7 @@
   composer = "Gustav Anderson (1920-1989) ou Lalo Schifrin (1932-)"
   copyrightStatus = "copyrighted"
   composerNationality = "ar"
+  youtube = "https://www.youtube.com/watch?v=_1UMdc18hl8"
 }
 
 % From: https://www.free-scores.com/PDF_FR/anderson-gustav-mission-impossible-89474.pdf

@@ -5,6 +5,7 @@
   lyricsLang = #'(fr)
   copyrightStatus = "public-domain" % Chanson traditionnelle française
   composerNationality = "fr"
+  youtube = "https://www.youtube.com/watch?v=l_Yl9xN4i5U"
 }
 
 %Source: https://fr.wikipedia.org/wiki/Trois_Petits_Chats

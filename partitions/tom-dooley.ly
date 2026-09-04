@@ -5,6 +5,7 @@
   composer = ""
   date = ""
   composerNationality = "us"
+  youtube = "https://www.youtube.com/watch?v=8jqO1fKqrWs"
 }
 
 \include "../include/harmonica.ly"

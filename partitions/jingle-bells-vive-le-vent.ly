@@ -6,6 +6,7 @@
   lyricsLang = #'(en)
   copyrightStatus = "public-domain"
   composerNationality = "us"
+  youtube = "https://www.youtube.com/watch?v=dmWhDS2uTXc"
 }
 
 %{

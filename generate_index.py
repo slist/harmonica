@@ -222,7 +222,7 @@ def parse_ly_metadata(ly_path: str) -> dict:
     metadata: dict = {
         "copyrightStatus": "unknown", "lyricsLang": [],
         "key": "unknown", "composer": "", "title": "",
-        "composerNationality": "", "difficulty": {},
+        "composerNationality": "", "difficulty": {}, "youtube": "",
     }
     if not os.path.exists(ly_path):
         logger.warning(f"  ⚠️  Fichier .ly introuvable : '{ly_path}'")
@@ -252,6 +252,7 @@ def parse_ly_metadata(ly_path: str) -> dict:
                     break
     metadata["title"]                = find(rf'^\s*title\s*=\s*"{_QUOTED}"', re.MULTILINE)
     metadata["composerNationality"]  = find(rf'composerNationality\s*=\s*"{_QUOTED}"')
+    metadata["youtube"]               = find(rf'youtube\s*=\s*"{_QUOTED}"')
 
     m = re.search(r'lyricsLang\s*=\s*#\'\(([^)]*)\)', content)
     if m:
@@ -456,6 +457,19 @@ def _mp3_link(files: list[str], prefix: str = "") -> str:
     return f"<a href='{escape(_cache_bust(prefix + files[0]))}'>MP3</a>"
 
 
+def _youtube_video_id(url: str) -> str:
+    if not url:
+        return ""
+    m = re.search(r'(?:youtube\.com/watch\?v=|youtu\.be/|youtube\.com/embed/)([A-Za-z0-9_-]{11})', url)
+    return m.group(1) if m else ""
+
+
+def _youtube_link(url: str) -> str:
+    if not url:
+        return "<span class='hidden'>—</span>"
+    return f"<a href='{escape(url)}' target='_blank' rel='noopener' title='Voir sur YouTube'>📺</a>"
+
+
 _PLAYER_CSS = """\
 <style>
 *{box-sizing:border-box}
@@ -469,10 +483,56 @@ body{margin:0;font-family:sans-serif;background:#fafafa}
 #player-bar audio{flex:2 1 260px;min-width:200px}
 #no-audio{color:#999;font-style:italic}
 .pdf-page{width:100%;height:100vh;border:none}
+#yt-block{display:flex;align-items:center;gap:.5em}
+#yt-player{width:160px;height:90px}
+#yt-controls{display:flex;flex-direction:column;gap:.3em}
+#yt-controls button,#yt-controls select{font-size:.85em;padding:.15em .4em;cursor:pointer}
 </style>"""
 
 
-def _player_page_html(title: str, mp3_file: str, pdf_files: list[str], back_href: str) -> str:
+_YOUTUBE_BLOCK_TMPL = """\
+<div id="yt-block">
+  <div id="yt-player"></div>
+  <div id="yt-controls">
+    <button onclick="ytRestart()" title="Retour au début de la vidéo">⏮ Début</button>
+    <select onchange="ytSetSpeed(this.value)" title="Vitesse de lecture">
+      <option value="0.25">0.25×</option>
+      <option value="0.5">0.5×</option>
+      <option value="0.75">0.75×</option>
+      <option value="1" selected>1×</option>
+      <option value="1.25">1.25×</option>
+      <option value="1.5">1.5×</option>
+      <option value="2">2×</option>
+    </select>
+  </div>
+</div>"""
+
+
+def _youtube_script(video_id: str) -> str:
+    return f"""\
+<script src="https://www.youtube.com/iframe_api"></script>
+<script>
+var ytPlayer;
+function onYouTubeIframeAPIReady(){{
+  ytPlayer = new YT.Player('yt-player', {{
+    height: '90',
+    width: '160',
+    videoId: '{video_id}',
+    playerVars: {{rel: 0}}
+  }});
+}}
+function ytRestart(){{
+  if(ytPlayer && ytPlayer.seekTo){{ytPlayer.seekTo(0, true);ytPlayer.playVideo();}}
+}}
+function ytSetSpeed(v){{
+  if(ytPlayer && ytPlayer.setPlaybackRate){{ytPlayer.setPlaybackRate(parseFloat(v));}}
+}}
+</script>"""
+
+
+def _player_page_html(
+    title: str, mp3_file: str, pdf_files: list[str], back_href: str, youtube_id: str = "",
+) -> str:
     if mp3_file:
         audio_html = (
             f"<audio controls src='{escape(_cache_bust(mp3_file))}'>"
@@ -480,6 +540,8 @@ def _player_page_html(title: str, mp3_file: str, pdf_files: list[str], back_href
         )
     else:
         audio_html = "<span id='no-audio'>Pas d'enregistrement audio disponible</span>"
+    yt_html = _YOUTUBE_BLOCK_TMPL if youtube_id else ""
+    yt_script = _youtube_script(youtube_id) if youtube_id else ""
     pdf_html = "".join(
         f"<iframe class='pdf-page' src='{escape(_cache_bust(f))}'></iframe>"
         for f in pdf_files
@@ -497,8 +559,10 @@ def _player_page_html(title: str, mp3_file: str, pdf_files: list[str], back_href
   <a href="{escape(back_href)}" onclick="if(history.length>1){{history.back();return false;}}">← Retour</a>
   <h1>{escape(title)}</h1>
   {audio_html}
+  {yt_html}
 </div>
 {pdf_html}
+{yt_script}
 </body>
 </html>
 """
@@ -507,6 +571,7 @@ def _player_page_html(title: str, mp3_file: str, pdf_files: list[str], back_href
 def _write_player_page(
     output_dir: str, base: str, tuning: str, title: str,
     pdf_files: list[str], mp3_files: list[str], back_href: str, prefix: str = "",
+    youtube_url: str = "",
 ) -> str:
     """Write a standalone page combining the sheet music PDF with a sticky audio player."""
     fname = f"{base}_{tuning}.html"
@@ -516,6 +581,7 @@ def _write_player_page(
         mp3_file=mp3_file,
         pdf_files=[prefix + f for f in pdf_files],
         back_href=back_href,
+        youtube_id=_youtube_video_id(youtube_url),
     )
     with open(os.path.join(output_dir, fname), "w", encoding="utf-8") as fh:
         fh.write(html)
@@ -524,11 +590,11 @@ def _write_player_page(
 
 def _pdf_cell(
     files: list[str], mp3_files: list[str], output_dir: str, base: str, tuning: str,
-    title: str, back_href: str, prefix: str = "",
+    title: str, back_href: str, prefix: str = "", youtube_url: str = "",
 ) -> str:
     if not files:
         return "<span class='hidden'>—</span>"
-    fname = _write_player_page(output_dir, base, tuning, title, files, mp3_files, back_href, prefix)
+    fname = _write_player_page(output_dir, base, tuning, title, files, mp3_files, back_href, prefix, youtube_url)
     return f"<a href='{escape(prefix + fname)}' title='Écouter + partition'>🎵🎼</a>"
 
 
@@ -553,6 +619,7 @@ def _song_row(meta: dict, public_only: bool, pdf_prefix: str = "") -> str:
     country    = COUNTRY_NAMES.get(nat, '')
     flag       = f"<span title='{escape(country)}'>{flag_emoji}</span>" if flag_emoji and country else flag_emoji
     diff       = meta['difficulty']
+    youtube    = meta.get('youtube', '')
     outputs    = meta['outputs']
     diat       = outputs['diat']
     chro       = outputs['chro']
@@ -571,14 +638,16 @@ def _song_row(meta: dict, public_only: bool, pdf_prefix: str = "") -> str:
     row += f"<td data-sort='{escape(composer.lower())}'>{composer_cell}</td>"
     row += f"<td data-sort='{key_num}'>{escape(key)}</td>"
     if show_links:
-        row += f"<td class='col-pdf'>{_pdf_cell(diat, mp3s, OUTPUT_DIR, base, 'diatonique', title, 'index.html', pdf_prefix)}</td>"
+        row += f"<td class='col-pdf'>{_pdf_cell(diat, mp3s, OUTPUT_DIR, base, 'diatonique', title, 'index.html', pdf_prefix, youtube)}</td>"
         row += difficulty_cell(diff)
-        row += f"<td class='col-pdf'>{_pdf_cell(chro, mp3s, OUTPUT_DIR, base, 'chromatique', title, 'index.html', pdf_prefix)}</td>"
+        row += f"<td class='col-pdf'>{_pdf_cell(chro, mp3s, OUTPUT_DIR, base, 'chromatique', title, 'index.html', pdf_prefix, youtube)}</td>"
         row += f"<td>{_mp3_link(mp3s, pdf_prefix)}</td>"
+        row += f"<td>{_youtube_link(youtube)}</td>"
     else:
         row += "<td class='hidden col-pdf'>—</td>"
         row += difficulty_cell(diff)
         row += "<td class='hidden col-pdf'>—</td>"
+        row += "<td class='hidden'>—</td>"
         row += "<td class='hidden'>—</td>"
     row += f"<td class='badge'>{lyrics_icon(lyrics)}</td>"
     row += copyright_cell(status, composer)
@@ -591,7 +660,7 @@ def _song_row(meta: dict, public_only: bool, pdf_prefix: str = "") -> str:
 _TABLE_COLS = [
     ("Œuvre", ""), ("Compositeur", ""), ("Clé", ""),
     ("Diatonique", "col-pdf"), ("Difficulté 🎵", ""),
-    ("Chromatique", "col-pdf"), ("MP3", ""),
+    ("Chromatique", "col-pdf"), ("MP3", ""), ("YouTube", ""),
     ("Paroles", ""), ("Droits", ""),
 ]
 

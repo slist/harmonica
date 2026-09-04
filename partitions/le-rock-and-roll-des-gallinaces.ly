@@ -7,6 +7,7 @@
   copyright = "© Steve Waring — Tous droits réservés"
   copyrightStatus = "copyrighted"
   composerNationality = "fr"
+  youtube = "https://www.youtube.com/watch?v=JaL9ub4nEQQ"
 }
 
 \include "../include/harmonica.ly"

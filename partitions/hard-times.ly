@@ -6,6 +6,7 @@
   lyricsLang = #'(en)
   copyrightStatus = "public-domain"
   composerNationality = "us"
+  youtube = "https://www.youtube.com/watch?v=iI6g32MeotY"
 }
 
 %From https://www.wedesoft.de/software/2021/12/19/lilypond-bluesharp-tabs/

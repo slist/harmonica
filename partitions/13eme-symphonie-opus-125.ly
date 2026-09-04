@@ -7,6 +7,7 @@
   lyricsLang = #'()
   copyrightStatus = "public-domain"
   composerNationality = "de"
+  youtube = "https://www.youtube.com/watch?v=AUGU3Son8D8"
 }
 
 \include "../include/harmonica.ly"

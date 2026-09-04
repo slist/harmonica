@@ -6,6 +6,7 @@
   lyricsLang = #'(fr)
   copyrightStatus = "public-domain" % ? Chanson de Noël française créée en 1946
   composerNationality = "fr"
+  youtube = "https://www.youtube.com/watch?v=K1MnvbRDSYQ"
 }
 
 \include "../include/harmonica.ly"

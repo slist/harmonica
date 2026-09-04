@@ -8,6 +8,7 @@
   lyricsLang = #'(fr)
   copyrightStatus = "public-domain" % Chanson traditionnelle française
   composerNationality = "fr"
+  youtube = "https://www.youtube.com/watch?v=Z_YwUDHXRZk"
 }
 
 % Source: https://www.partitions-domaine-public.fr/pdf/533/noel-il-est-ne-le-divin-enfant.html

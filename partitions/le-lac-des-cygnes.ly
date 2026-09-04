@@ -8,6 +8,7 @@
   arranger = ""
   instrument = ""
   composerNationality = "ru"
+  youtube = "https://www.youtube.com/watch?v=9cNQFB0TDfY"
 }
 
 \include "../include/harmonica.ly"

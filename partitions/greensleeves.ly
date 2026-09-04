@@ -8,6 +8,7 @@
   lyricsLang = #'(en)
   copyrightStatus = "public-domain" % Chanson traditionnelle anglaise (XVIe siècle)
   composerNationality = "gb"
+  youtube = "https://www.youtube.com/watch?v=yV5RtFI_MqU"
 }
 
 % Source: https://www.harmonica12.fr/Folkloriques/Greensleeves.pdf

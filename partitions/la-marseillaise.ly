@@ -6,6 +6,7 @@
   lyricsLang = #'(fr)
   copyrightStatus = "public-domain" % Hymne national français
   composerNationality = "fr"
+  youtube = "https://www.youtube.com/watch?v=t7N2MY9tjnc"
 }
 
 \include "../include/harmonica.ly"

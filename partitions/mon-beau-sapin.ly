@@ -7,6 +7,7 @@
   lyricsLang = #'(fr)
   copyrightStatus = "public-domain"
   composerNationality = "de"
+  youtube = "https://www.youtube.com/watch?v=Wdv8jH1CLSQ"
 }
 
 %Source:

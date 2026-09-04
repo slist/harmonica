@@ -9,6 +9,7 @@
   lyricsLang = #'(en)
   copyrightStatus = "public-domain"
   composerNationality = "us"
+  youtube = "https://www.youtube.com/watch?v=wiix2iu0dfY"
 }
 
 %Source: https://riffspot.com/music/camptown-races-harmonica/681/

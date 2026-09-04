@@ -7,6 +7,7 @@
   lyricsLang = #'(en)
   copyrightStatus = "copyrighted"
   composerNationality = "fr"
+  youtube = "https://www.youtube.com/watch?v=QA48wTGbU7A"
 }
 
 %Source: https://itsybitsykidsmusic.com/head-shoulders-knees-and-toes/

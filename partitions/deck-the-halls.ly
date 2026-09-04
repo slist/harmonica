@@ -6,6 +6,7 @@
   lyricsLang = #'(en)
   copyrightStatus = "public-domain" % Mélodie galloise traditionnelle (XVIe siècle)
   composerNationality = "gb"
+  youtube = "https://www.youtube.com/watch?v=UqItlHUSN-4"
 }
 
 \include "../include/harmonica.ly"

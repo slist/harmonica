@@ -13,6 +13,7 @@
   copyrightStatus = "copyrighted"
   composerNationality = "GB"
   instrument = "Harmonica en E"
+  youtube = "https://www.youtube.com/watch?v=-xtl3WZm4Dc"
 }
 
 \include "../include/harmonica.ly"

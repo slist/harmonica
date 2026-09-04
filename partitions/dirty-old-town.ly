@@ -6,6 +6,7 @@
   lyricsLang = #'(en)
   copyrightStatus = "copyrighted"
   composerNationality = "gb"
+  youtube = "https://www.youtube.com/watch?v=JgGuRdYm9CQ"
 }
 
 % From: https://musescore.com/user/28111512/scores/6520909

@@ -5,6 +5,7 @@
   composer = "Ennio Morricone (1928-2020)"
   copyrightStatus = "copyrighted"
   composerNationality = "it"
+  youtube = "https://www.youtube.com/watch?v=iE5CkYe6ASg"
 }
 
 % From: https://musescore.com/user/26895614/scores/5277890

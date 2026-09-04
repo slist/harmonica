@@ -6,6 +6,7 @@
   composer = "Ennio Morricone (1928-2020)"
   instrument = "Harmonica diatonique en C"
   composerNationality = "it"
+  youtube = "https://www.youtube.com/watch?v=BdIkrEW6TQA"
 }
 
 % From: https://www.sheetmusicdirect.com/de-DE/se/ID_No/1444188/Product.aspx

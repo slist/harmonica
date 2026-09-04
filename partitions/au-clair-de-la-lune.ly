@@ -8,6 +8,7 @@
   lyricsLang = #'(fr)
   date = ""
   composerNationality = "fr"
+  youtube = "https://www.youtube.com/watch?v=s6-g2iPeBTY"
 }
 
 %Source: https://www.rhapsody.fr/wp-content/uploads/2021/08/Anonyme-Au-Clair-de-la-Lune-1.pdf

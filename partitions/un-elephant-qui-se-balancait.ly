@@ -4,6 +4,7 @@
   title = "Un éléphant qui se balançait"
   %composer = ""
   composerNationality = "fr"
+  youtube = "https://www.youtube.com/watch?v=Ns92r5TQH3k"
 }
 
 \include "../include/harmonica.ly"
