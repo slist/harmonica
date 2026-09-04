@@ -155,7 +155,7 @@ fusionner_avec_index(
 fusionner_avec_index(
     partitions_seules,
     os.path.join(DOSSIER, "all_partition.pdf"),
-    "Index des partitions sans tablature harmonica",
+    "Index des partitions",
     titres_partitions,
 )
 
