@@ -10,28 +10,38 @@
 *{box-sizing:border-box}
 body{margin:0;font-family:sans-serif;background:#fafafa}
 #player-bar{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid #ccc;
-            box-shadow:0 2px 4px #0002;padding:.6em 1em;display:flex;align-items:center;
-            gap:1em;flex-wrap:wrap}
+            box-shadow:0 2px 4px #0002;padding:.6em 1em;display:flex;flex-direction:column;gap:.5em}
+#player-bar-top{display:flex;align-items:center;gap:1em;flex-wrap:wrap}
 #player-bar a{color:#1565c0;text-decoration:none;font-weight:bold;white-space:nowrap}
 #player-bar a:hover{text-decoration:underline}
-#player-bar h1{margin:0;font-size:1em;flex:1 1 auto;min-width:150px}
-#player-bar audio{flex:2 1 260px;min-width:200px}
+#player-bar h1{margin:0;font-size:1em;flex:1 1 auto;min-width:0}
+#player-bar-media{display:flex;align-items:center;gap:1em;flex-wrap:wrap}
+#player-bar-media[hidden]{display:none}
+#player-bar-media audio{flex:2 1 260px;min-width:200px}
 #no-audio{color:#999;font-style:italic}
 .pdf-page{width:100%;height:100vh;border:none}
+#yt-toggle{background:none;border:1px solid #ccc;border-radius:4px;font-size:1em;
+           line-height:1;padding:.3em .5em;cursor:pointer}
+#yt-toggle[hidden],#yt-block[hidden]{display:none}
 #yt-block{display:flex;align-items:center;gap:.5em}
 #yt-player{width:320px;height:180px}
-#yt-controls{display:flex;flex-direction:column;gap:.3em}
+#yt-controls{display:flex;flex-direction:column;gap:.9em}
 #yt-controls button,#yt-controls select{font-size:.85em;padding:.15em .4em;cursor:pointer}
 </style>
 </head>
 <body>
 <div id="player-bar">
-  <a href="index.html" onclick="if(history.length>1){history.back();return false;}">← Retour</a>
-  <h1>Cartographie de l&#x27;Harmonica en Do (C) — Diatonique</h1>
-  <audio controls src='gamme-harmo-diato-c.mp3?v=80a6d13'>Votre navigateur ne supporte pas la lecture audio.</audio>
-  
+  <div id="player-bar-top">
+    <a href="index.html" onclick="if(history.length>1){history.back();return false;}">← Retour</a>
+    <h1>Cartographie de l&#x27;Harmonica en Do (C) — Diatonique</h1>
+    
+    
+  </div>
+  <div id="player-bar-media">
+    <audio id='audio-player' controls src='gamme-harmo-diato-c.mp3?v=2133ed3'>Votre navigateur ne supporte pas la lecture audio.</audio>
+  </div>
 </div>
-<iframe class='pdf-page' src='gamme-harmo-diato-c_diatonique.pdf?v=80a6d13'></iframe>
+<iframe class='pdf-page' src='gamme-harmo-diato-c_diatonique.pdf?v=2133ed3'></iframe>
 
 </body>
 </html>
