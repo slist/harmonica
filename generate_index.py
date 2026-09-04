@@ -484,15 +484,25 @@ body{margin:0;font-family:sans-serif;background:#fafafa}
 #no-audio{color:#999;font-style:italic}
 .pdf-page{width:100%;height:100vh;border:none}
 #yt-block{display:flex;align-items:center;gap:.5em}
-#yt-player{width:160px;height:90px}
+#yt-player{width:320px;height:180px}
 #yt-controls{display:flex;flex-direction:column;gap:.3em}
 #yt-controls button,#yt-controls select{font-size:.85em;padding:.15em .4em;cursor:pointer}
 </style>"""
 
 
-_YOUTUBE_BLOCK_TMPL = """\
+def _youtube_block_html(video_id: str) -> str:
+    # A real <iframe> (not a placeholder <div>) so the native YouTube UI —
+    # including click-to-play on the thumbnail — works immediately, instead
+    # of only once the JS API asynchronously builds an iframe from scratch.
+    # The IFrame API then just attaches to this existing element (see
+    # onYouTubeIframeAPIReady below) to add the restart/speed controls.
+    return f"""\
 <div id="yt-block">
-  <div id="yt-player"></div>
+  <iframe id="yt-player" width="320" height="180"
+    src="https://www.youtube.com/embed/{video_id}?enablejsapi=1&amp;rel=0"
+    title="Lecteur YouTube" frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
   <div id="yt-controls">
     <button onclick="ytRestart()" title="Retour au début de la vidéo">⏮ Début</button>
     <select onchange="ytSetSpeed(this.value)" title="Vitesse de lecture">
@@ -515,11 +525,17 @@ def _youtube_script(video_id: str) -> str:
 var ytPlayer;
 function onYouTubeIframeAPIReady(){{
   ytPlayer = new YT.Player('yt-player', {{
-    height: '90',
-    width: '160',
-    videoId: '{video_id}',
-    playerVars: {{rel: 0}}
+    events: {{onError: ytOnError}}
   }});
+}}
+function ytOnError(){{
+  // La vidéo n'a pas pu être lue dans l'iframe (intégration désactivée par
+  // son propriétaire, vidéo privée/supprimée…) : on retombe sur un lien direct.
+  var block = document.getElementById('yt-block');
+  if(block){{
+    block.innerHTML =
+      "<a href='https://www.youtube.com/watch?v={video_id}' target='_blank' rel='noopener'>📺 Voir la vidéo sur YouTube</a>";
+  }}
 }}
 function ytRestart(){{
   if(ytPlayer && ytPlayer.seekTo){{ytPlayer.seekTo(0, true);ytPlayer.playVideo();}}
@@ -540,7 +556,7 @@ def _player_page_html(
         )
     else:
         audio_html = "<span id='no-audio'>Pas d'enregistrement audio disponible</span>"
-    yt_html = _YOUTUBE_BLOCK_TMPL if youtube_id else ""
+    yt_html = _youtube_block_html(youtube_id) if youtube_id else ""
     yt_script = _youtube_script(youtube_id) if youtube_id else ""
     pdf_html = "".join(
         f"<iframe class='pdf-page' src='{escape(_cache_bust(f))}'></iframe>"
