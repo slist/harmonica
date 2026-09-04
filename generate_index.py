@@ -8,6 +8,9 @@ import sys
 import unicodedata
 from html import escape
 
+import markdown
+from markdown.extensions.toc import slugify_unicode
+
 logging.basicConfig(level=logging.INFO, format="%(message)s")
 logger = logging.getLogger(__name__)
 
@@ -44,6 +47,7 @@ COUNTRY_NAMES: dict[str, str] = {
 OUTPUT_DIR     = "output"
 PARTITIONS_DIR = "partitions"
 GAMMES_DIR     = "gammes"
+LIENS_UTILES_MD = "liens_utiles.md"
 
 # Password hash for the private page (override with PRIVATE_PASSWORD env var)
 _pw = os.environ.get("PRIVATE_PASSWORD") or "harmonica"
@@ -611,6 +615,7 @@ def generate_index_html(songs: list[dict]) -> None:
 <h1>Partitions Harmonica</h1>
 <nav>
   <a href="gammes/">📖 Gammes &amp; Scales</a>
+  <a href="liens-utiles.html">🔗 Liens utiles</a>
 </nav>
 <br>
 <p>
@@ -781,6 +786,52 @@ def generate_private_html(songs: list[dict], sha256_hash: str) -> None:
     logger.info(f"✓ private.html généré ({len(songs)} partitions, hash={sha256_hash[:8]}…)")
 
 
+def generate_liens_utiles_html(md_path: str = LIENS_UTILES_MD) -> None:
+    """Convert liens_utiles.md to a standalone HTML page in the output dir."""
+    if not os.path.exists(md_path):
+        logger.warning(f"⚠️  Fichier '{md_path}' introuvable")
+        return
+
+    with open(md_path, encoding="utf-8") as f:
+        text = f.read()
+    body = markdown.markdown(
+        text,
+        extensions=["toc"],
+        extension_configs={"toc": {"slugify": slugify_unicode}},
+        tab_length=2,
+    )
+
+    html = f"""<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Liens utiles</title>
+{_NO_CACHE_META}
+{_CSS}
+<style>
+.content{{background:#fff;padding:1.5em 2em;border:1px solid #ccc;border-radius:6px;
+         max-width:900px}}
+.content ul{{padding-left:1.4em}}
+.content a{{color:#1565c0}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html">← Partitions</a>
+</nav>
+<br>
+<div class="content">
+{body}
+</div>
+</body>
+</html>
+"""
+    out = os.path.join(OUTPUT_DIR, "liens-utiles.html")
+    with open(out, "w", encoding="utf-8") as f:
+        f.write(html)
+    logger.info("✓ liens-utiles.html généré")
+
+
 # --------- Summary ---------
 
 def log_summary(songs: list[dict]) -> None:
@@ -827,6 +878,7 @@ def main() -> None:
     generate_index_html(songs)
     generate_gammes_html(gammes)
     generate_private_html(songs, PRIVATE_HASH)
+    generate_liens_utiles_html()
     log_summary(songs)
 
 

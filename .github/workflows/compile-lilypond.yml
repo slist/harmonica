@@ -7,12 +7,14 @@ on:
       - '.github/workflows/**'
       - '**.py'
       - 'requirements.txt'
+      - 'liens_utiles.md'
   pull_request:
     paths:
       - '**.ly'
       - '.github/workflows/**'
       - '**.py'
       - 'requirements.txt'
+      - 'liens_utiles.md'
   workflow_dispatch:
 
 # Cancel in-progress runs when a new commit is pushed to the same ref
