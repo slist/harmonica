@@ -18,14 +18,20 @@ body{margin:0;font-family:sans-serif;background:#fafafa}
 #player-bar audio{flex:2 1 260px;min-width:200px}
 #no-audio{color:#999;font-style:italic}
 .pdf-page{width:100%;height:100vh;border:none}
+#yt-block{display:flex;align-items:center;gap:.5em}
+#yt-player{width:160px;height:90px}
+#yt-controls{display:flex;flex-direction:column;gap:.3em}
+#yt-controls button,#yt-controls select{font-size:.85em;padding:.15em .4em;cursor:pointer}
 </style>
 </head>
 <body>
 <div id="player-bar">
   <a href="index.html" onclick="if(history.length>1){history.back();return false;}">← Retour</a>
   <h1>Cartographie de l&#x27;Harmonica en Sol (G) — Chromatique</h1>
-  <audio controls src='gamme-harmo-diato-g.mp3?v=896c109'>Votre navigateur ne supporte pas la lecture audio.</audio>
+  <audio controls src='gamme-harmo-diato-g.mp3?v=9dd3d36'>Votre navigateur ne supporte pas la lecture audio.</audio>
+  
 </div>
-<iframe class='pdf-page' src='gamme-harmo-diato-g_chromatique.pdf?v=896c109'></iframe>
+<iframe class='pdf-page' src='gamme-harmo-diato-g_chromatique.pdf?v=9dd3d36'></iframe>
+
 </body>
 </html>
