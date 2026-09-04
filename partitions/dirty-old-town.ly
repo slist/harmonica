@@ -160,7 +160,7 @@ partitionScore =
   <<
     \new Staff {
       \relative do'' {
-        \melodie
+        \melodieChromatique
       }
     }
   >>
