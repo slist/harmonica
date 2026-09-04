@@ -475,19 +475,38 @@ _PLAYER_CSS = """\
 *{box-sizing:border-box}
 body{margin:0;font-family:sans-serif;background:#fafafa}
 #player-bar{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid #ccc;
-            box-shadow:0 2px 4px #0002;padding:.6em 1em;display:flex;align-items:center;
-            gap:1em;flex-wrap:wrap}
+            box-shadow:0 2px 4px #0002;padding:.6em 1em;display:flex;flex-direction:column;gap:.5em}
+#player-bar-top{display:flex;align-items:center;gap:1em;flex-wrap:wrap}
 #player-bar a{color:#1565c0;text-decoration:none;font-weight:bold;white-space:nowrap}
 #player-bar a:hover{text-decoration:underline}
-#player-bar h1{margin:0;font-size:1em;flex:1 1 auto;min-width:150px}
-#player-bar audio{flex:2 1 260px;min-width:200px}
+#player-bar h1{margin:0;font-size:1em;flex:1 1 auto;min-width:0}
+#player-bar-media{display:flex;align-items:center;gap:1em;flex-wrap:wrap}
+#player-bar-media[hidden]{display:none}
+#player-bar-media audio{flex:2 1 260px;min-width:200px}
 #no-audio{color:#999;font-style:italic}
 .pdf-page{width:100%;height:100vh;border:none}
+#yt-toggle{background:none;border:1px solid #ccc;border-radius:4px;font-size:1em;
+           line-height:1;padding:.3em .5em;cursor:pointer}
+#yt-toggle[hidden],#yt-block[hidden]{display:none}
 #yt-block{display:flex;align-items:center;gap:.5em}
 #yt-player{width:320px;height:180px}
-#yt-controls{display:flex;flex-direction:column;gap:.3em}
+#yt-controls{display:flex;flex-direction:column;gap:.9em}
 #yt-controls button,#yt-controls select{font-size:.85em;padding:.15em .4em;cursor:pointer}
 </style>"""
+
+
+def _youtube_toggle_html() -> str:
+    icon = (
+        '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" '
+        'style="vertical-align:-3px">'
+        '<path fill="#FF0000" d="M23.5 6.2a2.9 2.9 0 0 0-2-2C19.7 3.7 12 3.7 12 3.7'
+        's-7.7 0-9.5.5a2.9 2.9 0 0 0-2 2A30 30 0 0 0 0 12a30 30 0 0 0 .5 5.8 2.9 2.9'
+        ' 0 0 0 2 2c1.8.5 9.5.5 9.5.5s7.7 0 9.5-.5a2.9 2.9 0 0 0 2-2A30 30 0 0 0 24'
+        ' 12a30 30 0 0 0-.5-5.8z"/>'
+        '<path fill="#fff" d="M9.6 15.6V8.4L15.8 12z"/>'
+        '</svg>'
+    )
+    return f'<button id="yt-toggle" type="button" onclick="ytShow()">{icon} YouTube</button>'
 
 
 def _youtube_block_html(video_id: str) -> str:
@@ -496,8 +515,11 @@ def _youtube_block_html(video_id: str) -> str:
     # of only once the JS API asynchronously builds an iframe from scratch.
     # The IFrame API then just attaches to this existing element (see
     # onYouTubeIframeAPIReady below) to add the restart/speed controls.
+    # Hidden by default: takes the exact spot of the 📺 toggle button (see
+    # ytShow/ytHide) instead of floating over the sheet music or pushing it
+    # down permanently.
     return f"""\
-<div id="yt-block">
+<div id="yt-block" hidden>
   <iframe id="yt-player" width="320" height="180"
     src="https://www.youtube.com/embed/{video_id}?enablejsapi=1&amp;rel=0"
     title="Lecteur YouTube" frameborder="0"
@@ -514,6 +536,7 @@ def _youtube_block_html(video_id: str) -> str:
       <option value="1.5">1.5×</option>
       <option value="2">2×</option>
     </select>
+    <button onclick="ytHide()" title="Fermer la vidéo">✕ Fermer</button>
   </div>
 </div>"""
 
@@ -543,6 +566,21 @@ function ytRestart(){{
 function ytSetSpeed(v){{
   if(ytPlayer && ytPlayer.setPlaybackRate){{ytPlayer.setPlaybackRate(parseFloat(v));}}
 }}
+function ytShow(){{
+  document.getElementById('yt-toggle').hidden = true;
+  document.getElementById('yt-block').hidden = false;
+  var media = document.getElementById('player-bar-media');
+  if(media){{media.hidden = true;}}
+  var audio = document.getElementById('audio-player');
+  if(audio){{audio.pause();}}
+}}
+function ytHide(){{
+  document.getElementById('yt-toggle').hidden = false;
+  document.getElementById('yt-block').hidden = true;
+  var media = document.getElementById('player-bar-media');
+  if(media){{media.hidden = false;}}
+  if(ytPlayer && ytPlayer.pauseVideo){{ytPlayer.pauseVideo();}}
+}}
 </script>"""
 
 
@@ -551,11 +589,12 @@ def _player_page_html(
 ) -> str:
     if mp3_file:
         audio_html = (
-            f"<audio controls src='{escape(_cache_bust(mp3_file))}'>"
+            f"<audio id='audio-player' controls src='{escape(_cache_bust(mp3_file))}'>"
             "Votre navigateur ne supporte pas la lecture audio.</audio>"
         )
     else:
         audio_html = "<span id='no-audio'>Pas d'enregistrement audio disponible</span>"
+    yt_toggle = _youtube_toggle_html() if youtube_id else ""
     yt_html = _youtube_block_html(youtube_id) if youtube_id else ""
     yt_script = _youtube_script(youtube_id) if youtube_id else ""
     pdf_html = "".join(
@@ -572,10 +611,15 @@ def _player_page_html(
 </head>
 <body>
 <div id="player-bar">
-  <a href="{escape(back_href)}" onclick="if(history.length>1){{history.back();return false;}}">← Retour</a>
-  <h1>{escape(title)}</h1>
-  {audio_html}
-  {yt_html}
+  <div id="player-bar-top">
+    <a href="{escape(back_href)}" onclick="if(history.length>1){{history.back();return false;}}">← Retour</a>
+    <h1>{escape(title)}</h1>
+    {yt_toggle}
+    {yt_html}
+  </div>
+  <div id="player-bar-media">
+    {audio_html}
+  </div>
 </div>
 {pdf_html}
 {yt_script}
