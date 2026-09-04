@@ -15,7 +15,7 @@ DOSSIER        = "output"
 PARTITIONS_DIR = "partitions"
 GAMMES_DIR     = "gammes"
 GAMMES_DOSSIER = os.path.join(DOSSIER, "gammes")
-SUFFIXES = ("_diatonique", "_chromatique")
+SUFFIXES = ("_diatonique", "_chromatique", "_partition")
 
 
 def base_de_pdf(pdf: str) -> str:
@@ -133,6 +133,10 @@ partitions_chro = sorted(
     (f for f in fichiers if f.endswith("_chromatique.pdf")),
     key=lambda f: title_sort_key(titre_de_pdf(f, titres_partitions)),
 )
+partitions_seules = sorted(
+    (f for f in fichiers if f.endswith("_partition.pdf")),
+    key=lambda f: title_sort_key(titre_de_pdf(f, titres_partitions)),
+)
 
 fusionner_avec_index(
     partitions_diat,
@@ -145,6 +149,13 @@ fusionner_avec_index(
     partitions_chro,
     os.path.join(DOSSIER, "all_chromatique.pdf"),
     "Index des partitions pour harmonica chromatique",
+    titres_partitions,
+)
+
+fusionner_avec_index(
+    partitions_seules,
+    os.path.join(DOSSIER, "all_partition.pdf"),
+    "Index des partitions sans tablature harmonica",
     titres_partitions,
 )
 

@@ -712,6 +712,7 @@ def generate_private_html(songs: list[dict], sha256_hash: str) -> None:
 <ul>
   <li><a href="{escape(_cache_bust("all_diatonique.pdf"))}">Toutes les partitions diatoniques (PDF)</a></li>
   <li><a href="{escape(_cache_bust("all_chromatique.pdf"))}">Toutes les partitions chromatiques (PDF)</a></li>
+  <li><a href="{escape(_cache_bust("all_partition.pdf"))}">Toutes les partitions sans tablature harmonica (PDF)</a></li>
 </ul>
 <p>{len(songs)} partitions (toutes, y compris sous droits)</p>
 <table id="data-table">

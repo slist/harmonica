@@ -89,6 +89,7 @@ jobs:
 
             lilypond -dcompile-diatonique  -o "output/${base}_diatonique" "${tmp_file}" || { echo "❌ Failed: ${base} (diatonique)";  return 1; }
             lilypond -dcompile-chromatique -o "output/${base}_chromatique" "${tmp_file}" || { echo "❌ Failed: ${base} (chromatique)"; return 1; }
+            lilypond -dcompile-partition   -o "output/${base}_partition" "${tmp_file}"   || { echo "❌ Failed: ${base} (partition)";   return 1; }
             lilypond --formats=midi -dcompile-midi -o "output/${base}" "${tmp_file}"     || { echo "❌ Failed: ${base} (midi)";        return 1; }
           }
           export -f compile_file

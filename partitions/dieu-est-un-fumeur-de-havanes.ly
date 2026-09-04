@@ -4,6 +4,7 @@
 #(define compile-diatonique (ly:get-option 'compile-diatonique))
 #(define compile-chromatique (ly:get-option 'compile-chromatique))
 #(define compile-midi (ly:get-option 'compile-midi))
+#(define compile-partition (ly:get-option 'compile-partition))
 
 \header {
   title = "Dieu est un fumeur de Havanes"
@@ -111,6 +112,22 @@ chromatiqueScore =
 }
 
 % ============================
+% SCORE PARTITION (sans tablature harmonica)
+% ============================
+
+partitionScore =
+\score {
+  <<
+    \new Staff {
+      \relative do'' {
+        \melodie
+      }
+    }
+  >>
+  \layout { }
+}
+
+% ============================
 % SCORE MIDI
 % ============================
 
@@ -132,6 +149,8 @@ midiScore =
      (ly:parser-include-string "\\diatoniqueScore"))
 #(if compile-chromatique
      (ly:parser-include-string "\\chromatiqueScore"))
+#(if compile-partition
+     (ly:parser-include-string "\\partitionScore"))
 #(if compile-midi
      (ly:parser-include-string "\\midiScore"))
 
