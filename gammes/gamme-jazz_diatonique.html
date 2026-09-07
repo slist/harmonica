@@ -40,9 +40,9 @@ body{margin:0;font-family:'Public Sans',sans-serif;background:var(--bg);color:va
 #yt-controls{display:flex;flex-direction:column;gap:.9em}
 #yt-controls button,#yt-controls select,#audio-controls button,#audio-controls select{
            font-size:.85em;padding:.15em .4em;cursor:pointer;font-family:'Public Sans',sans-serif}
-#audio-controls button.play-btn{background:var(--accent);color:#fff;border:none;
+.play-btn{background:var(--accent);color:#fff;border:none;
            border-radius:4px;font-weight:600;padding:.3em .7em;min-width:5.5em}
-#audio-controls button.play-btn:hover{background:#1e2d4a}
+.play-btn:hover{background:#1e2d4a}
 </style>
 </head>
 <body>
@@ -57,30 +57,25 @@ body{margin:0;font-family:'Public Sans',sans-serif;background:var(--bg);color:va
   </div>
   <div id="player-bar-media">
     <div id="audio-controls">
-  <audio id='audio-player' controls src='gamme-jazz.mp3?v=8346225'>
+  <audio id='audio-player' controls src='gamme-jazz.mp3?v=a741682'>
     Votre navigateur ne supporte pas la lecture audio.
   </audio>
-  <button class="play-btn" onclick="audioPlay()" title="Démarrer la lecture immédiatement">▶ Play</button>
+  <button class="play-btn" onclick="audioPlay()" title="Démarrer depuis le début">▶ Play</button>
   <button class="play-btn" id="audio-play-delay" onclick="audioPlayDelayed()"
-          title="Démarrer après un compte à rebours de 3 secondes">▶ Play in 3s</button>
-  <button onclick="audioRestart()" title="Retour au début du MP3">⏮ Début</button>
+          title="Démarrer depuis le début après un compte à rebours de 3 secondes">▶ Play in 3s</button>
   <select onchange="audioSetSpeed(this.value)" title="Vitesse de lecture"><option value="0.25">0.25×</option><option value="0.5">0.5×</option><option value="0.75">0.75×</option><option value="1" selected>1×</option><option value="1.25">1.25×</option><option value="1.5">1.5×</option><option value="2">2×</option></select>
 </div>
   </div>
 </div>
-<iframe class='pdf-page' src='gamme-jazz_diatonique.pdf?v=8346225'></iframe>
+<iframe class='pdf-page' src='gamme-jazz_diatonique.pdf?v=a741682'></iframe>
 <script>
-function audioRestart(){
-  var a = document.getElementById('audio-player');
-  if(a){a.currentTime = 0; a.play();}
-}
 function audioSetSpeed(v){
   var a = document.getElementById('audio-player');
   if(a){a.playbackRate = parseFloat(v);}
 }
 function audioPlay(){
   var a = document.getElementById('audio-player');
-  if(a){a.play();}
+  if(a){a.currentTime = 0; a.play();}
 }
 var _audioCountdown = null;
 function audioPlayDelayed(){
@@ -103,7 +98,7 @@ function audioPlayDelayed(){
       clearInterval(_audioCountdown);
       _audioCountdown = null;
       btn.textContent = '▶ Play in 3s';
-      a.play();
+      audioPlay();
     }
   }, 1000);
 }
