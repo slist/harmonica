@@ -545,6 +545,7 @@ body{margin:0;font-family:'Public Sans',sans-serif;background:var(--bg);color:va
                font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600;color:var(--ink)}
 #player-bar-media{display:flex;align-items:center;gap:1em;flex-wrap:wrap}
 #player-bar-media[hidden]{display:none}
+#audio-controls{display:flex;align-items:center;gap:.5em;flex-wrap:wrap}
 #player-bar-media audio{flex:2 1 260px;min-width:200px}
 #no-audio{color:var(--muted);font-style:italic}
 .pdf-page{width:100%;height:100vh;border:none}
@@ -554,9 +555,21 @@ body{margin:0;font-family:'Public Sans',sans-serif;background:var(--bg);color:va
 #yt-block{display:flex;align-items:center;gap:.5em}
 #yt-player{width:320px;height:180px}
 #yt-controls{display:flex;flex-direction:column;gap:.9em}
-#yt-controls button,#yt-controls select{font-size:.85em;padding:.15em .4em;cursor:pointer;
-           font-family:'Public Sans',sans-serif}
+#yt-controls button,#yt-controls select,#audio-controls button,#audio-controls select{
+           font-size:.85em;padding:.15em .4em;cursor:pointer;font-family:'Public Sans',sans-serif}
 </style>"""
+
+
+_SPEED_OPTIONS = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 2]
+
+
+def _speed_select_html(onchange_js: str) -> str:
+    """Shared 0.25x-2x playback-speed <select>, used by both the MP3 and YouTube controls."""
+    opts = "".join(
+        f'<option value="{v}"{" selected" if v == 1 else ""}>{v}×</option>'
+        for v in _SPEED_OPTIONS
+    )
+    return f'<select onchange="{onchange_js}" title="Vitesse de lecture">{opts}</select>'
 
 
 def _youtube_toggle_html() -> str:
@@ -591,15 +604,7 @@ def _youtube_block_html(video_id: str) -> str:
     referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
   <div id="yt-controls">
     <button onclick="ytRestart()" title="Retour au début de la vidéo">⏮ Début</button>
-    <select onchange="ytSetSpeed(this.value)" title="Vitesse de lecture">
-      <option value="0.25">0.25×</option>
-      <option value="0.5">0.5×</option>
-      <option value="0.75">0.75×</option>
-      <option value="1" selected>1×</option>
-      <option value="1.25">1.25×</option>
-      <option value="1.5">1.5×</option>
-      <option value="2">2×</option>
-    </select>
+    {_speed_select_html("ytSetSpeed(this.value)")}
     <button onclick="ytHide()" title="Fermer la vidéo">✕ Fermer</button>
   </div>
 </div>"""
@@ -647,17 +652,35 @@ function ytHide(){{
 }}
 </script>"""
 
+_AUDIO_SCRIPT = """\
+<script>
+function audioRestart(){
+  var a = document.getElementById('audio-player');
+  if(a){a.currentTime = 0; a.play();}
+}
+function audioSetSpeed(v){
+  var a = document.getElementById('audio-player');
+  if(a){a.playbackRate = parseFloat(v);}
+}
+</script>"""
+
 
 def _player_page_html(
     title: str, mp3_file: str, pdf_files: list[str], back_href: str, youtube_id: str = "",
 ) -> str:
     if mp3_file:
-        audio_html = (
-            f"<audio id='audio-player' controls src='{escape(_cache_bust(mp3_file))}'>"
-            "Votre navigateur ne supporte pas la lecture audio.</audio>"
-        )
+        audio_html = f"""\
+<div id="audio-controls">
+  <audio id='audio-player' controls src='{escape(_cache_bust(mp3_file))}'>
+    Votre navigateur ne supporte pas la lecture audio.
+  </audio>
+  <button onclick="audioRestart()" title="Retour au début du MP3">⏮ Début</button>
+  {_speed_select_html("audioSetSpeed(this.value)")}
+</div>"""
+        audio_script = _AUDIO_SCRIPT
     else:
         audio_html = "<span id='no-audio'>Pas d'enregistrement audio disponible</span>"
+        audio_script = ""
     yt_toggle = _youtube_toggle_html() if youtube_id else ""
     yt_html = _youtube_block_html(youtube_id) if youtube_id else ""
     yt_script = _youtube_script(youtube_id) if youtube_id else ""
@@ -687,6 +710,7 @@ def _player_page_html(
   </div>
 </div>
 {pdf_html}
+{audio_script}
 {yt_script}
 </body>
 </html>
