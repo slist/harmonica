@@ -381,36 +381,100 @@ def collect_gammes() -> list[dict]:
 
 # --------- HTML helpers ---------
 
+# "Tablature Papier" theme: manuscript-paper palette (cool ink-blue + copper
+# accent on aged paper) shared by every generated page.
+_FONTS_LINK = """\
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Public+Sans:wght@400;500;600;700&display=swap">"""
+
+# Decorative watermark (staff lines, a couple of notes, a diatonic and a
+# chromatic harmonica outline) sat behind the page's <h1>. Pure line art
+# (rect/line/text, no hand-drawn paths) tinted via currentColor so it only
+# needs the surrounding element's `color` to match a given theme.
+_HERO_ART_SVG = """\
+<svg class="hero-art" viewBox="0 0 900 90" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+  <g stroke="currentColor" stroke-width="1.2" fill="none">
+    <line x1="20" y1="20" x2="260" y2="20"/><line x1="20" y1="28" x2="260" y2="28"/>
+    <line x1="20" y1="36" x2="260" y2="36"/><line x1="20" y1="44" x2="260" y2="44"/>
+    <line x1="20" y1="52" x2="260" y2="52"/>
+  </g>
+  <text x="40" y="48" font-size="24" fill="currentColor" font-family="Georgia,serif">&#9834;</text>
+  <text x="95" y="42" font-size="20" fill="currentColor" font-family="Georgia,serif">&#9835;</text>
+  <text x="150" y="50" font-size="22" fill="currentColor" font-family="Georgia,serif">&#9834;</text>
+  <g transform="translate(400,28)">
+    <rect x="0" y="0" width="130" height="34" rx="5" fill="none" stroke="currentColor" stroke-width="2"/>
+    <line x1="0" y1="17" x2="130" y2="17" stroke="currentColor" stroke-width="1"/>
+    <g stroke="currentColor" stroke-width="1.4">
+      <line x1="12" y1="6" x2="12" y2="28"/><line x1="24" y1="6" x2="24" y2="28"/>
+      <line x1="36" y1="6" x2="36" y2="28"/><line x1="48" y1="6" x2="48" y2="28"/>
+      <line x1="60" y1="6" x2="60" y2="28"/><line x1="72" y1="6" x2="72" y2="28"/>
+      <line x1="84" y1="6" x2="84" y2="28"/><line x1="96" y1="6" x2="96" y2="28"/>
+      <line x1="108" y1="6" x2="108" y2="28"/><line x1="120" y1="6" x2="120" y2="28"/>
+    </g>
+  </g>
+  <g transform="translate(560,22)">
+    <rect x="0" y="0" width="150" height="30" rx="5" fill="none" stroke="currentColor" stroke-width="2"/>
+    <line x1="0" y1="15" x2="150" y2="15" stroke="currentColor" stroke-width="1"/>
+    <g stroke="currentColor" stroke-width="1.2">
+      <line x1="10" y1="5" x2="10" y2="25"/><line x1="20" y1="5" x2="20" y2="25"/>
+      <line x1="30" y1="5" x2="30" y2="25"/><line x1="40" y1="5" x2="40" y2="25"/>
+      <line x1="50" y1="5" x2="50" y2="25"/><line x1="60" y1="5" x2="60" y2="25"/>
+      <line x1="70" y1="5" x2="70" y2="25"/><line x1="80" y1="5" x2="80" y2="25"/>
+      <line x1="90" y1="5" x2="90" y2="25"/><line x1="100" y1="5" x2="100" y2="25"/>
+      <line x1="110" y1="5" x2="110" y2="25"/><line x1="120" y1="5" x2="120" y2="25"/>
+    </g>
+    <rect x="150" y="4" width="14" height="22" rx="3" fill="none" stroke="currentColor" stroke-width="2"/>
+  </g>
+</svg>"""
+
+
+def _hero(title_html: str) -> str:
+    """Wrap a page's <h1> with the staff/harmonica watermark behind it."""
+    return f'<div class="hero">{_HERO_ART_SVG}<div class="hero-content">{title_html}</div></div>'
+
+
 _CSS = """\
 <style>
+:root{
+  --bg:#e9e7dc; --surface:#f5f3ea; --ink:#242229; --muted:#736f5f;
+  --accent:#2c3e63; --accent-2:#8a5a2c; --border:#c9c3ab;
+}
 *{box-sizing:border-box}
-body{font-family:sans-serif;max-width:1400px;margin:0 auto;padding:1em;background:#fafafa}
-h1{color:#333}
-nav a{margin-right:1em;text-decoration:none;color:#1565c0;font-weight:bold}
+body{font-family:'Public Sans',sans-serif;max-width:1400px;margin:0 auto;padding:1em;
+     background:var(--bg);color:var(--ink)}
+h1{font-family:'Cormorant Garamond',serif;font-weight:600;font-style:italic;
+   color:var(--ink);font-size:2.1em;margin:.3em 0}
+.hero{position:relative}
+.hero-art{position:absolute;inset:0;z-index:0;opacity:.16;color:var(--accent-2);pointer-events:none}
+.hero-content{position:relative;z-index:1}
+nav a{margin-right:1em;text-decoration:none;color:var(--accent);font-weight:600}
 nav a:hover{text-decoration:underline}
-table{border-collapse:collapse;width:100%;font-size:0.88em;background:#fff}
-thead th{background:#f0f0f0;cursor:pointer;user-select:none;white-space:nowrap;
-         padding:7px 9px;border:1px solid #ccc;text-align:center}
-thead th:hover{background:#dde}
+table{border-collapse:collapse;width:100%;font-size:0.88em;background:var(--surface)}
+thead th{background:var(--surface);cursor:pointer;user-select:none;white-space:nowrap;
+         padding:7px 9px;border:1px solid var(--border);text-align:center;
+         font-weight:600;color:var(--muted);text-transform:uppercase;font-size:.78em;letter-spacing:.03em}
+thead th:hover{background:#e8e4d4}
 thead th.col-pdf{white-space:normal;word-break:break-word}
 td.col-pdf{width:3em;text-align:center}
 thead th.sort-asc::after{content:" ▲";font-size:.8em}
 thead th.sort-desc::after{content:" ▼";font-size:.8em}
-tbody td{border:1px solid #ccc;padding:5px 8px;text-align:center}
+tbody td{border:1px solid var(--border);padding:5px 8px;text-align:center}
 tbody td:first-child{text-align:left}
 tbody td:nth-child(2){text-align:left}
-tbody tr:hover{background:#f5f5f5}
-.hidden{color:#bbb;font-style:italic}
+tbody tr:hover{background:#efece0}
+.hidden{color:#a9a48f;font-style:italic}
 .badge{font-size:1.1em}
 /* login form */
-#login-section{max-width:340px;margin:4em auto;padding:2em;background:#fff;
-               border:1px solid #ccc;border-radius:8px;text-align:center;box-shadow:0 2px 8px #0001}
-#login-section h2{margin-top:0}
-#pwd-input{width:100%;padding:.5em;font-size:1em;margin:.5em 0;border:1px solid #aaa;border-radius:4px}
-#login-btn{padding:.5em 1.5em;font-size:1em;background:#1565c0;color:#fff;border:none;
-           border-radius:4px;cursor:pointer}
-#login-btn:hover{background:#0d47a1}
-#login-error{color:#c62828;margin-top:.5em;display:none}
+#login-section{max-width:340px;margin:4em auto;padding:2em;background:var(--surface);
+               border:1px solid var(--border);border-radius:4px;text-align:center;box-shadow:0 2px 8px #0001}
+#login-section h2{margin-top:0;font-family:'Cormorant Garamond',serif}
+#pwd-input{width:100%;padding:.5em;font-size:1em;margin:.5em 0;border:1px solid var(--border);
+           border-radius:4px;font-family:'Public Sans',sans-serif}
+#login-btn{padding:.5em 1.5em;font-size:1em;background:var(--accent);color:#fff;border:none;
+           border-radius:4px;cursor:pointer;font-family:'Public Sans',sans-serif;font-weight:600}
+#login-btn:hover{background:#1e2d4a}
+#login-error{color:#a13a2f;margin-top:.5em;display:none}
 </style>"""
 
 # Hint browsers (notably mobile Chrome) not to serve a stale copy of the page
@@ -464,34 +528,34 @@ def _youtube_video_id(url: str) -> str:
     return m.group(1) if m else ""
 
 
-def _youtube_link(url: str) -> str:
-    if not url:
-        return "<span class='hidden'>—</span>"
-    return f"<a href='{escape(url)}' target='_blank' rel='noopener' title='Voir sur YouTube'>📺</a>"
-
-
 _PLAYER_CSS = """\
 <style>
+:root{
+  --bg:#e9e7dc; --surface:#f5f3ea; --ink:#242229; --muted:#736f5f;
+  --accent:#2c3e63; --border:#c9c3ab;
+}
 *{box-sizing:border-box}
-body{margin:0;font-family:sans-serif;background:#fafafa}
-#player-bar{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid #ccc;
+body{margin:0;font-family:'Public Sans',sans-serif;background:var(--bg);color:var(--ink)}
+#player-bar{position:sticky;top:0;z-index:10;background:var(--surface);border-bottom:1px solid var(--border);
             box-shadow:0 2px 4px #0002;padding:.6em 1em;display:flex;flex-direction:column;gap:.5em}
 #player-bar-top{display:flex;align-items:center;gap:1em;flex-wrap:wrap}
-#player-bar a{color:#1565c0;text-decoration:none;font-weight:bold;white-space:nowrap}
+#player-bar a{color:var(--accent);text-decoration:none;font-weight:600;white-space:nowrap}
 #player-bar a:hover{text-decoration:underline}
-#player-bar h1{margin:0;font-size:1em;flex:1 1 auto;min-width:0}
+#player-bar h1{margin:0;font-size:1.15em;flex:1 1 auto;min-width:0;
+               font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600;color:var(--ink)}
 #player-bar-media{display:flex;align-items:center;gap:1em;flex-wrap:wrap}
 #player-bar-media[hidden]{display:none}
 #player-bar-media audio{flex:2 1 260px;min-width:200px}
-#no-audio{color:#999;font-style:italic}
+#no-audio{color:var(--muted);font-style:italic}
 .pdf-page{width:100%;height:100vh;border:none}
-#yt-toggle{background:none;border:1px solid #ccc;border-radius:4px;font-size:1em;
-           line-height:1;padding:.3em .5em;cursor:pointer}
+#yt-toggle{background:none;border:1px solid var(--border);border-radius:4px;font-size:1em;
+           line-height:1;padding:.3em .5em;cursor:pointer;color:var(--muted)}
 #yt-toggle[hidden],#yt-block[hidden]{display:none}
 #yt-block{display:flex;align-items:center;gap:.5em}
 #yt-player{width:320px;height:180px}
 #yt-controls{display:flex;flex-direction:column;gap:.9em}
-#yt-controls button,#yt-controls select{font-size:.85em;padding:.15em .4em;cursor:pointer}
+#yt-controls button,#yt-controls select{font-size:.85em;padding:.15em .4em;cursor:pointer;
+           font-family:'Public Sans',sans-serif}
 </style>"""
 
 
@@ -607,6 +671,7 @@ def _player_page_html(
 <meta charset="UTF-8">
 <title>{escape(title)}</title>
 {_NO_CACHE_META}
+{_FONTS_LINK}
 {_PLAYER_CSS}
 </head>
 <body>
@@ -701,14 +766,10 @@ def _song_row(meta: dict, public_only: bool, pdf_prefix: str = "") -> str:
         row += f"<td class='col-pdf'>{_pdf_cell(diat, mp3s, OUTPUT_DIR, base, 'diatonique', title, 'index.html', pdf_prefix, youtube)}</td>"
         row += difficulty_cell(diff)
         row += f"<td class='col-pdf'>{_pdf_cell(chro, mp3s, OUTPUT_DIR, base, 'chromatique', title, 'index.html', pdf_prefix, youtube)}</td>"
-        row += f"<td>{_mp3_link(mp3s, pdf_prefix)}</td>"
-        row += f"<td>{_youtube_link(youtube)}</td>"
     else:
         row += "<td class='hidden col-pdf'>—</td>"
         row += difficulty_cell(diff)
         row += "<td class='hidden col-pdf'>—</td>"
-        row += "<td class='hidden'>—</td>"
-        row += "<td class='hidden'>—</td>"
     row += f"<td class='badge'>{lyrics_icon(lyrics)}</td>"
     row += copyright_cell(status, composer)
     row += "</tr>\n"
@@ -720,7 +781,7 @@ def _song_row(meta: dict, public_only: bool, pdf_prefix: str = "") -> str:
 _TABLE_COLS = [
     ("Œuvre", ""), ("Compositeur", ""), ("Clé", ""),
     ("Diatonique", "col-pdf"), ("Difficulté 🎵", ""),
-    ("Chromatique", "col-pdf"), ("MP3", ""), ("YouTube", ""),
+    ("Chromatique", "col-pdf"),
     ("Paroles", ""), ("Droits", ""),
 ]
 
@@ -739,9 +800,9 @@ def generate_index_html(songs: list[dict]) -> None:
 
     html = f"""<!DOCTYPE html>
 <html lang="fr">
-<head><meta charset="UTF-8"><title>Partitions Harmonica</title>{_NO_CACHE_META}{_CSS}</head>
+<head><meta charset="UTF-8"><title>Partitions Harmonica</title>{_NO_CACHE_META}{_FONTS_LINK}{_CSS}</head>
 <body>
-<h1>Partitions Harmonica</h1>
+{_hero('<h1>Partitions Harmonica</h1>')}
 <nav>
   <a href="gammes/">📖 Gammes &amp; Scales</a>
   <a href="liens-utiles.html">🔗 Liens utiles</a>
@@ -759,7 +820,7 @@ def generate_index_html(songs: list[dict]) -> None:
 </table>
 {_SORT_JS}
 <p style="margin-top:2em;text-align:right;font-size:0.8em">
-  <a href="private.html" style="color:#bbb;text-decoration:none" title="Accès complet">🔒</a>
+  <a href="private.html" style="color:var(--muted);text-decoration:none" title="Accès complet">🔒</a>
 </p>
 </body>
 </html>
@@ -808,9 +869,9 @@ def generate_gammes_html(gammes: list[dict]) -> None:
 
     html = f"""<!DOCTYPE html>
 <html lang="fr">
-<head><meta charset="UTF-8"><title>Gammes Harmonica</title>{_NO_CACHE_META}{_CSS}</head>
+<head><meta charset="UTF-8"><title>Gammes Harmonica</title>{_NO_CACHE_META}{_FONTS_LINK}{_CSS}</head>
 <body>
-<h1>Gammes &amp; Références</h1>
+{_hero('<h1>Gammes &amp; Références</h1>')}
 <nav>
   <a href="../">← Partitions</a>
 </nav>
@@ -838,7 +899,7 @@ def generate_private_html(songs: list[dict], sha256_hash: str) -> None:
     rows  = "".join(_song_row(s, public_only=False) for s in songs)
 
     protected_content = f"""
-<h1>Partitions Harmonica — Accès complet</h1>
+{_hero('<h1>Partitions Harmonica — Accès complet</h1>')}
 <nav>
   <a href="gammes/">📖 Gammes</a>
 </nav>
@@ -902,6 +963,7 @@ def generate_private_html(songs: list[dict], sha256_hash: str) -> None:
 <title>Partitions — Accès privé</title>
 <meta name="robots" content="noindex,nofollow">
 {_NO_CACHE_META}
+{_FONTS_LINK}
 {_CSS}
 </head>
 <body>
@@ -936,12 +998,14 @@ def generate_liens_utiles_html(md_path: str = LIENS_UTILES_MD) -> None:
 <meta charset="UTF-8">
 <title>Liens utiles</title>
 {_NO_CACHE_META}
+{_FONTS_LINK}
 {_CSS}
 <style>
-.content{{background:#fff;padding:1.5em 2em;border:1px solid #ccc;border-radius:6px;
-         max-width:900px}}
+.content{{background:var(--surface);padding:1.5em 2em;border:1px solid var(--border);
+         border-radius:4px;max-width:900px}}
+.content h1{{margin-top:0}}
 .content ul{{padding-left:1.4em}}
-.content a{{color:#1565c0}}
+.content a{{color:var(--accent)}}
 </style>
 </head>
 <body>
