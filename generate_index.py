@@ -560,9 +560,9 @@ body{margin:0;font-family:'Public Sans',sans-serif;background:var(--bg);color:va
 #yt-controls{display:flex;flex-direction:column;gap:.9em}
 #yt-controls button,#yt-controls select,#audio-controls button,#audio-controls select{
            font-size:.85em;padding:.15em .4em;cursor:pointer;font-family:'Public Sans',sans-serif}
-#audio-controls button.play-btn{background:var(--accent);color:#fff;border:none;
+.play-btn{background:var(--accent);color:#fff;border:none;
            border-radius:4px;font-weight:600;padding:.3em .7em;min-width:5.5em}
-#audio-controls button.play-btn:hover{background:#1e2d4a}
+.play-btn:hover{background:#1e2d4a}
 </style>"""
 
 
@@ -607,7 +607,7 @@ def _youtube_block_html(video_id: str) -> str:
     # including click-to-play on the thumbnail — works immediately, instead
     # of only once the JS API asynchronously builds an iframe from scratch.
     # The IFrame API then just attaches to this existing element (see
-    # onYouTubeIframeAPIReady below) to add the restart/speed controls.
+    # onYouTubeIframeAPIReady below) to add the play/speed controls.
     # Hidden by default: takes the exact spot of the 📺 toggle button (see
     # ytShow/ytHide) instead of floating over the sheet music or pushing it
     # down permanently.
@@ -619,7 +619,9 @@ def _youtube_block_html(video_id: str) -> str:
     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
     referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
   <div id="yt-controls">
-    <button onclick="ytRestart()" title="Retour au début de la vidéo">⏮ Début</button>
+    <button class="play-btn" onclick="ytPlay()" title="Démarrer depuis le début">▶ Play</button>
+    <button class="play-btn" id="yt-play-delay" onclick="ytPlayDelayed()"
+            title="Démarrer depuis le début après un compte à rebours de 3 secondes">▶ Play in 3s</button>
     {_speed_select_html("ytSetSpeed(this.value)")}
     <button onclick="ytHide()" title="Fermer la vidéo">✕ Fermer</button>
   </div>
@@ -645,8 +647,32 @@ function ytOnError(){{
       "<a href='https://www.youtube.com/watch?v={video_id}' target='_blank' rel='noopener'>📺 Voir la vidéo sur YouTube</a>";
   }}
 }}
-function ytRestart(){{
+function ytPlay(){{
   if(ytPlayer && ytPlayer.seekTo){{ytPlayer.seekTo(0, true);ytPlayer.playVideo();}}
+}}
+var _ytCountdown = null;
+function ytPlayDelayed(){{
+  var btn = document.getElementById('yt-play-delay');
+  if(!btn) return;
+  if(_ytCountdown){{
+    clearInterval(_ytCountdown);
+    _ytCountdown = null;
+    btn.textContent = '▶ Play in 3s';
+    return;
+  }}
+  var n = 3;
+  btn.textContent = n + '…';
+  _ytCountdown = setInterval(function(){{
+    n--;
+    if(n > 0){{
+      btn.textContent = n + '…';
+    }} else {{
+      clearInterval(_ytCountdown);
+      _ytCountdown = null;
+      btn.textContent = '▶ Play in 3s';
+      ytPlay();
+    }}
+  }}, 1000);
 }}
 function ytSetSpeed(v){{
   if(ytPlayer && ytPlayer.setPlaybackRate){{ytPlayer.setPlaybackRate(parseFloat(v));}}
@@ -660,6 +686,12 @@ function ytShow(){{
   if(audio){{audio.pause();}}
 }}
 function ytHide(){{
+  if(_ytCountdown){{
+    clearInterval(_ytCountdown);
+    _ytCountdown = null;
+    var delayBtn = document.getElementById('yt-play-delay');
+    if(delayBtn){{delayBtn.textContent = '▶ Play in 3s';}}
+  }}
   document.getElementById('yt-toggle').hidden = false;
   document.getElementById('yt-block').hidden = true;
   var media = document.getElementById('player-bar-media');
@@ -670,17 +702,13 @@ function ytHide(){{
 
 _AUDIO_SCRIPT = """\
 <script>
-function audioRestart(){
-  var a = document.getElementById('audio-player');
-  if(a){a.currentTime = 0; a.play();}
-}
 function audioSetSpeed(v){
   var a = document.getElementById('audio-player');
   if(a){a.playbackRate = parseFloat(v);}
 }
 function audioPlay(){
   var a = document.getElementById('audio-player');
-  if(a){a.play();}
+  if(a){a.currentTime = 0; a.play();}
 }
 var _audioCountdown = null;
 function audioPlayDelayed(){
@@ -703,7 +731,7 @@ function audioPlayDelayed(){
       clearInterval(_audioCountdown);
       _audioCountdown = null;
       btn.textContent = '▶ Play in 3s';
-      a.play();
+      audioPlay();
     }
   }, 1000);
 }
@@ -722,10 +750,9 @@ def _player_page_html(
   <audio id='audio-player' controls src='{escape(_cache_bust(mp3_file))}'>
     Votre navigateur ne supporte pas la lecture audio.
   </audio>
-  <button class="play-btn" onclick="audioPlay()" title="Démarrer la lecture immédiatement">▶ Play</button>
+  <button class="play-btn" onclick="audioPlay()" title="Démarrer depuis le début">▶ Play</button>
   <button class="play-btn" id="audio-play-delay" onclick="audioPlayDelayed()"
-          title="Démarrer après un compte à rebours de 3 secondes">▶ Play in 3s</button>
-  <button onclick="audioRestart()" title="Retour au début du MP3">⏮ Début</button>
+          title="Démarrer depuis le début après un compte à rebours de 3 secondes">▶ Play in 3s</button>
   {_speed_select_html("audioSetSpeed(this.value)")}
 </div>"""
         audio_script = _AUDIO_SCRIPT
