@@ -218,11 +218,27 @@ def difficulty_cell(diff: dict) -> str:
 
 # --------- LilyPond metadata parsing ---------
 
+_DIATONIC_TAB_RE = re.compile(r'\\diatonic([A-Za-z]*)HarmonicaTab')
+
+
+def diatonic_harmonica_keys(content: str) -> str:
+    """Harmonica key(s) used for the diatonic tab (e.g. 'C', or 'D+G' when the
+    song needs a tuning change mid-piece), from \\diatonicHarmonicaTab /
+    \\diatonicXHarmonicaTab calls. Bare \\diatonicHarmonicaTab means C."""
+    keys = []
+    for m in _DIATONIC_TAB_RE.finditer(_strip_comments(content)):
+        key = m.group(1) or "C"
+        if key not in keys:
+            keys.append(key)
+    return "+".join(keys) if keys else "C"
+
+
 def parse_ly_metadata(ly_path: str) -> dict:
     metadata: dict = {
         "copyrightStatus": "unknown", "lyricsLang": [],
         "key": "unknown", "composer": "", "title": "",
         "composerNationality": "", "difficulty": {}, "youtube": "",
+        "diatonicHarmonicaKeys": "C",
     }
     if not os.path.exists(ly_path):
         logger.warning(f"  ⚠️  Fichier .ly introuvable : '{ly_path}'")
@@ -263,6 +279,7 @@ def parse_ly_metadata(ly_path: str) -> dict:
         metadata["key"] = m.group(1)
 
     metadata["difficulty"] = analyze_difficulty(content)
+    metadata["diatonicHarmonicaKeys"] = diatonic_harmonica_keys(content)
     return metadata
 
 
@@ -465,6 +482,8 @@ tbody td:nth-child(2){text-align:left}
 tbody tr:hover{background:#efece0}
 .hidden{color:#a9a48f;font-style:italic}
 .badge{font-size:1.1em}
+.harmo-key{font-size:1.15em;font-weight:700;color:var(--accent);text-decoration:none}
+.harmo-key:hover{text-decoration:underline}
 /* login form */
 #login-section{max-width:340px;margin:4em auto;padding:2em;background:var(--surface);
                border:1px solid var(--border);border-radius:4px;text-align:center;box-shadow:0 2px 8px #0001}
@@ -830,7 +849,7 @@ def _write_player_page(
 def _pdf_cell(
     files: list[str], mp3_files: list[str], output_dir: str, base: str, tuning: str,
     title: str, back_href: str, prefix: str = "", youtube_url: str = "",
-    prev_song: dict | None = None, next_song: dict | None = None,
+    prev_song: dict | None = None, next_song: dict | None = None, harmonica_keys: str = "",
 ) -> str:
     if not files:
         return "<span class='hidden'>—</span>"
@@ -838,7 +857,10 @@ def _pdf_cell(
         output_dir, base, tuning, title, files, mp3_files, back_href, prefix, youtube_url,
         prev_song, next_song,
     )
-    return f"<a href='{escape(prefix + fname)}' title='Écouter + partition'>🎵🎼</a>"
+    href = escape(prefix + fname)
+    if harmonica_keys:
+        return f"<a class='harmo-key' href='{href}' title='Écouter + partition — harmonica {escape(harmonica_keys)}'>{escape(harmonica_keys)}</a>"
+    return f"<a href='{href}' title='Écouter + partition'>🎵🎼</a>"
 
 
 def _table_header(cols: list[tuple]) -> str:
@@ -878,6 +900,7 @@ def _song_row(meta: dict, public_only: bool, pdf_prefix: str = "", nav_maps: dic
     flag       = f"<span title='{escape(country)}'>{flag_emoji}</span>" if flag_emoji and country else flag_emoji
     diff       = meta['difficulty']
     youtube    = meta.get('youtube', '')
+    diat_keys  = meta.get('diatonicHarmonicaKeys', 'C')
     outputs    = meta['outputs']
     diat       = outputs['diat']
     chro       = outputs['chro']
@@ -900,7 +923,7 @@ def _song_row(meta: dict, public_only: bool, pdf_prefix: str = "", nav_maps: dic
     row += f"<td data-sort='{escape(composer.lower())}'>{composer_cell}</td>"
     row += f"<td data-sort='{key_num}'>{escape(key)}</td>"
     if show_links:
-        row += f"<td class='col-pdf'>{_pdf_cell(diat, mp3s, OUTPUT_DIR, base, 'diatonique', title, 'index.html', pdf_prefix, youtube, diat_prev, diat_next)}</td>"
+        row += f"<td class='col-pdf'>{_pdf_cell(diat, mp3s, OUTPUT_DIR, base, 'diatonique', title, 'index.html', pdf_prefix, youtube, diat_prev, diat_next, diat_keys)}</td>"
         row += difficulty_cell(diff)
         row += f"<td class='col-pdf'>{_pdf_cell(chro, mp3s, OUTPUT_DIR, base, 'chromatique', title, 'index.html', pdf_prefix, youtube, chro_prev, chro_next)}</td>"
     else:
