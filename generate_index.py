@@ -560,6 +560,9 @@ body{margin:0;font-family:'Public Sans',sans-serif;background:var(--bg);color:va
 #yt-controls{display:flex;flex-direction:column;gap:.9em}
 #yt-controls button,#yt-controls select,#audio-controls button,#audio-controls select{
            font-size:.85em;padding:.15em .4em;cursor:pointer;font-family:'Public Sans',sans-serif}
+#audio-controls button.play-btn{background:var(--accent);color:#fff;border:none;
+           border-radius:4px;font-weight:600;padding:.3em .7em;min-width:5.5em}
+#audio-controls button.play-btn:hover{background:#1e2d4a}
 </style>"""
 
 
@@ -675,6 +678,35 @@ function audioSetSpeed(v){
   var a = document.getElementById('audio-player');
   if(a){a.playbackRate = parseFloat(v);}
 }
+function audioPlay(){
+  var a = document.getElementById('audio-player');
+  if(a){a.play();}
+}
+var _audioCountdown = null;
+function audioPlayDelayed(){
+  var a = document.getElementById('audio-player');
+  var btn = document.getElementById('audio-play-delay');
+  if(!a || !btn) return;
+  if(_audioCountdown){
+    clearInterval(_audioCountdown);
+    _audioCountdown = null;
+    btn.textContent = '▶ Play in 3s';
+    return;
+  }
+  var n = 3;
+  btn.textContent = n + '…';
+  _audioCountdown = setInterval(function(){
+    n--;
+    if(n > 0){
+      btn.textContent = n + '…';
+    } else {
+      clearInterval(_audioCountdown);
+      _audioCountdown = null;
+      btn.textContent = '▶ Play in 3s';
+      a.play();
+    }
+  }, 1000);
+}
 </script>"""
 
 
@@ -690,6 +722,9 @@ def _player_page_html(
   <audio id='audio-player' controls src='{escape(_cache_bust(mp3_file))}'>
     Votre navigateur ne supporte pas la lecture audio.
   </audio>
+  <button class="play-btn" onclick="audioPlay()" title="Démarrer la lecture immédiatement">▶ Play</button>
+  <button class="play-btn" id="audio-play-delay" onclick="audioPlayDelayed()"
+          title="Démarrer après un compte à rebours de 3 secondes">▶ Play in 3s</button>
   <button onclick="audioRestart()" title="Retour au début du MP3">⏮ Début</button>
   {_speed_select_html("audioSetSpeed(this.value)")}
 </div>"""
