@@ -541,6 +541,9 @@ body{margin:0;font-family:'Public Sans',sans-serif;background:var(--bg);color:va
 #player-bar-top{display:flex;align-items:center;gap:1em;flex-wrap:wrap}
 #player-bar a{color:var(--accent);text-decoration:none;font-weight:600;white-space:nowrap}
 #player-bar a:hover{text-decoration:underline}
+.nav-prev,.nav-next{font-size:1.3em;line-height:1;padding:0 .1em}
+.nav-next{margin-left:auto}
+.nav-disabled{font-size:1.3em;line-height:1;padding:0 .1em;color:var(--border);cursor:default}
 #player-bar h1{margin:0;font-size:1.15em;flex:1 1 auto;min-width:0;
                font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600;color:var(--ink)}
 #player-bar-media{display:flex;align-items:center;gap:1em;flex-wrap:wrap}
@@ -570,6 +573,16 @@ def _speed_select_html(onchange_js: str) -> str:
         for v in _SPEED_OPTIONS
     )
     return f'<select onchange="{onchange_js}" title="Vitesse de lecture">{opts}</select>'
+
+
+def _nav_link_html(direction: str, href: str, title: str) -> str:
+    """Prev/next-song arrow shown at either end of the player header.
+    Rendered as a disabled span (no href) at the start/end of the list."""
+    arrow = "◀" if direction == "prev" else "▶"
+    cls = f"nav-{direction}"
+    if not href:
+        return f"<span class='{cls} nav-disabled' aria-hidden='true'>{arrow}</span>"
+    return f"<a class='{cls}' href='{escape(href)}' title='{escape(title)}'>{arrow}</a>"
 
 
 def _youtube_toggle_html() -> str:
@@ -667,7 +680,10 @@ function audioSetSpeed(v){
 
 def _player_page_html(
     title: str, mp3_file: str, pdf_files: list[str], back_href: str, youtube_id: str = "",
+    prev_href: str = "", prev_title: str = "", next_href: str = "", next_title: str = "",
 ) -> str:
+    prev_btn = _nav_link_html("prev", prev_href, prev_title)
+    next_btn = _nav_link_html("next", next_href, next_title)
     if mp3_file:
         audio_html = f"""\
 <div id="audio-controls">
@@ -700,10 +716,12 @@ def _player_page_html(
 <body>
 <div id="player-bar">
   <div id="player-bar-top">
+    {prev_btn}
     <a href="{escape(back_href)}" onclick="if(history.length>1){{history.back();return false;}}">← Retour</a>
     <h1>{escape(title)}</h1>
     {yt_toggle}
     {yt_html}
+    {next_btn}
   </div>
   <div id="player-bar-media">
     {audio_html}
@@ -720,17 +738,27 @@ def _player_page_html(
 def _write_player_page(
     output_dir: str, base: str, tuning: str, title: str,
     pdf_files: list[str], mp3_files: list[str], back_href: str, prefix: str = "",
-    youtube_url: str = "",
+    youtube_url: str = "", prev_song: dict | None = None, next_song: dict | None = None,
 ) -> str:
     """Write a standalone page combining the sheet music PDF with a sticky audio player."""
     fname = f"{base}_{tuning}.html"
     mp3_file = prefix + mp3_files[0] if mp3_files else ""
+
+    def _neighbor(song: dict | None) -> tuple[str, str]:
+        if not song:
+            return "", ""
+        return f"{prefix}{song['base']}_{tuning}.html", song['title'] or song['base']
+
+    prev_href, prev_title = _neighbor(prev_song)
+    next_href, next_title = _neighbor(next_song)
     html = _player_page_html(
         title=f"{title} — {tuning.capitalize()}",
         mp3_file=mp3_file,
         pdf_files=[prefix + f for f in pdf_files],
         back_href=back_href,
         youtube_id=_youtube_video_id(youtube_url),
+        prev_href=prev_href, prev_title=f"Précédent : {prev_title}" if prev_title else "",
+        next_href=next_href, next_title=f"Suivant : {next_title}" if next_title else "",
     )
     with open(os.path.join(output_dir, fname), "w", encoding="utf-8") as fh:
         fh.write(html)
@@ -740,10 +768,14 @@ def _write_player_page(
 def _pdf_cell(
     files: list[str], mp3_files: list[str], output_dir: str, base: str, tuning: str,
     title: str, back_href: str, prefix: str = "", youtube_url: str = "",
+    prev_song: dict | None = None, next_song: dict | None = None,
 ) -> str:
     if not files:
         return "<span class='hidden'>—</span>"
-    fname = _write_player_page(output_dir, base, tuning, title, files, mp3_files, back_href, prefix, youtube_url)
+    fname = _write_player_page(
+        output_dir, base, tuning, title, files, mp3_files, back_href, prefix, youtube_url,
+        prev_song, next_song,
+    )
     return f"<a href='{escape(prefix + fname)}' title='Écouter + partition'>🎵🎼</a>"
 
 
@@ -756,7 +788,22 @@ def _table_header(cols: list[tuple]) -> str:
     return f"<thead><tr>{ths}</tr></thead>"
 
 
-def _song_row(meta: dict, public_only: bool, pdf_prefix: str = "") -> str:
+def _build_nav_maps(songs: list[dict]) -> dict[str, dict[str, tuple]]:
+    """For 'diat' and 'chro', map a song's base -> (prev_song, next_song) among the
+    songs that actually have a page for that tuning, in table order."""
+    maps: dict[str, dict[str, tuple]] = {}
+    for tuning_key in ("diat", "chro"):
+        ordered = [s for s in songs if s["outputs"][tuning_key]]
+        nav = {}
+        for i, s in enumerate(ordered):
+            prev_s = ordered[i - 1] if i > 0 else None
+            next_s = ordered[i + 1] if i + 1 < len(ordered) else None
+            nav[s["base"]] = (prev_s, next_s)
+        maps[tuning_key] = nav
+    return maps
+
+
+def _song_row(meta: dict, public_only: bool, pdf_prefix: str = "", nav_maps: dict | None = None) -> str:
     base      = meta['base']
     status    = meta['copyrightStatus']
     lyrics    = meta['lyricsLang']
@@ -782,14 +829,18 @@ def _song_row(meta: dict, public_only: bool, pdf_prefix: str = "") -> str:
     is_free = status in ("public-domain", "public domain")
     show_links = is_free or not public_only
 
+    nav_maps = nav_maps or {}
+    diat_prev, diat_next = nav_maps.get("diat", {}).get(base, (None, None))
+    chro_prev, chro_next = nav_maps.get("chro", {}).get(base, (None, None))
+
     row  = "<tr>"
     row += f"<td data-sort='{escape(title.lower())}'>{escape(title)}</td>"
     row += f"<td data-sort='{escape(composer.lower())}'>{composer_cell}</td>"
     row += f"<td data-sort='{key_num}'>{escape(key)}</td>"
     if show_links:
-        row += f"<td class='col-pdf'>{_pdf_cell(diat, mp3s, OUTPUT_DIR, base, 'diatonique', title, 'index.html', pdf_prefix, youtube)}</td>"
+        row += f"<td class='col-pdf'>{_pdf_cell(diat, mp3s, OUTPUT_DIR, base, 'diatonique', title, 'index.html', pdf_prefix, youtube, diat_prev, diat_next)}</td>"
         row += difficulty_cell(diff)
-        row += f"<td class='col-pdf'>{_pdf_cell(chro, mp3s, OUTPUT_DIR, base, 'chromatique', title, 'index.html', pdf_prefix, youtube)}</td>"
+        row += f"<td class='col-pdf'>{_pdf_cell(chro, mp3s, OUTPUT_DIR, base, 'chromatique', title, 'index.html', pdf_prefix, youtube, chro_prev, chro_next)}</td>"
     else:
         row += "<td class='hidden col-pdf'>—</td>"
         row += difficulty_cell(diff)
@@ -819,8 +870,9 @@ def generate_index_html(songs: list[dict]) -> None:
     free   = [s for s in songs if s['copyrightStatus'] in ("public-domain", "public domain")]
     locked = [s for s in songs if s['copyrightStatus'] not in ("public-domain", "public domain")]
 
+    nav_maps = _build_nav_maps(songs)
     thead = _table_header(_TABLE_COLS)
-    rows  = "".join(_song_row(s, public_only=True) for s in songs)
+    rows  = "".join(_song_row(s, public_only=True, nav_maps=nav_maps) for s in songs)
 
     html = f"""<!DOCTYPE html>
 <html lang="fr">
@@ -919,8 +971,9 @@ def generate_gammes_html(gammes: list[dict]) -> None:
 
 
 def generate_private_html(songs: list[dict], sha256_hash: str) -> None:
+    nav_maps = _build_nav_maps(songs)
     thead = _table_header(_TABLE_COLS)
-    rows  = "".join(_song_row(s, public_only=False) for s in songs)
+    rows  = "".join(_song_row(s, public_only=False, nav_maps=nav_maps) for s in songs)
 
     protected_content = f"""
 {_hero('<h1>Partitions Harmonica — Accès complet</h1>')}
