@@ -6,41 +6,56 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Public+Sans:wght@400;500;600;700&display=swap">
 <style>
+:root{
+  --bg:#e9e7dc; --surface:#f5f3ea; --ink:#242229; --muted:#736f5f;
+  --accent:#2c3e63; --accent-2:#8a5a2c; --border:#c9c3ab;
+}
 *{box-sizing:border-box}
-body{font-family:sans-serif;max-width:1400px;margin:0 auto;padding:1em;background:#fafafa}
-h1{color:#333}
-nav a{margin-right:1em;text-decoration:none;color:#1565c0;font-weight:bold}
+body{font-family:'Public Sans',sans-serif;max-width:1400px;margin:0 auto;padding:1em;
+     background:var(--bg);color:var(--ink)}
+h1{font-family:'Cormorant Garamond',serif;font-weight:600;font-style:italic;
+   color:var(--ink);font-size:2.1em;margin:.3em 0}
+.hero{position:relative}
+.hero-art{position:absolute;inset:0;z-index:0;opacity:.16;color:var(--accent-2);pointer-events:none}
+.hero-content{position:relative;z-index:1}
+nav a{margin-right:1em;text-decoration:none;color:var(--accent);font-weight:600}
 nav a:hover{text-decoration:underline}
-table{border-collapse:collapse;width:100%;font-size:0.88em;background:#fff}
-thead th{background:#f0f0f0;cursor:pointer;user-select:none;white-space:nowrap;
-         padding:7px 9px;border:1px solid #ccc;text-align:center}
-thead th:hover{background:#dde}
+table{border-collapse:collapse;width:100%;font-size:0.88em;background:var(--surface)}
+thead th{background:var(--surface);cursor:pointer;user-select:none;white-space:nowrap;
+         padding:7px 9px;border:1px solid var(--border);text-align:center;
+         font-weight:600;color:var(--muted);text-transform:uppercase;font-size:.78em;letter-spacing:.03em}
+thead th:hover{background:#e8e4d4}
 thead th.col-pdf{white-space:normal;word-break:break-word}
 td.col-pdf{width:3em;text-align:center}
 thead th.sort-asc::after{content:" ▲";font-size:.8em}
 thead th.sort-desc::after{content:" ▼";font-size:.8em}
-tbody td{border:1px solid #ccc;padding:5px 8px;text-align:center}
+tbody td{border:1px solid var(--border);padding:5px 8px;text-align:center}
 tbody td:first-child{text-align:left}
 tbody td:nth-child(2){text-align:left}
-tbody tr:hover{background:#f5f5f5}
-.hidden{color:#bbb;font-style:italic}
+tbody tr:hover{background:#efece0}
+.hidden{color:#a9a48f;font-style:italic}
 .badge{font-size:1.1em}
 /* login form */
-#login-section{max-width:340px;margin:4em auto;padding:2em;background:#fff;
-               border:1px solid #ccc;border-radius:8px;text-align:center;box-shadow:0 2px 8px #0001}
-#login-section h2{margin-top:0}
-#pwd-input{width:100%;padding:.5em;font-size:1em;margin:.5em 0;border:1px solid #aaa;border-radius:4px}
-#login-btn{padding:.5em 1.5em;font-size:1em;background:#1565c0;color:#fff;border:none;
-           border-radius:4px;cursor:pointer}
-#login-btn:hover{background:#0d47a1}
-#login-error{color:#c62828;margin-top:.5em;display:none}
+#login-section{max-width:340px;margin:4em auto;padding:2em;background:var(--surface);
+               border:1px solid var(--border);border-radius:4px;text-align:center;box-shadow:0 2px 8px #0001}
+#login-section h2{margin-top:0;font-family:'Cormorant Garamond',serif}
+#pwd-input{width:100%;padding:.5em;font-size:1em;margin:.5em 0;border:1px solid var(--border);
+           border-radius:4px;font-family:'Public Sans',sans-serif}
+#login-btn{padding:.5em 1.5em;font-size:1em;background:var(--accent);color:#fff;border:none;
+           border-radius:4px;cursor:pointer;font-family:'Public Sans',sans-serif;font-weight:600}
+#login-btn:hover{background:#1e2d4a}
+#login-error{color:#a13a2f;margin-top:.5em;display:none}
 </style>
 <style>
-.content{background:#fff;padding:1.5em 2em;border:1px solid #ccc;border-radius:6px;
-         max-width:900px}
+.content{background:var(--surface);padding:1.5em 2em;border:1px solid var(--border);
+         border-radius:4px;max-width:900px}
+.content h1{margin-top:0}
 .content ul{padding-left:1.4em}
-.content a{color:#1565c0}
+.content a{color:var(--accent)}
 </style>
 </head>
 <body>

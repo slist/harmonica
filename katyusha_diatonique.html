@@ -6,27 +6,36 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Public+Sans:wght@400;500;600;700&display=swap">
 <style>
+:root{
+  --bg:#e9e7dc; --surface:#f5f3ea; --ink:#242229; --muted:#736f5f;
+  --accent:#2c3e63; --border:#c9c3ab;
+}
 *{box-sizing:border-box}
-body{margin:0;font-family:sans-serif;background:#fafafa}
-#player-bar{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid #ccc;
+body{margin:0;font-family:'Public Sans',sans-serif;background:var(--bg);color:var(--ink)}
+#player-bar{position:sticky;top:0;z-index:10;background:var(--surface);border-bottom:1px solid var(--border);
             box-shadow:0 2px 4px #0002;padding:.6em 1em;display:flex;flex-direction:column;gap:.5em}
 #player-bar-top{display:flex;align-items:center;gap:1em;flex-wrap:wrap}
-#player-bar a{color:#1565c0;text-decoration:none;font-weight:bold;white-space:nowrap}
+#player-bar a{color:var(--accent);text-decoration:none;font-weight:600;white-space:nowrap}
 #player-bar a:hover{text-decoration:underline}
-#player-bar h1{margin:0;font-size:1em;flex:1 1 auto;min-width:0}
+#player-bar h1{margin:0;font-size:1.15em;flex:1 1 auto;min-width:0;
+               font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600;color:var(--ink)}
 #player-bar-media{display:flex;align-items:center;gap:1em;flex-wrap:wrap}
 #player-bar-media[hidden]{display:none}
 #player-bar-media audio{flex:2 1 260px;min-width:200px}
-#no-audio{color:#999;font-style:italic}
+#no-audio{color:var(--muted);font-style:italic}
 .pdf-page{width:100%;height:100vh;border:none}
-#yt-toggle{background:none;border:1px solid #ccc;border-radius:4px;font-size:1em;
-           line-height:1;padding:.3em .5em;cursor:pointer}
+#yt-toggle{background:none;border:1px solid var(--border);border-radius:4px;font-size:1em;
+           line-height:1;padding:.3em .5em;cursor:pointer;color:var(--muted)}
 #yt-toggle[hidden],#yt-block[hidden]{display:none}
 #yt-block{display:flex;align-items:center;gap:.5em}
 #yt-player{width:320px;height:180px}
 #yt-controls{display:flex;flex-direction:column;gap:.9em}
-#yt-controls button,#yt-controls select{font-size:.85em;padding:.15em .4em;cursor:pointer}
+#yt-controls button,#yt-controls select{font-size:.85em;padding:.15em .4em;cursor:pointer;
+           font-family:'Public Sans',sans-serif}
 </style>
 </head>
 <body>
@@ -57,10 +66,10 @@ body{margin:0;font-family:sans-serif;background:#fafafa}
 </div>
   </div>
   <div id="player-bar-media">
-    <audio id='audio-player' controls src='katyusha.mp3?v=2133ed3'>Votre navigateur ne supporte pas la lecture audio.</audio>
+    <audio id='audio-player' controls src='katyusha.mp3?v=5b98977'>Votre navigateur ne supporte pas la lecture audio.</audio>
   </div>
 </div>
-<iframe class='pdf-page' src='katyusha_diatonique.pdf?v=2133ed3'></iframe>
+<iframe class='pdf-page' src='katyusha_diatonique.pdf?v=5b98977'></iframe>
 <script src="https://www.youtube.com/iframe_api"></script>
 <script>
 var ytPlayer;
