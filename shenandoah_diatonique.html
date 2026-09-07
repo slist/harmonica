@@ -21,10 +21,14 @@ body{margin:0;font-family:'Public Sans',sans-serif;background:var(--bg);color:va
 #player-bar-top{display:flex;align-items:center;gap:1em;flex-wrap:wrap}
 #player-bar a{color:var(--accent);text-decoration:none;font-weight:600;white-space:nowrap}
 #player-bar a:hover{text-decoration:underline}
+.nav-prev,.nav-next{font-size:1.3em;line-height:1;padding:0 .1em}
+.nav-next{margin-left:auto}
+.nav-disabled{font-size:1.3em;line-height:1;padding:0 .1em;color:var(--border);cursor:default}
 #player-bar h1{margin:0;font-size:1.15em;flex:1 1 auto;min-width:0;
                font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600;color:var(--ink)}
 #player-bar-media{display:flex;align-items:center;gap:1em;flex-wrap:wrap}
 #player-bar-media[hidden]{display:none}
+#audio-controls{display:flex;align-items:center;gap:.5em;flex-wrap:wrap}
 #player-bar-media audio{flex:2 1 260px;min-width:200px}
 #no-audio{color:var(--muted);font-style:italic}
 .pdf-page{width:100%;height:100vh;border:none}
@@ -34,13 +38,14 @@ body{margin:0;font-family:'Public Sans',sans-serif;background:var(--bg);color:va
 #yt-block{display:flex;align-items:center;gap:.5em}
 #yt-player{width:320px;height:180px}
 #yt-controls{display:flex;flex-direction:column;gap:.9em}
-#yt-controls button,#yt-controls select{font-size:.85em;padding:.15em .4em;cursor:pointer;
-           font-family:'Public Sans',sans-serif}
+#yt-controls button,#yt-controls select,#audio-controls button,#audio-controls select{
+           font-size:.85em;padding:.15em .4em;cursor:pointer;font-family:'Public Sans',sans-serif}
 </style>
 </head>
 <body>
 <div id="player-bar">
   <div id="player-bar-top">
+    <a class='nav-prev' href='sarabande_diatonique.html' title='Précédent : Sarabande'>◀</a>
     <a href="index.html" onclick="if(history.length>1){history.back();return false;}">← Retour</a>
     <h1>Shenandoah — Diatonique</h1>
     <button id="yt-toggle" type="button" onclick="ytShow()"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" style="vertical-align:-3px"><path fill="#FF0000" d="M23.5 6.2a2.9 2.9 0 0 0-2-2C19.7 3.7 12 3.7 12 3.7s-7.7 0-9.5.5a2.9 2.9 0 0 0-2 2A30 30 0 0 0 0 12a30 30 0 0 0 .5 5.8 2.9 2.9 0 0 0 2 2c1.8.5 9.5.5 9.5.5s7.7 0 9.5-.5a2.9 2.9 0 0 0 2-2A30 30 0 0 0 24 12a30 30 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6V8.4L15.8 12z"/></svg> YouTube</button>
@@ -52,24 +57,33 @@ body{margin:0;font-family:'Public Sans',sans-serif;background:var(--bg);color:va
     referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
   <div id="yt-controls">
     <button onclick="ytRestart()" title="Retour au début de la vidéo">⏮ Début</button>
-    <select onchange="ytSetSpeed(this.value)" title="Vitesse de lecture">
-      <option value="0.25">0.25×</option>
-      <option value="0.5">0.5×</option>
-      <option value="0.75">0.75×</option>
-      <option value="1" selected>1×</option>
-      <option value="1.25">1.25×</option>
-      <option value="1.5">1.5×</option>
-      <option value="2">2×</option>
-    </select>
+    <select onchange="ytSetSpeed(this.value)" title="Vitesse de lecture"><option value="0.25">0.25×</option><option value="0.5">0.5×</option><option value="0.75">0.75×</option><option value="1" selected>1×</option><option value="1.25">1.25×</option><option value="1.5">1.5×</option><option value="2">2×</option></select>
     <button onclick="ytHide()" title="Fermer la vidéo">✕ Fermer</button>
   </div>
 </div>
+    <a class='nav-next' href='douce-nuit_diatonique.html' title='Suivant : Silent night - Douce nuit'>▶</a>
   </div>
   <div id="player-bar-media">
-    <audio id='audio-player' controls src='shenandoah.mp3?v=5b98977'>Votre navigateur ne supporte pas la lecture audio.</audio>
+    <div id="audio-controls">
+  <audio id='audio-player' controls src='shenandoah.mp3?v=c7db120'>
+    Votre navigateur ne supporte pas la lecture audio.
+  </audio>
+  <button onclick="audioRestart()" title="Retour au début du MP3">⏮ Début</button>
+  <select onchange="audioSetSpeed(this.value)" title="Vitesse de lecture"><option value="0.25">0.25×</option><option value="0.5">0.5×</option><option value="0.75">0.75×</option><option value="1" selected>1×</option><option value="1.25">1.25×</option><option value="1.5">1.5×</option><option value="2">2×</option></select>
+</div>
   </div>
 </div>
-<iframe class='pdf-page' src='shenandoah_diatonique.pdf?v=5b98977'></iframe>
+<iframe class='pdf-page' src='shenandoah_diatonique.pdf?v=c7db120'></iframe>
+<script>
+function audioRestart(){
+  var a = document.getElementById('audio-player');
+  if(a){a.currentTime = 0; a.play();}
+}
+function audioSetSpeed(v){
+  var a = document.getElementById('audio-player');
+  if(a){a.playbackRate = parseFloat(v);}
+}
+</script>
 <script src="https://www.youtube.com/iframe_api"></script>
 <script>
 var ytPlayer;
