@@ -6,9 +6,66 @@ J'aime beaucoup jouer de l'harmonica, et les ressources disponibles sur Internet
 
 - [Liens utiles](#liens-utiles)
   - [Sommaire](#sommaire)
-  - [Cours pour débutants par Liam Ward](#cours-pour-débutants-par-liam-ward)
+  - [Ressources en français](#ressources-en-français)
+    - [YouTube (FR)](#youtube-fr)
+    - [Web (FR)](#web-fr)
+  - [Ressources en anglais](#ressources-en-anglais)
+    - [YouTube (EN)](#youtube-en)
+      - [Cours pour débutants par Liam Ward](#cours-pour-débutants-par-liam-ward)
+    - [Web (EN)](#web-en)
 
-## Cours pour débutants par Liam Ward
+## Ressources en français
+
+### YouTube (FR)
+
+- <https://www.youtube.com/@apprendrelharmonica> Paul Lassey
+- <https://www.youtube.com/@GuillaumeRobin> Guillaume Robin
+- <https://www.youtube.com/@harmonicatablatures>
+- <https://www.youtube.com/@HarmoChopin>
+- <https://www.youtube.com/@beijaJeanzac>
+- <https://www.youtube.com/@jean-louischarton2251>
+- <https://www.youtube.com/@apprendrelharmonica2381>
+- <https://www.youtube.com/@FlorenceGacoinMarks>
+- <https://www.youtube.com/gregzlap>
+- <https://www.youtube.com/channel/UCSsFJZEliooPyp15IG6VsBg> Jean-Jacques Milteau
+
+
+
+
+### Web (FR)
+
+- <http://frans.free.fr/lilypond/>
+- <https://fr.scoutwiki.org>
+- <https://www.petiteguitare.fr/>
+- <https://partitions-domaine-public.fr/>
+- https://fr.sheetmusicdirect.com/
+<!--
+- <https://harmonica12.fr/> (Harmonica chromatique, mais site en erreur en ce moment :-< )
+- <https://www.rhapsody.fr/> (plein d'erreurs)
+-->
+
+
+## Ressources en anglais
+
+### YouTube (EN)
+
+- <https://www.youtube.com/@JuzzieSmithYoutube>
+- <https://www.youtube.com/@Learntheharmonica>
+- <https://www.youtube.com/@HarpWell>
+- <https://www.youtube.com/@HowardLevyland>
+- <https://www.youtube.com/@HarmonicaRevolution>
+- <https://www.youtube.com/@Harmonicacom>
+- <https://www.youtube.com/@cyleoharmonica>
+- <https://www.youtube.com/@indiarasfair>
+- <https://www.youtube.com/@AmandaVentura>
+- <https://www.youtube.com/@FilipJersMusic>
+- <https://www.youtube.com/@del78ful> Top pour les musiques de western
+- <https://www.youtube.com/@TomlinHarmonica>
+- <https://www.youtube.com/@ianalaxer>
+- <https://www.youtube.com/@HarmonicaBluesy>
+
+
+#### Cours pour débutants par Liam Ward
 
 - [Liste de lecture complète](https://www.youtube.com/playlist?list=PLKONji9dlomQtLpyMM4vT9K1mx_jUNxLp)
 - Vidéos et résumés
@@ -36,10 +93,18 @@ J'aime beaucoup jouer de l'harmonica, et les ressources disponibles sur Internet
   - [Take Me Home, Country Roads - John Denver harmonica lesson (Saturday Song Study #9)](https://www.youtube.com/watch?v=v8XcpyPjRpg) - Morceau d'application : « Take Me Home, Country Roads »
   - [3 top tips for beginner harmonica (Harmonica Q&A Live)](https://www.youtube.com/watch?v=pYXMTZwIct0) - Trois conseils pour les débutants : beaucoup écouter, oser se tromper, trouver un professeur
   - [Bending for beginners (Harmonica Q&A Live)](https://www.youtube.com/watch?v=UANJ8OZPOP0) - Apprendre le bending pour les débutants
-  - [The six harmonica keys you need (Harmonica Q&A Live)](https://www.youtube.com/watch?v=z4z8utmByis) - Les tonalités d'harmonica les plus courantes
+  - [The six harmonica keys you need (Harmonica Q&A Live)](https://www.youtube.com/watch?v=z4z8utmByis) - Les tonalités d'harmonica les plus courantes: G A B♭ C D F
   - [Warbles/trills - move head or harp? (Harmonica Q&A Live)](https://www.youtube.com/watch?v=_8VyEkviNxM) - Le trémolo : bouger la tête ou l'harmonica ?
   - [Holding the harmonica and microphone (Harmonica Q&A Live)](https://www.youtube.com/watch?v=jIsKAs-66aQ) - Tenir l'harmonica avec un microphone
   - [How to clean a harmonica (Harmonica Q&A Live)](https://www.youtube.com/watch?v=b_F8x0vRlAA) - Comment nettoyer son harmonica
   - [What is a 12 bar blues? (Harmonica Q&A Live)](https://www.youtube.com/watch?v=Ss4Xk5TIhVM) - Qu'est-ce qu'un blues en 12 mesures (question/réponse simple)
   - [Silent Night](https://www.youtube.com/watch?v=T5s_N_9pfsc) - Morceau d'application : « Silent Night »
   - [My Girl](https://www.youtube.com/watch?v=ayZXQSf6fXo) - Morceau d'application : « My Girl »
+
+### Web (EN)
+
+- <https://www.free-scores.com>
+- <https://musescore.com/>
+- https://itsybitsykidsmusic.com/
+- https://harptabs.com/
+- https://riffspot.com/ More for Guitar, ukulele...
