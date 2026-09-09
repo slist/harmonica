@@ -63,6 +63,7 @@ J'aime beaucoup jouer de l'harmonica, et les ressources disponibles sur Internet
 - <https://www.youtube.com/@TomlinHarmonica>
 - <https://www.youtube.com/@ianalaxer>
 - <https://www.youtube.com/@HarmonicaBluesy>
+- <https://www.youtube.com/@Mr.H-Harmonica> De belles interprétations en Chromatique
 
 
 #### Cours pour débutants par Liam Ward
