@@ -10,6 +10,7 @@
   % Traditional American folk song, 19th century (California Gold Rush era)
   % Popularized in the 20th century by Johnny Cash (1932–2003)
   composerNationality = "us"
+  youtube = "https://www.youtube.com/watch?v=mr03En-8fH8"
 }
 
 \include "../include/harmonica.ly"

@@ -5,6 +5,7 @@
   poet = "Robert Burns (1759-1796)"
   copyrightStatus = "public-domain"
   composerNationality = "gb"
+  youtube = "https://www.youtube.com/watch?v=nIR2GR254S8"
 }
 
 \include "../include/harmonica.ly"

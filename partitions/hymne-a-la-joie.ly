@@ -6,6 +6,7 @@
   lyricsLang = #'()
   copyrightStatus = "public-domain" % Chanson traditionnelle anglaise (XVIe siècle)
   composerNationality = "de"
+  youtube = "https://www.youtube.com/watch?v=I4XSBThnhh4"
 }
 
 \include "../include/harmonica.ly"

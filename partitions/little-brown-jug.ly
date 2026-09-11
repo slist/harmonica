@@ -4,6 +4,7 @@
   title = "Little brown jug"
   composer = "Glenn Miller Orchestra (1940)"
   composerNationality = "us"
+  youtube = "https://www.youtube.com/watch?v=tSyA0c_Rs8U"
 }
 
 \include "../include/harmonica.ly"

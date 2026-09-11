@@ -8,6 +8,7 @@
   %arranger = ""
   %instrument = "Harmonica chromatique"
   composerNationality = "fr"
+  youtube = "https://www.youtube.com/watch?v=6RaZoWKM7ao"
 }
 
 \include "../include/harmonica.ly"

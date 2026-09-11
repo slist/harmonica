@@ -18,6 +18,7 @@
 
   %composerNationality = "FR"
   %instrument = "Harmonica"
+  youtube = "https://www.youtube.com/watch?v=x8zM9q5zb3k"
 }
 
 \include "../include/harmonica.ly"

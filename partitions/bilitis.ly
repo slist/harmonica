@@ -11,6 +11,7 @@
   composer = "Francis Lai (1932-2018)"
   copyrightStatus = "copyrighted"
   composerNationality = "fr"
+  youtube = "https://www.youtube.com/watch?v=X5jhIBkMQLA"
 }
 
 % From https://musescore.com/user/62893/scores/2659406

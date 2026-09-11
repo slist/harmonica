@@ -218,11 +218,27 @@ def difficulty_cell(diff: dict) -> str:
 
 # --------- LilyPond metadata parsing ---------
 
+_DIATONIC_TAB_RE = re.compile(r'\\diatonic([A-Za-z]*)HarmonicaTab')
+
+
+def diatonic_harmonica_keys(content: str) -> str:
+    """Harmonica key(s) used for the diatonic tab (e.g. 'C', or 'D+G' when the
+    song needs a tuning change mid-piece), from \\diatonicHarmonicaTab /
+    \\diatonicXHarmonicaTab calls. Bare \\diatonicHarmonicaTab means C."""
+    keys = []
+    for m in _DIATONIC_TAB_RE.finditer(_strip_comments(content)):
+        key = m.group(1) or "C"
+        if key not in keys:
+            keys.append(key)
+    return "+".join(keys) if keys else "C"
+
+
 def parse_ly_metadata(ly_path: str) -> dict:
     metadata: dict = {
         "copyrightStatus": "unknown", "lyricsLang": [],
         "key": "unknown", "composer": "", "title": "",
-        "composerNationality": "", "difficulty": {},
+        "composerNationality": "", "difficulty": {}, "youtube": "",
+        "diatonicHarmonicaKeys": "C",
     }
     if not os.path.exists(ly_path):
         logger.warning(f"  ⚠️  Fichier .ly introuvable : '{ly_path}'")
@@ -252,6 +268,7 @@ def parse_ly_metadata(ly_path: str) -> dict:
                     break
     metadata["title"]                = find(rf'^\s*title\s*=\s*"{_QUOTED}"', re.MULTILINE)
     metadata["composerNationality"]  = find(rf'composerNationality\s*=\s*"{_QUOTED}"')
+    metadata["youtube"]               = find(rf'youtube\s*=\s*"{_QUOTED}"')
 
     m = re.search(r'lyricsLang\s*=\s*#\'\(([^)]*)\)', content)
     if m:
@@ -262,6 +279,7 @@ def parse_ly_metadata(ly_path: str) -> dict:
         metadata["key"] = m.group(1)
 
     metadata["difficulty"] = analyze_difficulty(content)
+    metadata["diatonicHarmonicaKeys"] = diatonic_harmonica_keys(content)
     return metadata
 
 
@@ -380,36 +398,102 @@ def collect_gammes() -> list[dict]:
 
 # --------- HTML helpers ---------
 
+# "Tablature Papier" theme: manuscript-paper palette (cool ink-blue + copper
+# accent on aged paper) shared by every generated page.
+_FONTS_LINK = """\
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Public+Sans:wght@400;500;600;700&display=swap">"""
+
+# Decorative watermark (staff lines, a couple of notes, a diatonic and a
+# chromatic harmonica outline) sat behind the page's <h1>. Pure line art
+# (rect/line/text, no hand-drawn paths) tinted via currentColor so it only
+# needs the surrounding element's `color` to match a given theme.
+_HERO_ART_SVG = """\
+<svg class="hero-art" viewBox="0 0 900 90" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+  <g stroke="currentColor" stroke-width="1.2" fill="none">
+    <line x1="20" y1="20" x2="260" y2="20"/><line x1="20" y1="28" x2="260" y2="28"/>
+    <line x1="20" y1="36" x2="260" y2="36"/><line x1="20" y1="44" x2="260" y2="44"/>
+    <line x1="20" y1="52" x2="260" y2="52"/>
+  </g>
+  <text x="40" y="48" font-size="24" fill="currentColor" font-family="Georgia,serif">&#9834;</text>
+  <text x="95" y="42" font-size="20" fill="currentColor" font-family="Georgia,serif">&#9835;</text>
+  <text x="150" y="50" font-size="22" fill="currentColor" font-family="Georgia,serif">&#9834;</text>
+  <g transform="translate(400,28)">
+    <rect x="0" y="0" width="130" height="34" rx="5" fill="none" stroke="currentColor" stroke-width="2"/>
+    <line x1="0" y1="17" x2="130" y2="17" stroke="currentColor" stroke-width="1"/>
+    <g stroke="currentColor" stroke-width="1.4">
+      <line x1="12" y1="6" x2="12" y2="28"/><line x1="24" y1="6" x2="24" y2="28"/>
+      <line x1="36" y1="6" x2="36" y2="28"/><line x1="48" y1="6" x2="48" y2="28"/>
+      <line x1="60" y1="6" x2="60" y2="28"/><line x1="72" y1="6" x2="72" y2="28"/>
+      <line x1="84" y1="6" x2="84" y2="28"/><line x1="96" y1="6" x2="96" y2="28"/>
+      <line x1="108" y1="6" x2="108" y2="28"/><line x1="120" y1="6" x2="120" y2="28"/>
+    </g>
+  </g>
+  <g transform="translate(560,22)">
+    <rect x="0" y="0" width="150" height="30" rx="5" fill="none" stroke="currentColor" stroke-width="2"/>
+    <line x1="0" y1="15" x2="150" y2="15" stroke="currentColor" stroke-width="1"/>
+    <g stroke="currentColor" stroke-width="1.2">
+      <line x1="10" y1="5" x2="10" y2="25"/><line x1="20" y1="5" x2="20" y2="25"/>
+      <line x1="30" y1="5" x2="30" y2="25"/><line x1="40" y1="5" x2="40" y2="25"/>
+      <line x1="50" y1="5" x2="50" y2="25"/><line x1="60" y1="5" x2="60" y2="25"/>
+      <line x1="70" y1="5" x2="70" y2="25"/><line x1="80" y1="5" x2="80" y2="25"/>
+      <line x1="90" y1="5" x2="90" y2="25"/><line x1="100" y1="5" x2="100" y2="25"/>
+      <line x1="110" y1="5" x2="110" y2="25"/><line x1="120" y1="5" x2="120" y2="25"/>
+    </g>
+    <rect x="150" y="4" width="14" height="22" rx="3" fill="none" stroke="currentColor" stroke-width="2"/>
+  </g>
+</svg>"""
+
+
+def _hero(title_html: str) -> str:
+    """Wrap a page's <h1> with the staff/harmonica watermark behind it."""
+    return f'<div class="hero">{_HERO_ART_SVG}<div class="hero-content">{title_html}</div></div>'
+
+
 _CSS = """\
 <style>
+:root{
+  --bg:#e9e7dc; --surface:#f5f3ea; --ink:#242229; --muted:#736f5f;
+  --accent:#2c3e63; --accent-2:#8a5a2c; --border:#c9c3ab;
+}
 *{box-sizing:border-box}
-body{font-family:sans-serif;max-width:1400px;margin:0 auto;padding:1em;background:#fafafa}
-h1{color:#333}
-nav a{margin-right:1em;text-decoration:none;color:#1565c0;font-weight:bold}
+body{font-family:'Public Sans',sans-serif;max-width:1400px;margin:0 auto;padding:1em;
+     background:var(--bg);color:var(--ink)}
+h1{font-family:'Cormorant Garamond',serif;font-weight:600;font-style:italic;
+   color:var(--ink);font-size:2.1em;margin:.3em 0}
+.hero{position:relative}
+.hero-art{position:absolute;inset:0;z-index:0;opacity:.16;color:var(--accent-2);pointer-events:none}
+.hero-content{position:relative;z-index:1}
+nav a{margin-right:1em;text-decoration:none;color:var(--accent);font-weight:600}
 nav a:hover{text-decoration:underline}
-table{border-collapse:collapse;width:100%;font-size:0.88em;background:#fff}
-thead th{background:#f0f0f0;cursor:pointer;user-select:none;white-space:nowrap;
-         padding:7px 9px;border:1px solid #ccc;text-align:center}
-thead th:hover{background:#dde}
+table{border-collapse:collapse;width:100%;font-size:0.88em;background:var(--surface)}
+thead th{background:var(--surface);cursor:pointer;user-select:none;white-space:nowrap;
+         padding:7px 9px;border:1px solid var(--border);text-align:center;
+         font-weight:600;color:var(--muted);text-transform:uppercase;font-size:.78em;letter-spacing:.03em}
+thead th:hover{background:#e8e4d4}
 thead th.col-pdf{white-space:normal;word-break:break-word}
 td.col-pdf{width:3em;text-align:center}
 thead th.sort-asc::after{content:" ▲";font-size:.8em}
 thead th.sort-desc::after{content:" ▼";font-size:.8em}
-tbody td{border:1px solid #ccc;padding:5px 8px;text-align:center}
+tbody td{border:1px solid var(--border);padding:5px 8px;text-align:center}
 tbody td:first-child{text-align:left}
 tbody td:nth-child(2){text-align:left}
-tbody tr:hover{background:#f5f5f5}
-.hidden{color:#bbb;font-style:italic}
+tbody tr:hover{background:#efece0}
+.hidden{color:#a9a48f;font-style:italic}
 .badge{font-size:1.1em}
+.harmo-key{font-size:1.15em;font-weight:700;color:var(--accent);text-decoration:none}
+.harmo-key:hover{text-decoration:underline}
 /* login form */
-#login-section{max-width:340px;margin:4em auto;padding:2em;background:#fff;
-               border:1px solid #ccc;border-radius:8px;text-align:center;box-shadow:0 2px 8px #0001}
-#login-section h2{margin-top:0}
-#pwd-input{width:100%;padding:.5em;font-size:1em;margin:.5em 0;border:1px solid #aaa;border-radius:4px}
-#login-btn{padding:.5em 1.5em;font-size:1em;background:#1565c0;color:#fff;border:none;
-           border-radius:4px;cursor:pointer}
-#login-btn:hover{background:#0d47a1}
-#login-error{color:#c62828;margin-top:.5em;display:none}
+#login-section{max-width:340px;margin:4em auto;padding:2em;background:var(--surface);
+               border:1px solid var(--border);border-radius:4px;text-align:center;box-shadow:0 2px 8px #0001}
+#login-section h2{margin-top:0;font-family:'Cormorant Garamond',serif}
+#pwd-input{width:100%;padding:.5em;font-size:1em;margin:.5em 0;border:1px solid var(--border);
+           border-radius:4px;font-family:'Public Sans',sans-serif}
+#login-btn{padding:.5em 1.5em;font-size:1em;background:var(--accent);color:#fff;border:none;
+           border-radius:4px;cursor:pointer;font-family:'Public Sans',sans-serif;font-weight:600}
+#login-btn:hover{background:#1e2d4a}
+#login-error{color:#a13a2f;margin-top:.5em;display:none}
 </style>"""
 
 # Hint browsers (notably mobile Chrome) not to serve a stale copy of the page
@@ -456,30 +540,247 @@ def _mp3_link(files: list[str], prefix: str = "") -> str:
     return f"<a href='{escape(_cache_bust(prefix + files[0]))}'>MP3</a>"
 
 
+def _youtube_video_id(url: str) -> str:
+    if not url:
+        return ""
+    m = re.search(r'(?:youtube\.com/watch\?v=|youtu\.be/|youtube\.com/embed/)([A-Za-z0-9_-]{11})', url)
+    return m.group(1) if m else ""
+
+
 _PLAYER_CSS = """\
 <style>
+:root{
+  --bg:#e9e7dc; --surface:#f5f3ea; --ink:#242229; --muted:#736f5f;
+  --accent:#2c3e63; --border:#c9c3ab;
+}
 *{box-sizing:border-box}
-body{margin:0;font-family:sans-serif;background:#fafafa}
-#player-bar{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid #ccc;
-            box-shadow:0 2px 4px #0002;padding:.6em 1em;display:flex;align-items:center;
-            gap:1em;flex-wrap:wrap}
-#player-bar a{color:#1565c0;text-decoration:none;font-weight:bold;white-space:nowrap}
+body{margin:0;font-family:'Public Sans',sans-serif;background:var(--bg);color:var(--ink)}
+#player-bar{position:sticky;top:0;z-index:10;background:var(--surface);border-bottom:1px solid var(--border);
+            box-shadow:0 2px 4px #0002;padding:.6em 1em;display:flex;flex-direction:column;gap:.5em}
+#player-bar-top{display:flex;align-items:center;gap:1em;flex-wrap:wrap}
+#player-bar a{color:var(--accent);text-decoration:none;font-weight:600;white-space:nowrap}
 #player-bar a:hover{text-decoration:underline}
-#player-bar h1{margin:0;font-size:1em;flex:1 1 auto;min-width:150px}
-#player-bar audio{flex:2 1 260px;min-width:200px}
-#no-audio{color:#999;font-style:italic}
+.nav-prev,.nav-next{font-size:1.3em;line-height:1;padding:0 .1em}
+.nav-next{margin-left:auto}
+.nav-disabled{font-size:1.3em;line-height:1;padding:0 .1em;color:var(--border);cursor:default}
+#player-bar h1{margin:0;font-size:1.15em;flex:1 1 auto;min-width:0;
+               font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600;color:var(--ink)}
+#player-bar-media{display:flex;align-items:center;gap:1em;flex-wrap:wrap}
+#player-bar-media[hidden]{display:none}
+#audio-controls{display:flex;align-items:center;gap:.5em;flex-wrap:wrap}
+#player-bar-media audio{flex:2 1 260px;min-width:200px}
+#no-audio{color:var(--muted);font-style:italic}
 .pdf-page{width:100%;height:100vh;border:none}
+#yt-toggle{background:none;border:1px solid var(--border);border-radius:4px;font-size:1em;
+           line-height:1;padding:.3em .5em;cursor:pointer;color:var(--muted)}
+#yt-toggle[hidden],#yt-block[hidden]{display:none}
+#yt-block{display:flex;align-items:center;gap:.5em}
+#yt-player{width:320px;height:180px}
+#yt-controls{display:flex;flex-direction:column;gap:.9em}
+#yt-controls button,#yt-controls select,#audio-controls button,#audio-controls select{
+           font-size:.85em;padding:.15em .4em;cursor:pointer;font-family:'Public Sans',sans-serif}
+.play-btn{background:var(--accent);color:#fff;border:none;
+           border-radius:4px;font-weight:600;padding:.3em .7em;min-width:5.5em}
+.play-btn:hover{background:#1e2d4a}
 </style>"""
 
 
-def _player_page_html(title: str, mp3_file: str, pdf_files: list[str], back_href: str) -> str:
+_SPEED_OPTIONS = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 2]
+
+
+def _speed_select_html(onchange_js: str) -> str:
+    """Shared 0.25x-2x playback-speed <select>, used by both the MP3 and YouTube controls."""
+    opts = "".join(
+        f'<option value="{v}"{" selected" if v == 1 else ""}>{v}×</option>'
+        for v in _SPEED_OPTIONS
+    )
+    return f'<select onchange="{onchange_js}" title="Vitesse de lecture">{opts}</select>'
+
+
+def _nav_link_html(direction: str, href: str, title: str) -> str:
+    """Prev/next-song arrow shown at either end of the player header.
+    Rendered as a disabled span (no href) at the start/end of the list."""
+    arrow = "◀" if direction == "prev" else "▶"
+    cls = f"nav-{direction}"
+    if not href:
+        return f"<span class='{cls} nav-disabled' aria-hidden='true'>{arrow}</span>"
+    return f"<a class='{cls}' href='{escape(href)}' title='{escape(title)}'>{arrow}</a>"
+
+
+def _youtube_toggle_html() -> str:
+    icon = (
+        '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" '
+        'style="vertical-align:-3px">'
+        '<path fill="#FF0000" d="M23.5 6.2a2.9 2.9 0 0 0-2-2C19.7 3.7 12 3.7 12 3.7'
+        's-7.7 0-9.5.5a2.9 2.9 0 0 0-2 2A30 30 0 0 0 0 12a30 30 0 0 0 .5 5.8 2.9 2.9'
+        ' 0 0 0 2 2c1.8.5 9.5.5 9.5.5s7.7 0 9.5-.5a2.9 2.9 0 0 0 2-2A30 30 0 0 0 24'
+        ' 12a30 30 0 0 0-.5-5.8z"/>'
+        '<path fill="#fff" d="M9.6 15.6V8.4L15.8 12z"/>'
+        '</svg>'
+    )
+    return f'<button id="yt-toggle" type="button" onclick="ytShow()">{icon} YouTube</button>'
+
+
+def _youtube_block_html(video_id: str) -> str:
+    # A real <iframe> (not a placeholder <div>) so the native YouTube UI —
+    # including click-to-play on the thumbnail — works immediately, instead
+    # of only once the JS API asynchronously builds an iframe from scratch.
+    # The IFrame API then just attaches to this existing element (see
+    # onYouTubeIframeAPIReady below) to add the play/speed controls.
+    # Hidden by default: takes the exact spot of the 📺 toggle button (see
+    # ytShow/ytHide) instead of floating over the sheet music or pushing it
+    # down permanently.
+    return f"""\
+<div id="yt-block" hidden>
+  <iframe id="yt-player" width="320" height="180"
+    src="https://www.youtube.com/embed/{video_id}?enablejsapi=1&amp;rel=0"
+    title="Lecteur YouTube" frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+  <div id="yt-controls">
+    <button class="play-btn" onclick="ytPlay()" title="Démarrer depuis le début">▶ Play</button>
+    <button class="play-btn" id="yt-play-delay" onclick="ytPlayDelayed()"
+            title="Démarrer depuis le début après un compte à rebours de 3 secondes">▶ Play in 3s</button>
+    {_speed_select_html("ytSetSpeed(this.value)")}
+    <button onclick="ytHide()" title="Fermer la vidéo">✕ Fermer</button>
+  </div>
+</div>"""
+
+
+def _youtube_script(video_id: str) -> str:
+    return f"""\
+<script src="https://www.youtube.com/iframe_api"></script>
+<script>
+var ytPlayer;
+function onYouTubeIframeAPIReady(){{
+  ytPlayer = new YT.Player('yt-player', {{
+    events: {{onError: ytOnError}}
+  }});
+}}
+function ytOnError(){{
+  // La vidéo n'a pas pu être lue dans l'iframe (intégration désactivée par
+  // son propriétaire, vidéo privée/supprimée…) : on retombe sur un lien direct.
+  var block = document.getElementById('yt-block');
+  if(block){{
+    block.innerHTML =
+      "<a href='https://www.youtube.com/watch?v={video_id}' target='_blank' rel='noopener'>📺 Voir la vidéo sur YouTube</a>";
+  }}
+}}
+function ytPlay(){{
+  if(ytPlayer && ytPlayer.seekTo){{ytPlayer.seekTo(0, true);ytPlayer.playVideo();}}
+}}
+var _ytCountdown = null;
+function ytPlayDelayed(){{
+  var btn = document.getElementById('yt-play-delay');
+  if(!btn) return;
+  if(_ytCountdown){{
+    clearInterval(_ytCountdown);
+    _ytCountdown = null;
+    btn.textContent = '▶ Play in 3s';
+    return;
+  }}
+  var n = 3;
+  btn.textContent = n + '…';
+  _ytCountdown = setInterval(function(){{
+    n--;
+    if(n > 0){{
+      btn.textContent = n + '…';
+    }} else {{
+      clearInterval(_ytCountdown);
+      _ytCountdown = null;
+      btn.textContent = '▶ Play in 3s';
+      ytPlay();
+    }}
+  }}, 1000);
+}}
+function ytSetSpeed(v){{
+  if(ytPlayer && ytPlayer.setPlaybackRate){{ytPlayer.setPlaybackRate(parseFloat(v));}}
+}}
+function ytShow(){{
+  document.getElementById('yt-toggle').hidden = true;
+  document.getElementById('yt-block').hidden = false;
+  var media = document.getElementById('player-bar-media');
+  if(media){{media.hidden = true;}}
+  var audio = document.getElementById('audio-player');
+  if(audio){{audio.pause();}}
+}}
+function ytHide(){{
+  if(_ytCountdown){{
+    clearInterval(_ytCountdown);
+    _ytCountdown = null;
+    var delayBtn = document.getElementById('yt-play-delay');
+    if(delayBtn){{delayBtn.textContent = '▶ Play in 3s';}}
+  }}
+  document.getElementById('yt-toggle').hidden = false;
+  document.getElementById('yt-block').hidden = true;
+  var media = document.getElementById('player-bar-media');
+  if(media){{media.hidden = false;}}
+  if(ytPlayer && ytPlayer.pauseVideo){{ytPlayer.pauseVideo();}}
+}}
+</script>"""
+
+_AUDIO_SCRIPT = """\
+<script>
+function audioSetSpeed(v){
+  var a = document.getElementById('audio-player');
+  if(a){a.playbackRate = parseFloat(v);}
+}
+function audioPlay(){
+  var a = document.getElementById('audio-player');
+  if(a){a.currentTime = 0; a.play();}
+}
+var _audioCountdown = null;
+function audioPlayDelayed(){
+  var a = document.getElementById('audio-player');
+  var btn = document.getElementById('audio-play-delay');
+  if(!a || !btn) return;
+  if(_audioCountdown){
+    clearInterval(_audioCountdown);
+    _audioCountdown = null;
+    btn.textContent = '▶ Play in 3s';
+    return;
+  }
+  var n = 3;
+  btn.textContent = n + '…';
+  _audioCountdown = setInterval(function(){
+    n--;
+    if(n > 0){
+      btn.textContent = n + '…';
+    } else {
+      clearInterval(_audioCountdown);
+      _audioCountdown = null;
+      btn.textContent = '▶ Play in 3s';
+      audioPlay();
+    }
+  }, 1000);
+}
+</script>"""
+
+
+def _player_page_html(
+    title: str, mp3_file: str, pdf_files: list[str], back_href: str, youtube_id: str = "",
+    prev_href: str = "", prev_title: str = "", next_href: str = "", next_title: str = "",
+) -> str:
+    prev_btn = _nav_link_html("prev", prev_href, prev_title)
+    next_btn = _nav_link_html("next", next_href, next_title)
     if mp3_file:
-        audio_html = (
-            f"<audio controls src='{escape(_cache_bust(mp3_file))}'>"
-            "Votre navigateur ne supporte pas la lecture audio.</audio>"
-        )
+        audio_html = f"""\
+<div id="audio-controls">
+  <audio id='audio-player' controls src='{escape(_cache_bust(mp3_file))}'>
+    Votre navigateur ne supporte pas la lecture audio.
+  </audio>
+  <button class="play-btn" onclick="audioPlay()" title="Démarrer depuis le début">▶ Play</button>
+  <button class="play-btn" id="audio-play-delay" onclick="audioPlayDelayed()"
+          title="Démarrer depuis le début après un compte à rebours de 3 secondes">▶ Play in 3s</button>
+  {_speed_select_html("audioSetSpeed(this.value)")}
+</div>"""
+        audio_script = _AUDIO_SCRIPT
     else:
         audio_html = "<span id='no-audio'>Pas d'enregistrement audio disponible</span>"
+        audio_script = ""
+    yt_toggle = _youtube_toggle_html() if youtube_id else ""
+    yt_html = _youtube_block_html(youtube_id) if youtube_id else ""
+    yt_script = _youtube_script(youtube_id) if youtube_id else ""
     pdf_html = "".join(
         f"<iframe class='pdf-page' src='{escape(_cache_bust(f))}'></iframe>"
         for f in pdf_files
@@ -490,15 +791,26 @@ def _player_page_html(title: str, mp3_file: str, pdf_files: list[str], back_href
 <meta charset="UTF-8">
 <title>{escape(title)}</title>
 {_NO_CACHE_META}
+{_FONTS_LINK}
 {_PLAYER_CSS}
 </head>
 <body>
 <div id="player-bar">
-  <a href="{escape(back_href)}" onclick="if(history.length>1){{history.back();return false;}}">← Retour</a>
-  <h1>{escape(title)}</h1>
-  {audio_html}
+  <div id="player-bar-top">
+    {prev_btn}
+    <a href="{escape(back_href)}" onclick="if(history.length>1){{history.back();return false;}}">← Retour</a>
+    <h1>{escape(title)}</h1>
+    {yt_toggle}
+    {yt_html}
+    {next_btn}
+  </div>
+  <div id="player-bar-media">
+    {audio_html}
+  </div>
 </div>
 {pdf_html}
+{audio_script}
+{yt_script}
 </body>
 </html>
 """
@@ -507,15 +819,27 @@ def _player_page_html(title: str, mp3_file: str, pdf_files: list[str], back_href
 def _write_player_page(
     output_dir: str, base: str, tuning: str, title: str,
     pdf_files: list[str], mp3_files: list[str], back_href: str, prefix: str = "",
+    youtube_url: str = "", prev_song: dict | None = None, next_song: dict | None = None,
 ) -> str:
     """Write a standalone page combining the sheet music PDF with a sticky audio player."""
     fname = f"{base}_{tuning}.html"
     mp3_file = prefix + mp3_files[0] if mp3_files else ""
+
+    def _neighbor(song: dict | None) -> tuple[str, str]:
+        if not song:
+            return "", ""
+        return f"{prefix}{song['base']}_{tuning}.html", song['title'] or song['base']
+
+    prev_href, prev_title = _neighbor(prev_song)
+    next_href, next_title = _neighbor(next_song)
     html = _player_page_html(
         title=f"{title} — {tuning.capitalize()}",
         mp3_file=mp3_file,
         pdf_files=[prefix + f for f in pdf_files],
         back_href=back_href,
+        youtube_id=_youtube_video_id(youtube_url),
+        prev_href=prev_href, prev_title=f"Précédent : {prev_title}" if prev_title else "",
+        next_href=next_href, next_title=f"Suivant : {next_title}" if next_title else "",
     )
     with open(os.path.join(output_dir, fname), "w", encoding="utf-8") as fh:
         fh.write(html)
@@ -524,12 +848,19 @@ def _write_player_page(
 
 def _pdf_cell(
     files: list[str], mp3_files: list[str], output_dir: str, base: str, tuning: str,
-    title: str, back_href: str, prefix: str = "",
+    title: str, back_href: str, prefix: str = "", youtube_url: str = "",
+    prev_song: dict | None = None, next_song: dict | None = None, harmonica_keys: str = "",
 ) -> str:
     if not files:
         return "<span class='hidden'>—</span>"
-    fname = _write_player_page(output_dir, base, tuning, title, files, mp3_files, back_href, prefix)
-    return f"<a href='{escape(prefix + fname)}' title='Écouter + partition'>🎵🎼</a>"
+    fname = _write_player_page(
+        output_dir, base, tuning, title, files, mp3_files, back_href, prefix, youtube_url,
+        prev_song, next_song,
+    )
+    href = escape(prefix + fname)
+    if harmonica_keys:
+        return f"<a class='harmo-key' href='{href}' title='Écouter + partition — harmonica {escape(harmonica_keys)}'>{escape(harmonica_keys)}</a>"
+    return f"<a href='{href}' title='Écouter + partition'>🎵🎼</a>"
 
 
 def _table_header(cols: list[tuple]) -> str:
@@ -541,7 +872,22 @@ def _table_header(cols: list[tuple]) -> str:
     return f"<thead><tr>{ths}</tr></thead>"
 
 
-def _song_row(meta: dict, public_only: bool, pdf_prefix: str = "") -> str:
+def _build_nav_maps(songs: list[dict]) -> dict[str, dict[str, tuple]]:
+    """For 'diat' and 'chro', map a song's base -> (prev_song, next_song) among the
+    songs that actually have a page for that tuning, in table order."""
+    maps: dict[str, dict[str, tuple]] = {}
+    for tuning_key in ("diat", "chro"):
+        ordered = [s for s in songs if s["outputs"][tuning_key]]
+        nav = {}
+        for i, s in enumerate(ordered):
+            prev_s = ordered[i - 1] if i > 0 else None
+            next_s = ordered[i + 1] if i + 1 < len(ordered) else None
+            nav[s["base"]] = (prev_s, next_s)
+        maps[tuning_key] = nav
+    return maps
+
+
+def _song_row(meta: dict, public_only: bool, pdf_prefix: str = "", nav_maps: dict | None = None) -> str:
     base      = meta['base']
     status    = meta['copyrightStatus']
     lyrics    = meta['lyricsLang']
@@ -553,6 +899,8 @@ def _song_row(meta: dict, public_only: bool, pdf_prefix: str = "") -> str:
     country    = COUNTRY_NAMES.get(nat, '')
     flag       = f"<span title='{escape(country)}'>{flag_emoji}</span>" if flag_emoji and country else flag_emoji
     diff       = meta['difficulty']
+    youtube    = meta.get('youtube', '')
+    diat_keys  = meta.get('diatonicHarmonicaKeys', 'C')
     outputs    = meta['outputs']
     diat       = outputs['diat']
     chro       = outputs['chro']
@@ -566,20 +914,22 @@ def _song_row(meta: dict, public_only: bool, pdf_prefix: str = "") -> str:
     is_free = status in ("public-domain", "public domain")
     show_links = is_free or not public_only
 
+    nav_maps = nav_maps or {}
+    diat_prev, diat_next = nav_maps.get("diat", {}).get(base, (None, None))
+    chro_prev, chro_next = nav_maps.get("chro", {}).get(base, (None, None))
+
     row  = "<tr>"
     row += f"<td data-sort='{escape(title.lower())}'>{escape(title)}</td>"
     row += f"<td data-sort='{escape(composer.lower())}'>{composer_cell}</td>"
     row += f"<td data-sort='{key_num}'>{escape(key)}</td>"
     if show_links:
-        row += f"<td class='col-pdf'>{_pdf_cell(diat, mp3s, OUTPUT_DIR, base, 'diatonique', title, 'index.html', pdf_prefix)}</td>"
+        row += f"<td class='col-pdf'>{_pdf_cell(diat, mp3s, OUTPUT_DIR, base, 'diatonique', title, 'index.html', pdf_prefix, youtube, diat_prev, diat_next, diat_keys)}</td>"
         row += difficulty_cell(diff)
-        row += f"<td class='col-pdf'>{_pdf_cell(chro, mp3s, OUTPUT_DIR, base, 'chromatique', title, 'index.html', pdf_prefix)}</td>"
-        row += f"<td>{_mp3_link(mp3s, pdf_prefix)}</td>"
+        row += f"<td class='col-pdf'>{_pdf_cell(chro, mp3s, OUTPUT_DIR, base, 'chromatique', title, 'index.html', pdf_prefix, youtube, chro_prev, chro_next)}</td>"
     else:
         row += "<td class='hidden col-pdf'>—</td>"
         row += difficulty_cell(diff)
         row += "<td class='hidden col-pdf'>—</td>"
-        row += "<td class='hidden'>—</td>"
     row += f"<td class='badge'>{lyrics_icon(lyrics)}</td>"
     row += copyright_cell(status, composer)
     row += "</tr>\n"
@@ -591,7 +941,7 @@ def _song_row(meta: dict, public_only: bool, pdf_prefix: str = "") -> str:
 _TABLE_COLS = [
     ("Œuvre", ""), ("Compositeur", ""), ("Clé", ""),
     ("Diatonique", "col-pdf"), ("Difficulté 🎵", ""),
-    ("Chromatique", "col-pdf"), ("MP3", ""),
+    ("Chromatique", "col-pdf"),
     ("Paroles", ""), ("Droits", ""),
 ]
 
@@ -605,14 +955,15 @@ def generate_index_html(songs: list[dict]) -> None:
     free   = [s for s in songs if s['copyrightStatus'] in ("public-domain", "public domain")]
     locked = [s for s in songs if s['copyrightStatus'] not in ("public-domain", "public domain")]
 
+    nav_maps = _build_nav_maps(songs)
     thead = _table_header(_TABLE_COLS)
-    rows  = "".join(_song_row(s, public_only=True) for s in songs)
+    rows  = "".join(_song_row(s, public_only=True, nav_maps=nav_maps) for s in songs)
 
     html = f"""<!DOCTYPE html>
 <html lang="fr">
-<head><meta charset="UTF-8"><title>Partitions Harmonica</title>{_NO_CACHE_META}{_CSS}</head>
+<head><meta charset="UTF-8"><title>Partitions Harmonica</title>{_NO_CACHE_META}{_FONTS_LINK}{_CSS}</head>
 <body>
-<h1>Partitions Harmonica</h1>
+{_hero('<h1>Partitions Harmonica</h1>')}
 <nav>
   <a href="gammes/">📖 Gammes &amp; Scales</a>
   <a href="liens-utiles.html">🔗 Liens utiles</a>
@@ -630,7 +981,7 @@ def generate_index_html(songs: list[dict]) -> None:
 </table>
 {_SORT_JS}
 <p style="margin-top:2em;text-align:right;font-size:0.8em">
-  <a href="private.html" style="color:#bbb;text-decoration:none" title="Accès complet">🔒</a>
+  <a href="private.html" style="color:var(--muted);text-decoration:none" title="Accès complet">🔒</a>
 </p>
 </body>
 </html>
@@ -679,9 +1030,9 @@ def generate_gammes_html(gammes: list[dict]) -> None:
 
     html = f"""<!DOCTYPE html>
 <html lang="fr">
-<head><meta charset="UTF-8"><title>Gammes Harmonica</title>{_NO_CACHE_META}{_CSS}</head>
+<head><meta charset="UTF-8"><title>Gammes Harmonica</title>{_NO_CACHE_META}{_FONTS_LINK}{_CSS}</head>
 <body>
-<h1>Gammes &amp; Références</h1>
+{_hero('<h1>Gammes &amp; Références</h1>')}
 <nav>
   <a href="../">← Partitions</a>
 </nav>
@@ -705,11 +1056,12 @@ def generate_gammes_html(gammes: list[dict]) -> None:
 
 
 def generate_private_html(songs: list[dict], sha256_hash: str) -> None:
+    nav_maps = _build_nav_maps(songs)
     thead = _table_header(_TABLE_COLS)
-    rows  = "".join(_song_row(s, public_only=False) for s in songs)
+    rows  = "".join(_song_row(s, public_only=False, nav_maps=nav_maps) for s in songs)
 
     protected_content = f"""
-<h1>Partitions Harmonica — Accès complet</h1>
+{_hero('<h1>Partitions Harmonica — Accès complet</h1>')}
 <nav>
   <a href="gammes/">📖 Gammes</a>
 </nav>
@@ -773,6 +1125,7 @@ def generate_private_html(songs: list[dict], sha256_hash: str) -> None:
 <title>Partitions — Accès privé</title>
 <meta name="robots" content="noindex,nofollow">
 {_NO_CACHE_META}
+{_FONTS_LINK}
 {_CSS}
 </head>
 <body>
@@ -807,12 +1160,14 @@ def generate_liens_utiles_html(md_path: str = LIENS_UTILES_MD) -> None:
 <meta charset="UTF-8">
 <title>Liens utiles</title>
 {_NO_CACHE_META}
+{_FONTS_LINK}
 {_CSS}
 <style>
-.content{{background:#fff;padding:1.5em 2em;border:1px solid #ccc;border-radius:6px;
-         max-width:900px}}
+.content{{background:var(--surface);padding:1.5em 2em;border:1px solid var(--border);
+         border-radius:4px;max-width:900px}}
+.content h1{{margin-top:0}}
 .content ul{{padding-left:1.4em}}
-.content a{{color:#1565c0}}
+.content a{{color:var(--accent)}}
 </style>
 </head>
 <body>

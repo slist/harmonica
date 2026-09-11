@@ -8,6 +8,7 @@
   copyrightStatus = "copyrighted"
   date = "1934"
   composerNationality = "ru"
+  youtube = "https://www.youtube.com/watch?v=i2-c9MsrDH8"
 }
 
 %Source: harmonica12.fr

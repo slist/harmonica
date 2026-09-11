@@ -9,6 +9,7 @@
   copyrightStatus = "copyrighted"
   composerNationality = "ca"
   instrument = "Harmonica diatonique en G"
+  youtube = "https://www.youtube.com/watch?v=TF13Xk62Onk"
 }
 
 \include "../include/harmonica.ly"

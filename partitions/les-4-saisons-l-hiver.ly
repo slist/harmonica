@@ -29,6 +29,7 @@
   %instrument = "Harmonica chromatique"
   copyrightStatus = "public-domain"
   composerNationality = "it"
+  youtube = "https://www.youtube.com/watch?v=oASdOPHeyxA"
 }
 
 \include "../include/harmonica.ly"

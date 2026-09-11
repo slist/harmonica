@@ -8,6 +8,7 @@
   lyricsLang = #'(en)
   copyrightStatus = "public-domain"
   composerNationality = "gb"
+  youtube = "https://www.youtube.com/watch?v=Oav8CkGpcwA"
 }
 
 %Source: http://harmonicacomte.blogspot.com/2012/10/amazing-grace.html

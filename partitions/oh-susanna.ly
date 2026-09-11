@@ -7,6 +7,7 @@
   lyricsLang = #'(en)
   copyrightStatus = "public-domain"
   composerNationality = "us"
+  youtube = "https://www.youtube.com/watch?v=C6FHGazINFE"
 }
 
 % Source: https://musescore.com/user/5385411/scores/9382792

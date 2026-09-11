@@ -6,6 +6,7 @@
   lyricsLang = #'(fr)
   copyrightStatus = "public-domain"
   composerNationality = "at"
+  youtube = "https://www.youtube.com/watch?v=pu55DXQTz0I"
 }
 
 \markup " "

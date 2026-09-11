@@ -15,6 +15,7 @@
   %copyright = "Public Domain"
   copyrightStatus = "public-domain" % Mélodie traditionnelle
   composerNationality = "us"
+  youtube = "https://www.youtube.com/watch?v=Q89_4gL0M2M"
 }
 
 \include "../include/harmonica.ly"

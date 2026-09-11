@@ -9,6 +9,7 @@
   composer = "Henry Mancini (1924-1994)"
   copyrightStatus = "copyrighted"
   composerNationality = "us"
+  youtube = "https://www.youtube.com/watch?v=dtnNO5_Ao6U"
 }
 
 \include "../include/harmonica.ly"

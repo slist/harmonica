@@ -9,6 +9,7 @@
   copyrightStatus = "copyrighted"
   date = ""
   composerNationality = "ru"
+  youtube = "https://www.youtube.com/watch?v=t7O5w39p5Pk"
 }
 
 %{
