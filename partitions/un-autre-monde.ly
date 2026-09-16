@@ -26,7 +26,7 @@
 
 melodie = {
   %\key re \major % Tonalité de Ré majeur (fa♯, do♯)
-  \key fa \major % Tonalité de Fa majeur (sib♯)
+  %\key fa \major % Tonalité de Fa majeur (sib♯)
   %\key sol \major % Tonalité de Sol majeur (fa♯)
   \time 4/4
   %\tempo "Andantino rubato" 4 = 80
@@ -44,8 +44,10 @@ melodie = {
   la2 r2 | r1  | r2 la4 la8 do8~ | do4. la8 sol4 la4 | la4. mi8~ mi2 | r1 | r2 la8 la4 do8~ |
   %\break
   do4. la8 sol4 la4 | la4. sol8~ sol2 | r1 | r2 r4 r8 fa8 | sol8 sol fa4 la sol | fa r4 r2 |
-  %\break
-  sol8 sol sol fa la4 sol | fa r4 r4 r8 fa8 | sol8 sol fa4 la sol | fa r4 r2 | r4 r8 la8 la sol fa sol~
+  \break
+  sol8 sol sol fa la4 sol | fa r4 r4 r8 fa8 | sol8 sol fa4 la sol | fa r4 r2 |
+  \break
+  r4 r8 la8 la sol fa sol~
   %\break
   sol2 % ???
   
@@ -60,7 +62,7 @@ melodie = {
 accords = \chordmode {
 }
 accordsbof = \chordmode { % créé par ChatGPT
-  s2
+  % s2
   fa2
   re2:m
   la2:m
