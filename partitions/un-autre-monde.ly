@@ -40,13 +40,13 @@ melodie = {
   %\mark \markup \box "Intro"
   \partial 2
   la8 la4 do8~ | do4. la8 sol4 la | la4. mi8~ mi2 | r1 | r2 la8 la4 do8~ | do4. la8 sol4 la4 |
-  \break
+  %\break
   la2 r2 | r1  | r2 la4 la8 do8~ | do4. la8 sol4 la4 | la4. mi8~ mi2 | r1 | r2 la8 la4 do8~ |
-  \break
+  %\break
   do4. la8 sol4 la4 | la4. sol8~ sol2 | r1 | r2 r4 r8 fa8 | sol8 sol fa4 la sol | fa r4 r2 |
-  \break
+  %\break
   sol8 sol sol fa la4 sol | fa r4 r4 r8 fa8 | sol8 sol fa4 la sol | fa r4 r2 | r4 r8 la8 la sol fa sol~
-  \break
+  %\break
   sol2 % ???
   
   \bar "|."
@@ -57,8 +57,34 @@ melodie = {
   je ne vo -- yais plus en pieds je rê -- vais ré -- a -- li -- té ma ré -- a -- li -- té 
 }
 
-
 accords = \chordmode {
+}
+accordsbof = \chordmode { % créé par ChatGPT
+  s2
+  fa2
+  re2:m
+  la2:m
+  la1:m
+  fa1
+  re1:m
+  la1:m
+  la1:m
+  fa1
+  re1:m
+  la1:m
+  la1:m
+  fa1
+  re1:m
+  do1
+  do1
+  sib1
+  do1
+  sib1
+  do1
+  sib1
+  do1
+  sib1
+  do1
 }
 
 % ============================
@@ -68,9 +94,13 @@ accords = \chordmode {
 diatoniqueScore =
 \score {
   <<
+    \new ChordNames {
+      \accords
+    }
     \new Staff {
       %\set Staff.instrumentName = "Harmonica en E"
-      \diatonicEHarmonicaTab \relative do'' {
+      %\diatonicEHarmonicaTab \relative do''' {
+      \diatonicHarmonicaTab \relative do''' {
         \melodie
       }
     }
@@ -121,12 +151,27 @@ partitionScore =
 
 midiScore =
 \score {
-  \new Staff {
-    \set Staff.midiInstrument = #"harmonica"
-    \relative do'' {
-      \melodie
+  <<
+    % Noms des accords sur la partition
+    \new ChordNames {
+      \accords
     }
-  }
+
+    % Mélodie
+    \new Staff {
+      \set Staff.midiInstrument = #"harmonica"
+      \relative do''' {
+        \melodie
+      }
+    }
+
+    % Accords joués au piano
+    \new Staff {
+      \set Staff.midiInstrument = #"acoustic grand"
+      \accords
+    }
+  >>
+
   \midi {
     \tempo 4 = 132
   }
