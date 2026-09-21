@@ -110,6 +110,10 @@ def analyze_difficulty(content: str) -> dict:
         mods = m_rel.group(2)
         current = 48 + start_class + mods.count("'") * 12 - mods.count(",") * 12
 
+    # Strip \key <tonic> \major/\minor first: otherwise the generic backslash-
+    # command stripping below removes only "\key", leaving the tonic name
+    # (e.g. "sol" from "\key sol \major") behind as a phantom extra note.
+    melody = re.sub(r'\\key\s+\S+\s+\\(major|minor)', ' ', melody)
     melody = re.sub(r'\\[a-zA-Z]+(?:\s*\{[^{}]*\})?', ' ', melody)
     melody = re.sub(r'"[^"]*"', ' ', melody)
     melody = re.sub(r'#[^|\n{} ]*', ' ', melody)
