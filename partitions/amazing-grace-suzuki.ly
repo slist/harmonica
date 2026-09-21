@@ -80,8 +80,8 @@ melodie = {
 diatoniqueScore = 
 \score {
   <<
-    \new Staff { 
-      \diatonicHarmonicaTab \relative do'' {
+    \new Staff {
+      \diatonicSuzukiFiveHarmonicaTab \relative do' {
         \melodie
       }
     }

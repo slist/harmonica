@@ -20,12 +20,18 @@ FRENCH_NOTES  = {'sol': 7, 'do': 0, 're': 2, 'mi': 4, 'fa': 5, 'la': 9, 'si': 11
 ENGLISH_NOTES = {'c': 0, 'd': 2, 'e': 4, 'f': 5, 'g': 7, 'a': 9, 'b': 11}
 
 TUNING_ROOTS: dict[str, int] = {
-    'diatonicHarmonicaTab':   0,
-    'diatonicDHarmonicaTab':  2,
-    'diatonicGHarmonicaTab':  7,
-    'diatonicAHarmonicaTab':  9,
-    'diatonicFHarmonicaTab':  5,
-    'diatonicBbHarmonicaTab': 10,
+    'diatonicHarmonicaTab':       0,
+    'diatonicDHarmonicaTab':      2,
+    'diatonicGHarmonicaTab':      7,
+    'diatonicAHarmonicaTab':      9,
+    'diatonicFHarmonicaTab':      5,
+    'diatonicBbHarmonicaTab':     10,
+    'diatonicSuzukiFiveHarmonicaTab': 0,
+}
+
+# Non-key-letter \diatonic*HarmonicaTab suffixes, mapped to their display label.
+SPECIAL_TAB_LABELS: dict[str, str] = {
+    'SuzukiFive': 'Suzuki 5',
 }
 
 # Semitone offsets (from harmonica root) requiring special technique
@@ -222,12 +228,14 @@ _DIATONIC_TAB_RE = re.compile(r'\\diatonic([A-Za-z]*)HarmonicaTab')
 
 
 def diatonic_harmonica_keys(content: str) -> str:
-    """Harmonica key(s) used for the diatonic tab (e.g. 'C', or 'D+G' when the
-    song needs a tuning change mid-piece), from \\diatonicHarmonicaTab /
-    \\diatonicXHarmonicaTab calls. Bare \\diatonicHarmonicaTab means C."""
+    """Harmonica key(s)/model(s) used for the diatonic tab (e.g. 'C', 'D+G' when
+    the song needs a tuning change mid-piece, or 'Suzuki 5' for the 5-hole
+    model), from \\diatonicHarmonicaTab / \\diatonicXHarmonicaTab calls. Bare
+    \\diatonicHarmonicaTab means C."""
     keys = []
     for m in _DIATONIC_TAB_RE.finditer(_strip_comments(content)):
-        key = m.group(1) or "C"
+        suffix = m.group(1) or "C"
+        key = SPECIAL_TAB_LABELS.get(suffix, suffix)
         if key not in keys:
             keys.append(key)
     return "+".join(keys) if keys else "C"

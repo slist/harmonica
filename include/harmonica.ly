@@ -157,6 +157,22 @@ dip =
        ((36) (blow "10"))
        (else (markup "X")))))
 
+%% Suzuki 5-hole harmonica: 5 holes, no bends needed.
+%% blow: do mi sol do mi   draw: ré fa la si ré
+#(define (get-diatonic-suzuki-5-c-tab NoteEvent)
+   (case (ly:pitch-semitones (ly:music-property NoteEvent 'pitch))
+    ((0) (blow "1"))
+    ((2) (draw "1"))
+    ((4) (blow "2"))
+    ((5) (draw "2"))
+    ((7) (blow "3"))
+    ((9) (draw "3"))
+    ((11) (draw "4"))
+    ((12) (blow "4"))
+    ((14) (draw "5"))
+    ((16) (blow "5"))
+    (else (markup "X"))))
+
 #(define (get-diatonic-d-ritcher-tab NoteEvent) (get-diatonic-ritcher-tab NoteEvent 2))
 #(define (get-diatonic-e-ritcher-tab NoteEvent) (get-diatonic-ritcher-tab NoteEvent 4))
 #(define (get-diatonic-g-ritcher-tab NoteEvent) (get-diatonic-ritcher-tab NoteEvent 7))
@@ -267,6 +283,7 @@ New version for multiple notes
     ((diatonic-a-ritcher) (get-diatonic-a-ritcher-tab note))
     ((diatonic-f-ritcher) (get-diatonic-f-ritcher-tab note))
     ((diatonic-bb-ritcher) (get-diatonic-bb-ritcher-tab note))
+    ((diatonic-suzuki-5-c) (get-diatonic-suzuki-5-c-tab note))
     ((chromatic-c-solo) (get-chromatic-c-solo-tab note))
     (else (get-diatonic-c-ritcher-tab note))))
 
@@ -384,6 +401,7 @@ New version for multiple notes
 #(define add-diatonic-a-ritcher-tabs  (make-tab-adder 'diatonic-a-ritcher))
 #(define add-diatonic-f-ritcher-tabs  (make-tab-adder 'diatonic-f-ritcher))
 #(define add-diatonic-bb-ritcher-tabs (make-tab-adder 'diatonic-bb-ritcher))
+#(define add-diatonic-suzuki-5-c-tabs (make-tab-adder 'diatonic-suzuki-5-c))
 #(define add-chromatic-c-solo-tabs    (make-tab-adder 'chromatic-c-solo))
 
 diatonicHarmonicaTab =
@@ -427,6 +445,12 @@ diatonicBbHarmonicaTab =
   (parser location music)
   (ly:music?)
   (add-diatonic-bb-ritcher-tabs music))
+
+diatonicSuzukiFiveHarmonicaTab =
+#(define-music-function
+  (parser location music)
+  (ly:music?)
+  (add-diatonic-suzuki-5-c-tabs music))
 
 chromaticHarmonicaTab =
 #(define-music-function
