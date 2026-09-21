@@ -1,0 +1,141 @@
+\version "2.24.3"
+
+\header {
+  title = "Au Clair de la Lune (Suzuki)"
+  instrument = "Harmonica en C"
+  arranger = "Pour suzuki 5 trous"
+  composer = "Anonyme"
+  copyrightStatus = "public-domain"
+  lyricsLang = #'(fr)
+  date = ""
+  composerNationality = "fr"
+  youtube = "https://www.youtube.com/watch?v=s6-g2iPeBTY"
+}
+
+%Source: https://www.rhapsody.fr/wp-content/uploads/2021/08/Anonyme-Au-Clair-de-la-Lune-1.pdf
+
+\include "../include/harmonica.ly"
+\include "../include/style.ly"
+
+
+% Options de compilation personnalisées
+
+#(define compile-diatonique (ly:get-option 'compile-diatonique))
+#(define compile-chromatique (ly:get-option 'compile-chromatique))
+#(define compile-midi (ly:get-option 'compile-midi))
+#(define compile-partition (ly:get-option 'compile-partition))
+
+melodie = {
+  \time 4/4
+  %\clef "treble_8" % "treble^8" "treble_8"
+  c8 c c d e4 d |
+  c8 e d d c2 |
+  c8 c c d e4 d |
+  c8 e d d c2 |
+  d8 d d d a4 a |
+  d8 c b a g2 |
+  c8 c c d e4 d |
+  c8 e d d c2 
+  \bar "|."
+}
+\addlyrics {
+  Au clair de la lu -- ne, mon a -- mi Pier -- rot.
+  Prê -- te moi ta plu -- me, pour é -- crire un mot.
+  Ma chan -- delle est mor -- te, je n'ai plus de feu.
+  Ou -- vre moi ta por -- te, pour l'a -- mour de Dieu.
+}
+
+
+
+% ============================
+% SCORE DIATONIQUE
+% ============================
+
+diatoniqueScore = 
+\score {
+  <<
+    \new Staff { 
+      \diatonicSuzukiFiveHarmonicaTab \relative c'' {
+        \melodie
+      }
+    }
+  >>
+  \layout { }
+}
+
+
+% ============================
+% SCORE CHROMATIQUE
+% ============================
+
+chromatiqueScore = 
+\score {
+  <<
+    \new Staff { 
+      \chromaticHarmonicaTab \relative c'' {
+        \melodie
+      }
+    }
+  >>
+  \layout { }
+}
+
+
+% ============================
+% SCORE PARTITION (sans tablature harmonica)
+% ============================
+
+partitionScore =
+\score {
+  <<
+    \new Staff {
+      \relative c'' {
+        \melodie
+      }
+    }
+  >>
+  \layout { }
+}
+
+% ============================
+% SCORE MIDI
+% ============================
+
+midiScore =
+\score {
+  \new Staff {
+    \set Staff.midiInstrument = #"harmonica"
+    \chromaticHarmonicaTab \relative c'' {
+      \melodie
+    }
+  }
+  \midi {
+    \tempo 4 = 90
+  }
+}
+
+% ============================
+% COMPILATION SÉPARÉE
+% ============================
+
+% Pour générer la version diatonique :
+% lilypond -dcompile-diatonique <fichier.ly>
+
+% Pour générer la version chromatique :
+% lilypond -dcompile-chromatique <fichier.ly>
+
+% Pour générer le fichier midi :
+% lilypond --formats=midi -dcompile-midi <fichier.ly>
+
+% Inclusion conditionnelle des scores
+
+#(if compile-diatonique
+     (ly:parser-include-string "\\diatoniqueScore"))
+#(if compile-chromatique
+     (ly:parser-include-string "\\chromatiqueScore"))
+#(if compile-partition
+     (ly:parser-include-string "\\partitionScore"))
+#(if compile-midi
+     (ly:parser-include-string "\\midiScore"))
+
+% CI-IGNORE-BELOW : lignes de test manuel local, toujours ignorées par la compilation GitHub Actions
