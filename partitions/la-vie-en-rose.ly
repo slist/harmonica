@@ -37,7 +37,7 @@
 
 melodie = {
   \time 4/4
-  \clef "treble^8"
+  %\clef "treble^8"
   \tempo 4 = 82 % un tempo lent, « andante » typique d’une ballade française.
 
   
@@ -82,7 +82,7 @@ diatoniqueScore =
 \score {
   <<
     \new Staff { 
-      \diatonicHarmonicaTab \relative do''' {
+      \diatonicHarmonicaTab \relative do' {
         \melodie
       }
     }
@@ -101,7 +101,7 @@ chromatiqueScore =
       \accords
     }
     \new Staff { 
-      \chromaticHarmonicaTab \relative do'' {
+      \chromaticHarmonicaTab \relative do' {
         \melodie
       }
     }
@@ -153,6 +153,6 @@ midiScore =
      (ly:parser-include-string "\\midiScore"))
 
 % CI-IGNORE-BELOW : lignes de test manuel local, toujours ignorées par la compilation GitHub Actions
-%diatoniqueScore
-%\chromatiqueScore
-%\midiScore
+\diatoniqueScore
+\chromatiqueScore
+\midiScore
