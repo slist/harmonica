@@ -125,16 +125,29 @@ titres_partitions = construire_table_titres(PARTITIONS_DIR)
 
 fichiers = os.listdir(DOSSIER)
 
+
+def est_suzuki5(pdf: str) -> bool:
+    """Les fichiers "<base>-suzuki.ly" sont arrangés pour l'harmonica Suzuki 5
+    trous et sont regroupés dans leur propre PDF plutôt que dans les 3 PDF
+    généraux (qui, pour ces morceaux, ne feraient que doublonner les mêmes
+    partitions)."""
+    return base_de_pdf(pdf).endswith("-suzuki")
+
+
 partitions_diat = sorted(
-    (f for f in fichiers if f.endswith("_diatonique.pdf")),
+    (f for f in fichiers if f.endswith("_diatonique.pdf") and not est_suzuki5(f)),
     key=lambda f: title_sort_key(titre_de_pdf(f, titres_partitions)),
 )
 partitions_chro = sorted(
-    (f for f in fichiers if f.endswith("_chromatique.pdf")),
+    (f for f in fichiers if f.endswith("_chromatique.pdf") and not est_suzuki5(f)),
     key=lambda f: title_sort_key(titre_de_pdf(f, titres_partitions)),
 )
 partitions_seules = sorted(
-    (f for f in fichiers if f.endswith("_partition.pdf")),
+    (f for f in fichiers if f.endswith("_partition.pdf") and not est_suzuki5(f)),
+    key=lambda f: title_sort_key(titre_de_pdf(f, titres_partitions)),
+)
+partitions_suzuki5 = sorted(
+    (f for f in fichiers if f.endswith("_diatonique.pdf") and est_suzuki5(f)),
     key=lambda f: title_sort_key(titre_de_pdf(f, titres_partitions)),
 )
 
@@ -156,6 +169,13 @@ fusionner_avec_index(
     partitions_seules,
     os.path.join(DOSSIER, "all_partition.pdf"),
     "Index des partitions",
+    titres_partitions,
+)
+
+fusionner_avec_index(
+    partitions_suzuki5,
+    os.path.join(DOSSIER, "all_suzuki5.pdf"),
+    "Index des partitions pour harmonica Suzuki 5 trous",
     titres_partitions,
 )
 
