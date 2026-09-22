@@ -38,12 +38,24 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v7
 
-      - name: Install LilyPond, fluidsynth and lame
+      - name: Install latest LilyPond
+        env:
+          LILYPOND_VERSION: "2.27.3"
+        run: |
+          set -euo pipefail
+          curl -sSL "https://gitlab.com/lilypond/lilypond/-/releases/v${LILYPOND_VERSION}/downloads/lilypond-${LILYPOND_VERSION}-linux-x86_64.tar.gz" -o /tmp/lilypond.tar.gz
+          tar -xzf /tmp/lilypond.tar.gz -C /opt
+          echo "/opt/lilypond-${LILYPOND_VERSION}/bin" >> "${GITHUB_PATH}"
+          "/opt/lilypond-${LILYPOND_VERSION}/bin/lilypond" --version
+    
+      #- name: Install LilyPond, fluidsynth and lame
+      - name: Install fluidsynth and lame
         run: |
           set -euo pipefail
           sudo apt-get update
+          # sudo apt-get install -y lilypond fluidsynth fluid-soundfont-gm lame
           sudo apt-get install -y lilypond fluidsynth fluid-soundfont-gm lame
-          lilypond --version
+          # lilypond --version
 
       - name: Set up Python
         uses: actions/setup-python@v7
