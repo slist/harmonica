@@ -156,7 +156,7 @@ midiScore =
     % Mélodie
     \new Staff {
       \set Staff.midiInstrument = #"harmonica"
-      \relative do''' {
+      \relative do'' {
         \melodie
       }
     }
@@ -186,7 +186,7 @@ accompagnementMidiScore =
       \set Staff.midiInstrument = #"harmonica"
       \set Staff.midiMinimumVolume = #0.5
       \set Staff.midiMaximumVolume = #0.5
-      \relative do''' {
+      \relative do'' {
         \melodie
       }
     }
