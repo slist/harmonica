@@ -39,13 +39,16 @@ jobs:
         uses: actions/checkout@v7
 
       - name: Install latest LilyPond
-        env:
-          LILYPOND_VERSION: "2.27.3"
         run: |
           set -euo pipefail
+          # Récupère dynamiquement la dernière version publiée plutôt que de figer un numéro.
+          LILYPOND_VERSION=$(curl -sSL "https://gitlab.com/api/v4/projects/lilypond%2Flilypond/releases" \
+            | jq -r '.[0].tag_name' | sed 's/^v//')
+          echo "Dernière version de LilyPond : ${LILYPOND_VERSION}"
           curl -sSL "https://gitlab.com/lilypond/lilypond/-/releases/v${LILYPOND_VERSION}/downloads/lilypond-${LILYPOND_VERSION}-linux-x86_64.tar.gz" -o /tmp/lilypond.tar.gz
           tar -xzf /tmp/lilypond.tar.gz -C /opt
           echo "/opt/lilypond-${LILYPOND_VERSION}/bin" >> "${GITHUB_PATH}"
+          echo "VERSION_LILYPOND=${LILYPOND_VERSION}" >> "${GITHUB_ENV}"
           "/opt/lilypond-${LILYPOND_VERSION}/bin/lilypond" --version
     
       #- name: Install LilyPond, fluidsynth and lame
