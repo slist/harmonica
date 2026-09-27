@@ -76,8 +76,14 @@ melodie = {
 }
 
 accords = \chordmode {
-  do re:7 do re:7
-  si:m7 red:7 la:m7 re:7 la:m7 re:7
+  \repeat volta 2 {
+    do re:7 do re:7
+    si:m7 red:7 
+  }
+  \alternative {
+    { la:m7 re:7 }
+    { la:m7 re:7 }
+  }
   fa:maj7 mi:m7 re:m7 do:maj7
   fa:maj7 mi:m7 mib:7 re:m7
   do re:7 do re:7
@@ -156,7 +162,7 @@ midiScore =
     % Mélodie
     \new Staff {
       \set Staff.midiInstrument = #"harmonica"
-      \relative do'' {
+      \unfoldRepeats \relative do'' {
         \melodie
       }
     }
@@ -164,7 +170,7 @@ midiScore =
     % Accords joués au piano
     \new Staff {
       \set Staff.midiInstrument = #"acoustic grand"
-      \accords
+      \unfoldRepeats \accords
     }
   >>
 
