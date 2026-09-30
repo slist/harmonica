@@ -1,4 +1,4 @@
-"""Generate index.html, gammes/index.html, and private.html for the harmonica site."""
+"""Generate index.html, gammes/index.html, private.html and difficulte.html for the harmonica site."""
 
 import hashlib
 import logging
@@ -11,33 +11,18 @@ from html import escape
 import markdown
 from markdown.extensions.toc import slugify_unicode
 
+import complexity
+from complexity import analyze_difficulty, brace_block, difficulty_cell, strip_comments
+
 logging.basicConfig(level=logging.INFO, format="%(message)s")
 logger = logging.getLogger(__name__)
 
 # --------- Constants ---------
 
-FRENCH_NOTES  = {'sol': 7, 'do': 0, 're': 2, 'mi': 4, 'fa': 5, 'la': 9, 'si': 11}
-ENGLISH_NOTES = {'c': 0, 'd': 2, 'e': 4, 'f': 5, 'g': 7, 'a': 9, 'b': 11}
-
-TUNING_ROOTS: dict[str, int] = {
-    'diatonicHarmonicaTab':       0,
-    'diatonicDHarmonicaTab':      2,
-    'diatonicGHarmonicaTab':      7,
-    'diatonicAHarmonicaTab':      9,
-    'diatonicFHarmonicaTab':      5,
-    'diatonicBbHarmonicaTab':     10,
-    'diatonicSuzukiFiveHarmonicaTab': 0,
-}
-
 # Non-key-letter \diatonic*HarmonicaTab suffixes, mapped to their display label.
 SPECIAL_TAB_LABELS: dict[str, str] = {
     'SuzukiFive': 'Suzuki 5',
 }
-
-# Semitone offsets (from harmonica root) requiring special technique
-BEND_OFFSETS     = {1, 5, 6, 8, 9, 10, 13, 20, 27, 30, 34, 35}
-OVERBLOW_OFFSETS = {3, 15, 18, 22}
-OVERDRAW_OFFSETS = {25, 32}
 
 COUNTRY_FLAGS: dict[str, str] = {
     'ar': '🇦🇷', 'at': '🇦🇹', 'ca': '🇨🇦', 'de': '🇩🇪', 'fr': '🇫🇷', 'gb': '🇬🇧',
@@ -65,167 +50,6 @@ PRIVATE_HASH = hashlib.sha256(_pw.encode()).hexdigest()
 CACHE_BUST = os.environ.get("GITHUB_SHA", "")[:7]
 
 
-# --------- Difficulty analysis ---------
-
-def _strip_comments(text: str) -> str:
-    text = re.sub(r'%\{.*?%\}', '', text, flags=re.DOTALL)
-    return re.sub(r'%[^\n]*', '', text)
-
-
-def _brace_block(text: str, start: int) -> str:
-    depth, i = 1, start
-    while i < len(text) and depth:
-        c = text[i]
-        if c == '{':   depth += 1
-        elif c == '}': depth -= 1
-        i += 1
-    return text[start:i - 1]
-
-
-def analyze_difficulty(content: str) -> dict:
-    content = _strip_comments(content)
-    is_french = bool(re.search(r'language\s*"fran', content))
-    notes_map = FRENCH_NOTES if is_french else ENGLISH_NOTES
-
-    root = 0
-    for fn, r in TUNING_ROOTS.items():
-        if re.search(rf'\\{fn}\b', content):
-            root = r
-            break
-
-    tempo = None
-    m = re.search(r'\\tempo\s+\d+\.?\s*=\s*(\d+)', content)
-    if m:
-        tempo = int(m.group(1))
-
-    m_mel = re.search(r'\bmelodie\s*=\s*\{', content)
-    melody = _brace_block(content, m_mel.end()) if m_mel else content
-
-    current = 60
-    names_sorted = sorted(notes_map.keys(), key=len, reverse=True)
-    names_alt = '|'.join(names_sorted)
-    m_rel = re.search(rf'\\relative\s+({names_alt})([\',]*)', content)
-    if m_rel:
-        start_class = notes_map[m_rel.group(1)]
-        mods = m_rel.group(2)
-        current = 48 + start_class + mods.count("'") * 12 - mods.count(",") * 12
-
-    # Strip \key <tonic> \major/\minor first: otherwise the generic backslash-
-    # command stripping below removes only "\key", leaving the tonic name
-    # (e.g. "sol" from "\key sol \major") behind as a phantom extra note.
-    melody = re.sub(r'\\key\s+\S+\s+\\(major|minor)', ' ', melody)
-    melody = re.sub(r'\\[a-zA-Z]+(?:\s*\{[^{}]*\})?', ' ', melody)
-    melody = re.sub(r'"[^"]*"', ' ', melody)
-    melody = re.sub(r'#[^|\n{} ]*', ' ', melody)
-
-    if is_french:
-        note_re = re.compile(
-            rf'(?<![a-zA-Z])({names_alt})(dd|d|bb|b)?([\',]*)(\d+)?(\.+)?(?![a-zA-Z])'
-        )
-    else:
-        note_re = re.compile(
-            r"(?<![a-zA-Z])([cdefgab])(isis|eses|is|es)?([\',]*)(\d+)?(\.+)?(?![a-zA-Z])"
-        )
-
-    bends = overblows = overdraws = 0
-    fastest = None
-
-    for m in note_re.finditer(melody):
-        name    = m.group(1)
-        acc     = m.group(2) or ''
-        oct_str = m.group(3) or ''
-        dur_str = m.group(4)
-
-        base = notes_map.get(name, 0)
-        if is_french:
-            base += acc.count('d') - acc.count('b')
-        else:
-            if 'isis' in acc:   base += 2
-            elif 'is' in acc:   base += 1
-            elif 'eses' in acc: base -= 2
-            elif 'es' in acc:   base -= 1
-        base %= 12
-
-        diff_up = (base - current % 12) % 12
-        abs_p   = (current + diff_up) if diff_up <= 6 else (current - (12 - diff_up))
-        abs_p  += oct_str.count("'") * 12 - oct_str.count(",") * 12
-        current = abs_p
-
-        if dur_str:
-            d = int(dur_str)
-            if fastest is None or d > fastest:
-                fastest = d
-
-        offset = abs_p - 60 - root
-        if offset in BEND_OFFSETS:
-            bends += 1
-        elif offset in OVERBLOW_OFFSETS:
-            overblows += 1
-        elif offset in OVERDRAW_OFFSETS:
-            overdraws += 1
-
-    return {
-        'bends': bends, 'overblows': overblows, 'overdraws': overdraws,
-        'tempo': tempo, 'fastest_note': fastest,
-    }
-
-
-def difficulty_sort_value(diff: dict) -> float:
-    bends     = diff.get('bends', 0)
-    overblows = diff.get('overblows', 0)
-    overdraws = diff.get('overdraws', 0)
-    tempo     = diff.get('tempo') or 100
-    fastest   = diff.get('fastest_note') or 4
-    weight = bends + overblows * 3 + overdraws * 3
-    speed  = tempo * fastest / 240
-    return weight + speed
-
-
-def difficulty_cell(diff: dict) -> str:
-    bends     = diff.get('bends', 0)
-    overblows = diff.get('overblows', 0)
-    overdraws = diff.get('overdraws', 0)
-    tempo     = diff.get('tempo') or 100
-    fastest   = diff.get('fastest_note') or 4
-
-    speed = tempo * fastest / 240
-    if speed >= 7:
-        speed_badge, speed_label = '⚡', 'très rapide'
-    elif speed >= 4:
-        speed_badge, speed_label = '🏃', 'rapide'
-    elif speed >= 2:
-        speed_badge, speed_label = '🎵', 'modéré'
-    else:
-        speed_badge, speed_label = '🐢', 'lent'
-
-    weight = bends + overblows * 3 + overdraws * 3
-    if weight == 0:
-        level, level_label = '🟢', 'facile'
-    elif weight <= 5:
-        level, level_label = '🟡', 'moyen'
-    else:
-        level, level_label = '🔴', 'difficile'
-
-    parts   = [level]
-    details = [level_label]
-    if bends:
-        parts.append(f'↕{bends}')
-        details.append(f"{bends} altération(s) / bend(s)")
-    if overblows:
-        parts.append(f'⊕{overblows}')
-        details.append(f"{overblows} overblow(s)")
-    if overdraws:
-        parts.append(f'⊗{overdraws}')
-        details.append(f"{overdraws} overdraw(s)")
-    parts.append(speed_badge)
-    details.append(f'{speed_label} (♩={tempo}, 1/{fastest})')
-
-    sort_val = difficulty_sort_value(diff)
-    tooltip  = escape(' | '.join(details))
-    content  = ' '.join(parts)
-    return f"<td data-sort='{sort_val:.2f}' title='{tooltip}' style='white-space:nowrap'>{content}</td>"
-
-
 # --------- LilyPond metadata parsing ---------
 
 _DIATONIC_TAB_RE = re.compile(r'\\diatonic([A-Za-z]*)HarmonicaTab')
@@ -237,7 +61,7 @@ def diatonic_harmonica_keys(content: str) -> str:
     model), from \\diatonicHarmonicaTab / \\diatonicXHarmonicaTab calls. Bare
     \\diatonicHarmonicaTab means C."""
     keys = []
-    for m in _DIATONIC_TAB_RE.finditer(_strip_comments(content)):
+    for m in _DIATONIC_TAB_RE.finditer(strip_comments(content)):
         suffix = m.group(1) or "C"
         key = SPECIAL_TAB_LABELS.get(suffix, suffix)
         if key not in keys:
@@ -273,7 +97,7 @@ def parse_ly_metadata(ly_path: str) -> dict:
         # Fallback: extract text from \markup { ... } form (skip URL strings)
         m_markup = re.search(r'composer\s*=\s*\\markup\s*\{', content)
         if m_markup:
-            block = _brace_block(content, m_markup.end())
+            block = brace_block(content, m_markup.end())
             for s in re.findall(r'"([^"]+)"', block):
                 if not s.startswith('http') and s.strip():
                     metadata["composer"] = s.strip()
@@ -959,7 +783,7 @@ _TABLE_COLS = [
 
 _DIFFICULTY_HELP = (
     "🟢 facile · 🟡 moyen · 🔴 difficile — "
-    "↕ bends · ⊕ overblows · ⊗ overdraws — vitesse"
+    "↕ bends · ⊕ overblows · ⊗ overdraws · ↔ grands écarts · ▲ aigus — vitesse"
 )
 
 
@@ -979,11 +803,12 @@ def generate_index_html(songs: list[dict]) -> None:
 <nav>
   <a href="gammes/">📖 Gammes &amp; Scales</a>
   <a href="liens-utiles.html">🔗 Liens utiles</a>
+  <a href="difficulte.html">🎯 Calcul de la difficulté</a>
 </nav>
 <br>
 <p>
   {len(songs)} partitions · {len(free)} libres de droits · {len(locked)} sous droits
-  <span title="{escape(_DIFFICULTY_HELP)}" style="cursor:help;margin-left:.5em">ℹ️</span>
+  <a href="difficulte.html" title="{escape(_DIFFICULTY_HELP)}" style="margin-left:.5em;text-decoration:none">ℹ️</a>
 </p>
 <table id="data-table">
 {thead}
@@ -1200,6 +1025,152 @@ def generate_liens_utiles_html(md_path: str = LIENS_UTILES_MD) -> None:
     logger.info("✓ liens-utiles.html généré")
 
 
+def _fr_num(x: float) -> str:
+    """Format a number the French way (0.5 -> '0,5', 3.0 -> '3')."""
+    return f"{x:g}".replace(".", ",")
+
+
+def _mn(x: float) -> str:
+    return f"<mn>{_fr_num(x)}</mn>"
+
+
+def generate_difficulte_html() -> None:
+    """Document the difficulty formula of complexity.py, with its current weights."""
+    c = complexity
+    s = c.JUMP_MIN_HOLES
+    speed_rows = "".join(
+        f"<tr><td>{badge}</td><td>{label}</td><td>V ≥ {_fr_num(threshold)}</td></tr>\n"
+        for threshold, badge, label in c.SPEED_LEVELS
+    )
+
+    html = f"""<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Calcul de la difficulté</title>
+{_NO_CACHE_META}
+{_FONTS_LINK}
+{_CSS}
+<style>
+.content{{background:var(--surface);padding:1.5em 2em;border:1px solid var(--border);
+         border-radius:4px;max-width:900px}}
+.content h1{{margin-top:0}}
+.content a{{color:var(--accent)}}
+.content math[display=block]{{margin:1em 0;font-size:1.15em}}
+.content table{{width:auto}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html">← Partitions</a>
+</nav>
+<br>
+<div class="content">
+<h1>Calcul de la difficulté</h1>
+
+<p>La difficulté de chaque partition est calculée automatiquement à partir de la mélodie
+du fichier LilyPond (variable <code>melodie</code>), pour l'harmonica diatonique utilisé par
+la tablature : Richter 10 trous (Do, Ré, Mi, Fa, Sol, La, Si♭) ou Suzuki 5 trous.</p>
+
+<h2>1. Position des notes</h2>
+<p>Chaque note est convertie en écart en demi-tons par rapport à la tonique de l'harmonica,
+puis associée à un trou <i>h</i> et à une technique (souffle/aspiré, bend, overblow, overdraw),
+avec la même table que la tablature. Les notes hors de la tessiture sont ignorées.</p>
+
+<h2>2. Score technique <i>T</i></h2>
+<table>
+<thead><tr><th>Symbole</th><th>Variable</th><th>Ce qui est compté</th><th>Poids</th></tr></thead>
+<tbody>
+<tr><td>↕</td><td><i>B</i></td><td>notes demandant un bend (altération)</td><td>{_fr_num(c.WEIGHT_BEND)}</td></tr>
+<tr><td>⊕</td><td><i>O</i></td><td>notes demandant un overblow</td><td>{_fr_num(c.WEIGHT_OVERBLOW)}</td></tr>
+<tr><td>⊗</td><td><i>D</i></td><td>notes demandant un overdraw</td><td>{_fr_num(c.WEIGHT_OVERDRAW)}</td></tr>
+<tr><td>↔</td><td><i>J</i></td><td>grands écarts : sauts d'au moins {s} trous entre deux notes successives,
+  pondérés par leur taille</td><td>{_fr_num(c.WEIGHT_JUMP)}</td></tr>
+<tr><td>▲</td><td><i>A</i></td><td>notes jouées dans les aigus (trous {c.HIGH_HOLE_MIN} et 10)</td><td>{_fr_num(c.WEIGHT_HIGH)}</td></tr>
+</tbody>
+</table>
+
+<math display="block">
+  <mi>T</mi><mo>=</mo>
+  <msub><mi>w</mi><mi>B</mi></msub><mi>B</mi><mo>+</mo>
+  <msub><mi>w</mi><mi>O</mi></msub><mi>O</mi><mo>+</mo>
+  <msub><mi>w</mi><mi>D</mi></msub><mi>D</mi><mo>+</mo>
+  <msub><mi>w</mi><mi>J</mi></msub><mi>J</mi><mo>+</mo>
+  <msub><mi>w</mi><mi>A</mi></msub><mi>A</mi>
+</math>
+
+<p>Avec les poids actuels :</p>
+<math display="block">
+  <mi>T</mi><mo>=</mo>
+  {_mn(c.WEIGHT_BEND)}<mi>B</mi><mo>+</mo>
+  {_mn(c.WEIGHT_OVERBLOW)}<mi>O</mi><mo>+</mo>
+  {_mn(c.WEIGHT_OVERDRAW)}<mi>D</mi><mo>+</mo>
+  {_mn(c.WEIGHT_JUMP)}<mi>J</mi><mo>+</mo>
+  {_mn(c.WEIGHT_HIGH)}<mi>A</mi>
+</math>
+
+<p>En notant <i>h<sub>i</sub></i> le trou de la <i>i</i>-ème note et
+<i>s</i> = {s} le seuil d'un grand écart :</p>
+<math display="block">
+  <mi>J</mi><mo>=</mo>
+  <munder>
+    <mo>∑</mo>
+    <mrow><mi>i</mi><mo>:</mo><mo>|</mo><msub><mi>h</mi><mi>i</mi></msub><mo>−</mo>
+      <msub><mi>h</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>|</mo><mo>≥</mo><mi>s</mi></mrow>
+  </munder>
+  <mrow><mo>(</mo><mo>|</mo><msub><mi>h</mi><mi>i</mi></msub><mo>−</mo>
+    <msub><mi>h</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>|</mo>
+    <mo>−</mo><mi>s</mi><mo>+</mo><mn>1</mn><mo>)</mo></mrow>
+  <mspace width="2em"/>
+  <mi>A</mi><mo>=</mo>
+  <mo>#</mo><mrow><mo>{{</mo><mi>i</mi><mo>:</mo><msub><mi>h</mi><mi>i</mi></msub><mo>≥</mo>{_mn(c.HIGH_HOLE_MIN)}<mo>}}</mo></mrow>
+</math>
+
+<p>Un saut de {s} trous compte donc 1, un saut de {s + 1} trous compte 2, etc.
+Le badge ↔ affiche le nombre de grands écarts, et <i>J</i> leur somme pondérée.</p>
+
+<table>
+<thead><tr><th>Niveau</th><th>Condition</th></tr></thead>
+<tbody>
+<tr><td>🟢 facile</td><td>T = 0</td></tr>
+<tr><td>🟡 moyen</td><td>0 &lt; T ≤ {_fr_num(c.LEVEL_MEDIUM_MAX)}</td></tr>
+<tr><td>🔴 difficile</td><td>T &gt; {_fr_num(c.LEVEL_MEDIUM_MAX)}</td></tr>
+</tbody>
+</table>
+
+<h2>3. Indice de vitesse <i>V</i></h2>
+<p>À partir du tempo (<code>\\tempo 4 = …</code>, {c.DEFAULT_TEMPO} par défaut) et de la plus petite
+valeur de note <i>d</i> de la mélodie (4 = noire, 8 = croche, 16 = double croche ;
+{c.DEFAULT_FASTEST} par défaut) :</p>
+<math display="block">
+  <mi>V</mi><mo>=</mo>
+  <mfrac><mrow><mi>tempo</mi><mo>×</mo><mi>d</mi></mrow>{_mn(c.SPEED_DIVISOR)}</mfrac>
+</math>
+<table>
+<thead><tr><th></th><th>Vitesse</th><th>Condition</th></tr></thead>
+<tbody>
+{speed_rows}</tbody>
+</table>
+
+<h2>4. Tri de la colonne Difficulté</h2>
+<math display="block"><mi>S</mi><mo>=</mo><mi>T</mi><mo>+</mo><mi>V</mi></math>
+
+<h2>Limites</h2>
+<ul>
+  <li>Les notes sont comptées, pas les passages : une chanson longue a un score plus élevé.</li>
+  <li>Les silences et les respirations ne sont pas pris en compte dans les écarts.</li>
+  <li>Un seul accordage est utilisé par partition (un changement d'harmonica en cours de morceau est ignoré).</li>
+</ul>
+</div>
+</body>
+</html>
+"""
+    out = os.path.join(OUTPUT_DIR, "difficulte.html")
+    with open(out, "w", encoding="utf-8") as f:
+        f.write(html)
+    logger.info("✓ difficulte.html généré")
+
+
 # --------- Summary ---------
 
 def log_summary(songs: list[dict]) -> None:
@@ -1247,6 +1218,7 @@ def main() -> None:
     generate_gammes_html(gammes)
     generate_private_html(songs, PRIVATE_HASH)
     generate_liens_utiles_html()
+    generate_difficulte_html()
     log_summary(songs)
 
 
