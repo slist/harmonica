@@ -4,6 +4,7 @@
   title = "Kum ba yah"
   composer = ""
   date = ""
+  copyrightStatus = "public-domain"
   composerNationality = "us"
   youtube = "https://www.youtube.com/watch?v=xVktlb-oB9k"
 }

@@ -2,6 +2,7 @@
 
 \header {
   title = "Western JuJu"
+  copyrightStatus = "copyrighted"
 }
 
 \include "../include/harmonica.ly"

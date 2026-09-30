@@ -4,6 +4,7 @@
   title = "Tom Dooley"
   composer = ""
   date = ""
+  copyrightStatus = "public-domain"
   composerNationality = "us"
   youtube = "https://www.youtube.com/watch?v=8jqO1fKqrWs"
 }

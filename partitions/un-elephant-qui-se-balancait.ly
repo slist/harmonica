@@ -3,6 +3,7 @@
 \header {
   title = "Un éléphant qui se balançait"
   %composer = ""
+  copyrightStatus = "public-domain"
   composerNationality = "fr"
   youtube = "https://www.youtube.com/watch?v=Ns92r5TQH3k"
 }

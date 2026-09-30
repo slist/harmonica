@@ -3,6 +3,7 @@
 \header {
   title = "Little brown jug"
   composer = "Glenn Miller Orchestra (1940)"
+  copyrightStatus = "public-domain"
   composerNationality = "us"
   youtube = "https://www.youtube.com/watch?v=tSyA0c_Rs8U"
 }

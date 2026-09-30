@@ -4,6 +4,7 @@
   title = "Farewell To Cheyenne"
   subtitle = "from Once Upon a Time in The West"
   composer = "Ennio Morricone (1928-2020)"
+  copyrightStatus = "copyrighted"
   instrument = "Harmonica diatonique en C"
   composerNationality = "it"
   youtube = "https://www.youtube.com/watch?v=BdIkrEW6TQA"

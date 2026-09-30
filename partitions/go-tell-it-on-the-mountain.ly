@@ -4,6 +4,7 @@
   title = "Go, tell it on the mountain"
   composer = ""
   date = ""
+  copyrightStatus = "public-domain"
   composerNationality = "us"
   youtube = "https://www.youtube.com/watch?v=Lq5aEwtvdRI"
 }

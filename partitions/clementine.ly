@@ -4,6 +4,7 @@
   title = "My Darling Clementine - La poursuite infernale"
   composer = ""
   date = ""
+  copyrightStatus = "public-domain"
   composerNationality = "us"
   youtube = "https://www.youtube.com/watch?v=zNHFU5ZjfLU"
 }
