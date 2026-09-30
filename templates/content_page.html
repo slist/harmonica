@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block extra_style %}
+<style>
+{{ extra_style | safe }}
+</style>
+{% endblock %}
+{% block body %}
+<nav>
+  <a href="index.html">← Partitions</a>
+</nav>
+<br>
+<div class="content">
+{{ content | safe }}
+</div>
+{% endblock %}

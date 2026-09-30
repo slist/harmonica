@@ -1,0 +1,33 @@
+:root{
+  --bg:#e9e7dc; --surface:#f5f3ea; --ink:#242229; --muted:#736f5f;
+  --accent:#2c3e63; --border:#c9c3ab;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Public Sans',sans-serif;background:var(--bg);color:var(--ink)}
+#player-bar{position:sticky;top:0;z-index:10;background:var(--surface);border-bottom:1px solid var(--border);
+            box-shadow:0 2px 4px #0002;padding:.6em 1em;display:flex;flex-direction:column;gap:.5em}
+#player-bar-top{display:flex;align-items:center;gap:1em;flex-wrap:wrap}
+#player-bar a{color:var(--accent);text-decoration:none;font-weight:600;white-space:nowrap}
+#player-bar a:hover{text-decoration:underline}
+.nav-prev,.nav-next{font-size:1.3em;line-height:1;padding:0 .1em}
+.nav-next{margin-left:auto}
+.nav-disabled{font-size:1.3em;line-height:1;padding:0 .1em;color:var(--border);cursor:default}
+#player-bar h1{margin:0;font-size:1.15em;flex:1 1 auto;min-width:0;
+               font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600;color:var(--ink)}
+#player-bar-media{display:flex;align-items:center;gap:1em;flex-wrap:wrap}
+#player-bar-media[hidden]{display:none}
+#audio-controls{display:flex;align-items:center;gap:.5em;flex-wrap:wrap}
+#player-bar-media audio{flex:2 1 260px;min-width:200px}
+#no-audio{color:var(--muted);font-style:italic}
+.pdf-page{width:100%;height:100vh;border:none}
+#yt-toggle{background:none;border:1px solid var(--border);border-radius:4px;font-size:1em;
+           line-height:1;padding:.3em .5em;cursor:pointer;color:var(--muted)}
+#yt-toggle[hidden],#yt-block[hidden]{display:none}
+#yt-block{display:flex;align-items:center;gap:.5em}
+#yt-player{width:320px;height:180px}
+#yt-controls{display:flex;flex-direction:column;gap:.9em}
+#yt-controls button,#yt-controls select,#audio-controls button,#audio-controls select{
+           font-size:.85em;padding:.15em .4em;cursor:pointer;font-family:'Public Sans',sans-serif}
+.play-btn{background:var(--accent);color:#fff;border:none;
+           border-radius:4px;font-weight:600;padding:.3em .7em;min-width:5.5em}
+.play-btn:hover{background:#1e2d4a}

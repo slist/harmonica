@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>{{ title }}</title>
+{% block extra_meta %}{% endblock %}
+{% include "partials/no_cache_and_fonts.html" %}
+<style>
+{% include "partials/style.css" %}
+</style>
+{% block extra_style %}{% endblock %}
+</head>
+<body>
+{% block body %}{% endblock %}
+</body>
+</html>

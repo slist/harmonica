@@ -1,0 +1,14 @@
+<div id="yt-block" hidden>
+  <iframe id="yt-player" width="320" height="180"
+    src="https://www.youtube.com/embed/{{ video_id }}?enablejsapi=1&amp;rel=0"
+    title="Lecteur YouTube" frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+  <div id="yt-controls">
+    <button class="play-btn" onclick="ytPlay()" title="Démarrer depuis le début">▶ Play</button>
+    <button class="play-btn" id="yt-play-delay" onclick="ytPlayDelayed()"
+            title="Démarrer depuis le début après un compte à rebours de 3 secondes">▶ Play in 3s</button>
+    {{ speed_select | safe }}
+    <button onclick="ytHide()" title="Fermer la vidéo">✕ Fermer</button>
+  </div>
+</div>

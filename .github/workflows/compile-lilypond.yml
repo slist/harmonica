@@ -79,21 +79,7 @@ jobs:
           set -euo pipefail
           mkdir -p output
 
-          # Toute ligne à partir d'un marqueur "% CI-IGNORE-BELOW" (et les lignes suivantes)
-          # est retirée avant compilation, quel que soit son contenu (commenté ou non).
-          # Cela protège contre un oubli de commentaire sur les lignes de test manuel
-          # laissées en bas des fichiers .ly.
-          strip_ci_ignored() {
-            local file="$1"
-            local dir tmp_file
-            dir=$(dirname "${file}")
-            tmp_file=$(mktemp -p "${dir}" "ci-tmp.XXXXXX")
-            mv "${tmp_file}" "${tmp_file}.ly"
-            tmp_file="${tmp_file}.ly"
-            awk '/^%[[:space:]]*CI-IGNORE-BELOW/{exit} {print}' "${file}" > "${tmp_file}"
-            echo "${tmp_file}"
-          }
-          export -f strip_ci_ignored
+          source scripts/ci/strip_ci_ignored.sh
 
           compile_file() {
             local file="$1"
@@ -120,18 +106,7 @@ jobs:
           set -euo pipefail
           mkdir -p output/gammes
 
-          # Voir l'étape précédente pour le rôle du marqueur CI-IGNORE-BELOW.
-          strip_ci_ignored() {
-            local file="$1"
-            local dir tmp_file
-            dir=$(dirname "${file}")
-            tmp_file=$(mktemp -p "${dir}" "ci-tmp.XXXXXX")
-            mv "${tmp_file}" "${tmp_file}.ly"
-            tmp_file="${tmp_file}.ly"
-            awk '/^%[[:space:]]*CI-IGNORE-BELOW/{exit} {print}' "${file}" > "${tmp_file}"
-            echo "${tmp_file}"
-          }
-          export -f strip_ci_ignored
+          source scripts/ci/strip_ci_ignored.sh
 
           compile_gamme() {
             local file="$1"

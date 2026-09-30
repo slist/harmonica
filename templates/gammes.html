@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block body %}
+{% include "partials/hero.html" %}
+<nav>
+  <a href="../">← Partitions</a>
+</nav>
+<br>
+{% if merged_links %}<ul>{{ merged_links | safe }}</ul>{% endif %}
+<p>{{ gammes_count }} fiches de gammes</p>
+<table id="data-table">
+{{ thead | safe }}
+<tbody>
+{{ rows | safe }}
+</tbody>
+</table>
+<script>
+{% include "partials/sort.js" %}
+</script>
+{% endblock %}

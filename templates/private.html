@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block extra_meta %}
+<meta name="robots" content="noindex,nofollow">
+{% endblock %}
+{% block body %}
+<div id="login-section">
+  <h2>🔒 Accès protégé</h2>
+  <p>Entrez le mot de passe pour accéder aux partitions complètes.</p>
+  <input type="password" id="pwd-input" placeholder="Mot de passe"
+         onkeydown="if(event.key==='Enter')checkPwd()">
+  <br>
+  <button id="login-btn" onclick="checkPwd()">Connexion</button>
+  <p id="login-error">Mot de passe incorrect.</p>
+</div>
+<div id="protected-content" style="display:none">
+{% include "partials/hero.html" %}
+<nav>
+  <a href="gammes/">📖 Gammes</a>
+</nav>
+<br>
+<ul>
+  <li><a href="{{ all_diatonique_href }}">Toutes les partitions diatoniques (PDF)</a></li>
+  <li><a href="{{ all_chromatique_href }}">Toutes les partitions chromatiques (PDF)</a></li>
+  <li><a href="{{ all_partition_href }}">Toutes les partitions sans tablature harmonica (PDF)</a></li>
+  <li><a href="{{ all_suzuki5_href }}">Toutes les partitions pour Suzuki 5 trous (PDF)</a></li>
+</ul>
+<p>{{ songs_count }} partitions (toutes, y compris sous droits)</p>
+<table id="data-table">
+{{ thead | safe }}
+<tbody>
+{{ rows | safe }}
+</tbody>
+</table>
+<script>
+{% include "partials/sort.js" %}
+</script>
+</div>
+<script>
+(function(){
+  var H="{{ sha256_hash }}";
+  async function sha256(s){
+    var b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(s));
+    return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,"0");}).join("");
+  }
+  function show(){
+    document.getElementById("login-section").style.display="none";
+    document.getElementById("protected-content").style.display="block";
+  }
+  window.checkPwd=async function(){
+    var v=document.getElementById("pwd-input").value;
+    var h=await sha256(v);
+    if(h===H){sessionStorage.setItem("ph",h);show();}
+    else{document.getElementById("login-error").style.display="block";}
+  };
+  document.addEventListener("DOMContentLoaded",function(){
+    if(sessionStorage.getItem("ph")===H)show();
+  });
+})();
+</script>
+{% endblock %}

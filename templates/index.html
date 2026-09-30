@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block body %}
+{% include "partials/hero.html" %}
+<nav>
+  <a href="gammes/">📖 Gammes &amp; Scales</a>
+  <a href="liens-utiles.html">🔗 Liens utiles</a>
+  <a href="difficulte.html">🎯 Calcul de la difficulté</a>
+</nav>
+<br>
+<p>
+  {{ songs_count }} partitions · {{ free_count }} libres de droits · {{ locked_count }} sous droits
+  <a href="difficulte.html" title="{{ difficulty_help }}" style="margin-left:.5em;text-decoration:none">ℹ️</a>
+</p>
+<table id="data-table">
+{{ thead | safe }}
+<tbody>
+{{ rows | safe }}
+</tbody>
+</table>
+<script>
+{% include "partials/sort.js" %}
+</script>
+<p style="margin-top:2em;text-align:right;font-size:0.8em">
+  <a href="private.html" style="color:var(--muted);text-decoration:none" title="Accès complet">🔒</a>
+</p>
+{% endblock %}

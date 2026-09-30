@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>{{ title }}</title>
+{% include "partials/no_cache_and_fonts.html" %}
+<style>
+{% include "partials/player.css" %}
+</style>
+</head>
+<body>
+<div id="player-bar">
+  <div id="player-bar-top">
+    {{ prev_btn | safe }}
+    <a href="{{ back_href }}" onclick="if(history.length>1){history.back();return false;}">← Retour</a>
+    <h1>{{ title }}</h1>
+    {{ yt_toggle | safe }}
+    {{ yt_html | safe }}
+    {{ next_btn | safe }}
+  </div>
+  <div id="player-bar-media">
+    {{ audio_html | safe }}
+  </div>
+</div>
+{{ pdf_html | safe }}
+{{ audio_script | safe }}
+{{ yt_script | safe }}
+</body>
+</html>

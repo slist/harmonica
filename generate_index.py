@@ -9,6 +9,7 @@ import unicodedata
 from html import escape
 
 import markdown
+from jinja2 import Environment, FileSystemLoader, select_autoescape
 from markdown.extensions.toc import slugify_unicode
 
 import complexity
@@ -16,6 +17,20 @@ from complexity import analyze_difficulty, brace_block, difficulty_cell, strip_c
 
 logging.basicConfig(level=logging.INFO, format="%(message)s")
 logger = logging.getLogger(__name__)
+
+TEMPLATES_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "templates")
+_jinja_env = Environment(
+    loader=FileSystemLoader(TEMPLATES_DIR),
+    autoescape=select_autoescape(["html", "svg", "xml"]),
+    keep_trailing_newline=True,
+    trim_blocks=True,
+    lstrip_blocks=True,
+)
+
+
+def render(template_name: str, **context) -> str:
+    return _jinja_env.get_template(template_name).render(**context)
+
 
 # --------- Constants ---------
 
@@ -233,137 +248,10 @@ def collect_gammes() -> list[dict]:
 
 
 # --------- HTML helpers ---------
-
-# "Tablature Papier" theme: manuscript-paper palette (cool ink-blue + copper
-# accent on aged paper) shared by every generated page.
-_FONTS_LINK = """\
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Public+Sans:wght@400;500;600;700&display=swap">"""
-
-# Decorative watermark (staff lines, a couple of notes, a diatonic and a
-# chromatic harmonica outline) sat behind the page's <h1>. Pure line art
-# (rect/line/text, no hand-drawn paths) tinted via currentColor so it only
-# needs the surrounding element's `color` to match a given theme.
-_HERO_ART_SVG = """\
-<svg class="hero-art" viewBox="0 0 900 90" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-  <g stroke="currentColor" stroke-width="1.2" fill="none">
-    <line x1="20" y1="20" x2="260" y2="20"/><line x1="20" y1="28" x2="260" y2="28"/>
-    <line x1="20" y1="36" x2="260" y2="36"/><line x1="20" y1="44" x2="260" y2="44"/>
-    <line x1="20" y1="52" x2="260" y2="52"/>
-  </g>
-  <text x="40" y="48" font-size="24" fill="currentColor" font-family="Georgia,serif">&#9834;</text>
-  <text x="95" y="42" font-size="20" fill="currentColor" font-family="Georgia,serif">&#9835;</text>
-  <text x="150" y="50" font-size="22" fill="currentColor" font-family="Georgia,serif">&#9834;</text>
-  <g transform="translate(400,28)">
-    <rect x="0" y="0" width="130" height="34" rx="5" fill="none" stroke="currentColor" stroke-width="2"/>
-    <line x1="0" y1="17" x2="130" y2="17" stroke="currentColor" stroke-width="1"/>
-    <g stroke="currentColor" stroke-width="1.4">
-      <line x1="12" y1="6" x2="12" y2="28"/><line x1="24" y1="6" x2="24" y2="28"/>
-      <line x1="36" y1="6" x2="36" y2="28"/><line x1="48" y1="6" x2="48" y2="28"/>
-      <line x1="60" y1="6" x2="60" y2="28"/><line x1="72" y1="6" x2="72" y2="28"/>
-      <line x1="84" y1="6" x2="84" y2="28"/><line x1="96" y1="6" x2="96" y2="28"/>
-      <line x1="108" y1="6" x2="108" y2="28"/><line x1="120" y1="6" x2="120" y2="28"/>
-    </g>
-  </g>
-  <g transform="translate(560,22)">
-    <rect x="0" y="0" width="150" height="30" rx="5" fill="none" stroke="currentColor" stroke-width="2"/>
-    <line x1="0" y1="15" x2="150" y2="15" stroke="currentColor" stroke-width="1"/>
-    <g stroke="currentColor" stroke-width="1.2">
-      <line x1="10" y1="5" x2="10" y2="25"/><line x1="20" y1="5" x2="20" y2="25"/>
-      <line x1="30" y1="5" x2="30" y2="25"/><line x1="40" y1="5" x2="40" y2="25"/>
-      <line x1="50" y1="5" x2="50" y2="25"/><line x1="60" y1="5" x2="60" y2="25"/>
-      <line x1="70" y1="5" x2="70" y2="25"/><line x1="80" y1="5" x2="80" y2="25"/>
-      <line x1="90" y1="5" x2="90" y2="25"/><line x1="100" y1="5" x2="100" y2="25"/>
-      <line x1="110" y1="5" x2="110" y2="25"/><line x1="120" y1="5" x2="120" y2="25"/>
-    </g>
-    <rect x="150" y="4" width="14" height="22" rx="3" fill="none" stroke="currentColor" stroke-width="2"/>
-  </g>
-</svg>"""
-
-
-def _hero(title_html: str) -> str:
-    """Wrap a page's <h1> with the staff/harmonica watermark behind it."""
-    return f'<div class="hero">{_HERO_ART_SVG}<div class="hero-content">{title_html}</div></div>'
-
-
-_CSS = """\
-<style>
-:root{
-  --bg:#e9e7dc; --surface:#f5f3ea; --ink:#242229; --muted:#736f5f;
-  --accent:#2c3e63; --accent-2:#8a5a2c; --border:#c9c3ab;
-}
-*{box-sizing:border-box}
-body{font-family:'Public Sans',sans-serif;max-width:1400px;margin:0 auto;padding:1em;
-     background:var(--bg);color:var(--ink)}
-h1{font-family:'Cormorant Garamond',serif;font-weight:600;font-style:italic;
-   color:var(--ink);font-size:2.1em;margin:.3em 0}
-.hero{position:relative}
-.hero-art{position:absolute;inset:0;z-index:0;opacity:.16;color:var(--accent-2);pointer-events:none}
-.hero-content{position:relative;z-index:1}
-nav a{margin-right:1em;text-decoration:none;color:var(--accent);font-weight:600}
-nav a:hover{text-decoration:underline}
-table{border-collapse:collapse;width:100%;font-size:0.88em;background:var(--surface)}
-thead th{background:var(--surface);cursor:pointer;user-select:none;white-space:nowrap;
-         padding:7px 9px;border:1px solid var(--border);text-align:center;
-         font-weight:600;color:var(--muted);text-transform:uppercase;font-size:.78em;letter-spacing:.03em}
-thead th:hover{background:#e8e4d4}
-thead th.col-pdf{white-space:normal;word-break:break-word}
-td.col-pdf{width:3em;text-align:center}
-thead th.sort-asc::after{content:" ▲";font-size:.8em}
-thead th.sort-desc::after{content:" ▼";font-size:.8em}
-tbody td{border:1px solid var(--border);padding:5px 8px;text-align:center}
-tbody td:first-child{text-align:left}
-tbody td:nth-child(2){text-align:left}
-tbody tr:hover{background:#efece0}
-.hidden{color:#a9a48f;font-style:italic}
-.badge{font-size:1.1em}
-.harmo-key{font-size:1.15em;font-weight:700;color:var(--accent);text-decoration:none}
-.harmo-key:hover{text-decoration:underline}
-/* login form */
-#login-section{max-width:340px;margin:4em auto;padding:2em;background:var(--surface);
-               border:1px solid var(--border);border-radius:4px;text-align:center;box-shadow:0 2px 8px #0001}
-#login-section h2{margin-top:0;font-family:'Cormorant Garamond',serif}
-#pwd-input{width:100%;padding:.5em;font-size:1em;margin:.5em 0;border:1px solid var(--border);
-           border-radius:4px;font-family:'Public Sans',sans-serif}
-#login-btn{padding:.5em 1.5em;font-size:1em;background:var(--accent);color:#fff;border:none;
-           border-radius:4px;cursor:pointer;font-family:'Public Sans',sans-serif;font-weight:600}
-#login-btn:hover{background:#1e2d4a}
-#login-error{color:#a13a2f;margin-top:.5em;display:none}
-</style>"""
-
-# Hint browsers (notably mobile Chrome) not to serve a stale copy of the page
-# from disk cache. GitHub Pages doesn't let us set real Cache-Control headers.
-_NO_CACHE_META = """\
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">"""
-
-_SORT_JS = """\
-<script>
-(function(){
-  var _col=-1,_asc=true;
-  window.sortTable=function(th){
-    var table=th.closest('table');
-    var tbody=table.tBodies[0];
-    var rows=Array.from(tbody.rows);
-    var col=th.cellIndex;
-    if(_col===col){_asc=!_asc;}else{_col=col;_asc=true;}
-    rows.sort(function(a,b){
-      var va=(a.cells[col]&&a.cells[col].dataset.sort!==undefined)?a.cells[col].dataset.sort:a.cells[col].textContent.trim();
-      var vb=(b.cells[col]&&b.cells[col].dataset.sort!==undefined)?b.cells[col].dataset.sort:b.cells[col].textContent.trim();
-      var na=parseFloat(va),nb=parseFloat(vb);
-      if(!isNaN(na)&&!isNaN(nb)){return _asc?na-nb:nb-na;}
-      return _asc?va.localeCompare(vb,'fr'):vb.localeCompare(va,'fr');
-    });
-    rows.forEach(function(r){tbody.appendChild(r);});
-    table.querySelectorAll('thead th').forEach(function(t,i){
-      t.classList.remove('sort-asc','sort-desc');
-      if(i===col){t.classList.add(_asc?'sort-asc':'sort-desc');}
-    });
-  };
-})();
-</script>"""
+#
+# Page shells live under templates/ (Jinja2); the helpers below only build
+# the small, data-driven HTML snippets (table cells, player controls, ...)
+# that get passed into those templates.
 
 
 def _cache_bust(url: str) -> str:
@@ -381,44 +269,6 @@ def _youtube_video_id(url: str) -> str:
         return ""
     m = re.search(r'(?:youtube\.com/watch\?v=|youtu\.be/|youtube\.com/embed/)([A-Za-z0-9_-]{11})', url)
     return m.group(1) if m else ""
-
-
-_PLAYER_CSS = """\
-<style>
-:root{
-  --bg:#e9e7dc; --surface:#f5f3ea; --ink:#242229; --muted:#736f5f;
-  --accent:#2c3e63; --border:#c9c3ab;
-}
-*{box-sizing:border-box}
-body{margin:0;font-family:'Public Sans',sans-serif;background:var(--bg);color:var(--ink)}
-#player-bar{position:sticky;top:0;z-index:10;background:var(--surface);border-bottom:1px solid var(--border);
-            box-shadow:0 2px 4px #0002;padding:.6em 1em;display:flex;flex-direction:column;gap:.5em}
-#player-bar-top{display:flex;align-items:center;gap:1em;flex-wrap:wrap}
-#player-bar a{color:var(--accent);text-decoration:none;font-weight:600;white-space:nowrap}
-#player-bar a:hover{text-decoration:underline}
-.nav-prev,.nav-next{font-size:1.3em;line-height:1;padding:0 .1em}
-.nav-next{margin-left:auto}
-.nav-disabled{font-size:1.3em;line-height:1;padding:0 .1em;color:var(--border);cursor:default}
-#player-bar h1{margin:0;font-size:1.15em;flex:1 1 auto;min-width:0;
-               font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600;color:var(--ink)}
-#player-bar-media{display:flex;align-items:center;gap:1em;flex-wrap:wrap}
-#player-bar-media[hidden]{display:none}
-#audio-controls{display:flex;align-items:center;gap:.5em;flex-wrap:wrap}
-#player-bar-media audio{flex:2 1 260px;min-width:200px}
-#no-audio{color:var(--muted);font-style:italic}
-.pdf-page{width:100%;height:100vh;border:none}
-#yt-toggle{background:none;border:1px solid var(--border);border-radius:4px;font-size:1em;
-           line-height:1;padding:.3em .5em;cursor:pointer;color:var(--muted)}
-#yt-toggle[hidden],#yt-block[hidden]{display:none}
-#yt-block{display:flex;align-items:center;gap:.5em}
-#yt-player{width:320px;height:180px}
-#yt-controls{display:flex;flex-direction:column;gap:.9em}
-#yt-controls button,#yt-controls select,#audio-controls button,#audio-controls select{
-           font-size:.85em;padding:.15em .4em;cursor:pointer;font-family:'Public Sans',sans-serif}
-.play-btn{background:var(--accent);color:#fff;border:none;
-           border-radius:4px;font-weight:600;padding:.3em .7em;min-width:5.5em}
-.play-btn:hover{background:#1e2d4a}
-</style>"""
 
 
 _SPEED_OPTIONS = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 2]
@@ -443,156 +293,6 @@ def _nav_link_html(direction: str, href: str, title: str) -> str:
     return f"<a class='{cls}' href='{escape(href)}' title='{escape(title)}'>{arrow}</a>"
 
 
-def _youtube_toggle_html() -> str:
-    icon = (
-        '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" '
-        'style="vertical-align:-3px">'
-        '<path fill="#FF0000" d="M23.5 6.2a2.9 2.9 0 0 0-2-2C19.7 3.7 12 3.7 12 3.7'
-        's-7.7 0-9.5.5a2.9 2.9 0 0 0-2 2A30 30 0 0 0 0 12a30 30 0 0 0 .5 5.8 2.9 2.9'
-        ' 0 0 0 2 2c1.8.5 9.5.5 9.5.5s7.7 0 9.5-.5a2.9 2.9 0 0 0 2-2A30 30 0 0 0 24'
-        ' 12a30 30 0 0 0-.5-5.8z"/>'
-        '<path fill="#fff" d="M9.6 15.6V8.4L15.8 12z"/>'
-        '</svg>'
-    )
-    return f'<button id="yt-toggle" type="button" onclick="ytShow()">{icon} YouTube</button>'
-
-
-def _youtube_block_html(video_id: str) -> str:
-    # A real <iframe> (not a placeholder <div>) so the native YouTube UI —
-    # including click-to-play on the thumbnail — works immediately, instead
-    # of only once the JS API asynchronously builds an iframe from scratch.
-    # The IFrame API then just attaches to this existing element (see
-    # onYouTubeIframeAPIReady below) to add the play/speed controls.
-    # Hidden by default: takes the exact spot of the 📺 toggle button (see
-    # ytShow/ytHide) instead of floating over the sheet music or pushing it
-    # down permanently.
-    return f"""\
-<div id="yt-block" hidden>
-  <iframe id="yt-player" width="320" height="180"
-    src="https://www.youtube.com/embed/{video_id}?enablejsapi=1&amp;rel=0"
-    title="Lecteur YouTube" frameborder="0"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-    referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-  <div id="yt-controls">
-    <button class="play-btn" onclick="ytPlay()" title="Démarrer depuis le début">▶ Play</button>
-    <button class="play-btn" id="yt-play-delay" onclick="ytPlayDelayed()"
-            title="Démarrer depuis le début après un compte à rebours de 3 secondes">▶ Play in 3s</button>
-    {_speed_select_html("ytSetSpeed(this.value)")}
-    <button onclick="ytHide()" title="Fermer la vidéo">✕ Fermer</button>
-  </div>
-</div>"""
-
-
-def _youtube_script(video_id: str) -> str:
-    return f"""\
-<script src="https://www.youtube.com/iframe_api"></script>
-<script>
-var ytPlayer;
-function onYouTubeIframeAPIReady(){{
-  ytPlayer = new YT.Player('yt-player', {{
-    events: {{onError: ytOnError}}
-  }});
-}}
-function ytOnError(){{
-  // La vidéo n'a pas pu être lue dans l'iframe (intégration désactivée par
-  // son propriétaire, vidéo privée/supprimée…) : on retombe sur un lien direct.
-  var block = document.getElementById('yt-block');
-  if(block){{
-    block.innerHTML =
-      "<a href='https://www.youtube.com/watch?v={video_id}' target='_blank' rel='noopener'>📺 Voir la vidéo sur YouTube</a>";
-  }}
-}}
-function ytPlay(){{
-  if(ytPlayer && ytPlayer.seekTo){{ytPlayer.seekTo(0, true);ytPlayer.playVideo();}}
-}}
-var _ytCountdown = null;
-function ytPlayDelayed(){{
-  var btn = document.getElementById('yt-play-delay');
-  if(!btn) return;
-  if(_ytCountdown){{
-    clearInterval(_ytCountdown);
-    _ytCountdown = null;
-    btn.textContent = '▶ Play in 3s';
-    return;
-  }}
-  var n = 3;
-  btn.textContent = n + '…';
-  _ytCountdown = setInterval(function(){{
-    n--;
-    if(n > 0){{
-      btn.textContent = n + '…';
-    }} else {{
-      clearInterval(_ytCountdown);
-      _ytCountdown = null;
-      btn.textContent = '▶ Play in 3s';
-      ytPlay();
-    }}
-  }}, 1000);
-}}
-function ytSetSpeed(v){{
-  if(ytPlayer && ytPlayer.setPlaybackRate){{ytPlayer.setPlaybackRate(parseFloat(v));}}
-}}
-function ytShow(){{
-  document.getElementById('yt-toggle').hidden = true;
-  document.getElementById('yt-block').hidden = false;
-  var media = document.getElementById('player-bar-media');
-  if(media){{media.hidden = true;}}
-  var audio = document.getElementById('audio-player');
-  if(audio){{audio.pause();}}
-}}
-function ytHide(){{
-  if(_ytCountdown){{
-    clearInterval(_ytCountdown);
-    _ytCountdown = null;
-    var delayBtn = document.getElementById('yt-play-delay');
-    if(delayBtn){{delayBtn.textContent = '▶ Play in 3s';}}
-  }}
-  document.getElementById('yt-toggle').hidden = false;
-  document.getElementById('yt-block').hidden = true;
-  var media = document.getElementById('player-bar-media');
-  if(media){{media.hidden = false;}}
-  if(ytPlayer && ytPlayer.pauseVideo){{ytPlayer.pauseVideo();}}
-}}
-</script>"""
-
-_AUDIO_SCRIPT = """\
-<script>
-function audioSetSpeed(v){
-  var a = document.getElementById('audio-player');
-  if(a){a.playbackRate = parseFloat(v);}
-}
-function audioPlay(){
-  var a = document.getElementById('audio-player');
-  if(a){a.currentTime = 0; a.play();}
-}
-var _audioCountdown = null;
-function audioPlayDelayed(){
-  var a = document.getElementById('audio-player');
-  var btn = document.getElementById('audio-play-delay');
-  if(!a || !btn) return;
-  if(_audioCountdown){
-    clearInterval(_audioCountdown);
-    _audioCountdown = null;
-    btn.textContent = '▶ Play in 3s';
-    return;
-  }
-  var n = 3;
-  btn.textContent = n + '…';
-  _audioCountdown = setInterval(function(){
-    n--;
-    if(n > 0){
-      btn.textContent = n + '…';
-    } else {
-      clearInterval(_audioCountdown);
-      _audioCountdown = null;
-      btn.textContent = '▶ Play in 3s';
-      audioPlay();
-    }
-  }, 1000);
-}
-</script>"""
-
-
 def _player_page_html(
     title: str, mp3_file: str, pdf_files: list[str], back_href: str, youtube_id: str = "",
     prev_href: str = "", prev_title: str = "", next_href: str = "", next_title: str = "",
@@ -610,46 +310,33 @@ def _player_page_html(
           title="Démarrer depuis le début après un compte à rebours de 3 secondes">▶ Play in 3s</button>
   {_speed_select_html("audioSetSpeed(this.value)")}
 </div>"""
-        audio_script = _AUDIO_SCRIPT
+        audio_script = f"<script>\n{render('partials/audio.js')}</script>"
     else:
         audio_html = "<span id='no-audio'>Pas d'enregistrement audio disponible</span>"
         audio_script = ""
-    yt_toggle = _youtube_toggle_html() if youtube_id else ""
-    yt_html = _youtube_block_html(youtube_id) if youtube_id else ""
-    yt_script = _youtube_script(youtube_id) if youtube_id else ""
+    if youtube_id:
+        yt_toggle = render("partials/youtube_toggle.html").rstrip("\n")
+        yt_html = render(
+            "partials/youtube_block.html",
+            video_id=youtube_id,
+            speed_select=_speed_select_html("ytSetSpeed(this.value)"),
+        ).rstrip("\n")
+        yt_script = render("partials/youtube_script.js", video_id=youtube_id).rstrip("\n")
+    else:
+        yt_toggle = yt_html = yt_script = ""
     pdf_html = "".join(
         f"<iframe class='pdf-page' src='{escape(_cache_bust(f))}'></iframe>"
         for f in pdf_files
     )
-    return f"""<!DOCTYPE html>
-<html lang="fr">
-<head>
-<meta charset="UTF-8">
-<title>{escape(title)}</title>
-{_NO_CACHE_META}
-{_FONTS_LINK}
-{_PLAYER_CSS}
-</head>
-<body>
-<div id="player-bar">
-  <div id="player-bar-top">
-    {prev_btn}
-    <a href="{escape(back_href)}" onclick="if(history.length>1){{history.back();return false;}}">← Retour</a>
-    <h1>{escape(title)}</h1>
-    {yt_toggle}
-    {yt_html}
-    {next_btn}
-  </div>
-  <div id="player-bar-media">
-    {audio_html}
-  </div>
-</div>
-{pdf_html}
-{audio_script}
-{yt_script}
-</body>
-</html>
-"""
+    return render(
+        "player.html",
+        title=title,
+        back_href=back_href,
+        prev_btn=prev_btn, next_btn=next_btn,
+        yt_toggle=yt_toggle, yt_html=yt_html, yt_script=yt_script,
+        audio_html=audio_html, audio_script=audio_script,
+        pdf_html=pdf_html,
+    )
 
 
 def _write_player_page(
@@ -795,34 +482,14 @@ def generate_index_html(songs: list[dict]) -> None:
     thead = _table_header(_TABLE_COLS)
     rows  = "".join(_song_row(s, public_only=True, nav_maps=nav_maps) for s in songs)
 
-    html = f"""<!DOCTYPE html>
-<html lang="fr">
-<head><meta charset="UTF-8"><title>Partitions Harmonica</title>{_NO_CACHE_META}{_FONTS_LINK}{_CSS}</head>
-<body>
-{_hero('<h1>Partitions Harmonica</h1>')}
-<nav>
-  <a href="gammes/">📖 Gammes &amp; Scales</a>
-  <a href="liens-utiles.html">🔗 Liens utiles</a>
-  <a href="difficulte.html">🎯 Calcul de la difficulté</a>
-</nav>
-<br>
-<p>
-  {len(songs)} partitions · {len(free)} libres de droits · {len(locked)} sous droits
-  <a href="difficulte.html" title="{escape(_DIFFICULTY_HELP)}" style="margin-left:.5em;text-decoration:none">ℹ️</a>
-</p>
-<table id="data-table">
-{thead}
-<tbody>
-{rows}
-</tbody>
-</table>
-{_SORT_JS}
-<p style="margin-top:2em;text-align:right;font-size:0.8em">
-  <a href="private.html" style="color:var(--muted);text-decoration:none" title="Accès complet">🔒</a>
-</p>
-</body>
-</html>
-"""
+    html = render(
+        "index.html",
+        title="Partitions Harmonica",
+        title_html="<h1>Partitions Harmonica</h1>",
+        songs_count=len(songs), free_count=len(free), locked_count=len(locked),
+        difficulty_help=_DIFFICULTY_HELP,
+        thead=thead, rows=rows,
+    )
     out = os.path.join(OUTPUT_DIR, "index.html")
     with open(out, "w", encoding="utf-8") as f:
         f.write(html)
@@ -865,27 +532,14 @@ def generate_gammes_html(gammes: list[dict]) -> None:
         if os.path.exists(os.path.join(gammes_out, fname)):
             merged_links += f'<li><a href="{escape(_cache_bust(fname))}">{escape(label)}</a></li>\n'
 
-    html = f"""<!DOCTYPE html>
-<html lang="fr">
-<head><meta charset="UTF-8"><title>Gammes Harmonica</title>{_NO_CACHE_META}{_FONTS_LINK}{_CSS}</head>
-<body>
-{_hero('<h1>Gammes &amp; Références</h1>')}
-<nav>
-  <a href="../">← Partitions</a>
-</nav>
-<br>
-{f"<ul>{merged_links}</ul>" if merged_links else ""}
-<p>{len(gammes)} fiches de gammes</p>
-<table id="data-table">
-{thead}
-<tbody>
-{rows}
-</tbody>
-</table>
-{_SORT_JS}
-</body>
-</html>
-"""
+    html = render(
+        "gammes.html",
+        title="Gammes Harmonica",
+        title_html="<h1>Gammes &amp; Références</h1>",
+        merged_links=merged_links,
+        gammes_count=len(gammes),
+        thead=thead, rows=rows,
+    )
     out = os.path.join(gammes_out, "index.html")
     with open(out, "w", encoding="utf-8") as f:
         f.write(html)
@@ -897,80 +551,18 @@ def generate_private_html(songs: list[dict], sha256_hash: str) -> None:
     thead = _table_header(_TABLE_COLS)
     rows  = "".join(_song_row(s, public_only=False, nav_maps=nav_maps) for s in songs)
 
-    protected_content = f"""
-{_hero('<h1>Partitions Harmonica — Accès complet</h1>')}
-<nav>
-  <a href="gammes/">📖 Gammes</a>
-</nav>
-<br>
-<ul>
-  <li><a href="{escape(_cache_bust("all_diatonique.pdf"))}">Toutes les partitions diatoniques (PDF)</a></li>
-  <li><a href="{escape(_cache_bust("all_chromatique.pdf"))}">Toutes les partitions chromatiques (PDF)</a></li>
-  <li><a href="{escape(_cache_bust("all_partition.pdf"))}">Toutes les partitions sans tablature harmonica (PDF)</a></li>
-  <li><a href="{escape(_cache_bust("all_suzuki5.pdf"))}">Toutes les partitions pour Suzuki 5 trous (PDF)</a></li>
-</ul>
-<p>{len(songs)} partitions (toutes, y compris sous droits)</p>
-<table id="data-table">
-{thead}
-<tbody>
-{rows}
-</tbody>
-</table>
-{_SORT_JS}
-"""
-
-    login_form = f"""
-<div id="login-section">
-  <h2>🔒 Accès protégé</h2>
-  <p>Entrez le mot de passe pour accéder aux partitions complètes.</p>
-  <input type="password" id="pwd-input" placeholder="Mot de passe"
-         onkeydown="if(event.key==='Enter')checkPwd()">
-  <br>
-  <button id="login-btn" onclick="checkPwd()">Connexion</button>
-  <p id="login-error">Mot de passe incorrect.</p>
-</div>
-<div id="protected-content" style="display:none">
-{protected_content}
-</div>
-<script>
-(function(){{
-  var H="{sha256_hash}";
-  async function sha256(s){{
-    var b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(s));
-    return Array.from(new Uint8Array(b)).map(function(x){{return x.toString(16).padStart(2,"0");}}).join("");
-  }}
-  function show(){{
-    document.getElementById("login-section").style.display="none";
-    document.getElementById("protected-content").style.display="block";
-  }}
-  window.checkPwd=async function(){{
-    var v=document.getElementById("pwd-input").value;
-    var h=await sha256(v);
-    if(h===H){{sessionStorage.setItem("ph",h);show();}}
-    else{{document.getElementById("login-error").style.display="block";}}
-  }};
-  document.addEventListener("DOMContentLoaded",function(){{
-    if(sessionStorage.getItem("ph")===H)show();
-  }});
-}})();
-</script>
-"""
-
-    html = f"""<!DOCTYPE html>
-<html lang="fr">
-<head>
-<meta charset="UTF-8">
-<title>Partitions — Accès privé</title>
-<meta name="robots" content="noindex,nofollow">
-{_NO_CACHE_META}
-{_FONTS_LINK}
-{_CSS}
-</head>
-<body>
-{login_form}
-</body>
-</html>
-"""
+    html = render(
+        "private.html",
+        title="Partitions — Accès privé",
+        title_html="<h1>Partitions Harmonica — Accès complet</h1>",
+        sha256_hash=sha256_hash,
+        songs_count=len(songs),
+        thead=thead, rows=rows,
+        all_diatonique_href=_cache_bust("all_diatonique.pdf"),
+        all_chromatique_href=_cache_bust("all_chromatique.pdf"),
+        all_partition_href=_cache_bust("all_partition.pdf"),
+        all_suzuki5_href=_cache_bust("all_suzuki5.pdf"),
+    )
     out = os.path.join(OUTPUT_DIR, "private.html")
     with open(out, "w", encoding="utf-8") as f:
         f.write(html)
@@ -992,33 +584,19 @@ def generate_liens_utiles_html(md_path: str = LIENS_UTILES_MD) -> None:
         tab_length=2,
     )
 
-    html = f"""<!DOCTYPE html>
-<html lang="fr">
-<head>
-<meta charset="UTF-8">
-<title>Liens utiles</title>
-{_NO_CACHE_META}
-{_FONTS_LINK}
-{_CSS}
-<style>
-.content{{background:var(--surface);padding:1.5em 2em;border:1px solid var(--border);
-         border-radius:4px;max-width:900px}}
-.content h1{{margin-top:0}}
-.content ul{{padding-left:1.4em}}
-.content a{{color:var(--accent)}}
-</style>
-</head>
-<body>
-<nav>
-  <a href="index.html">← Partitions</a>
-</nav>
-<br>
-<div class="content">
-{body}
-</div>
-</body>
-</html>
-"""
+    extra_style = """\
+.content{background:var(--surface);padding:1.5em 2em;border:1px solid var(--border);
+         border-radius:4px;max-width:900px}
+.content h1{margin-top:0}
+.content ul{padding-left:1.4em}
+.content a{color:var(--accent)}"""
+
+    html = render(
+        "content_page.html",
+        title="Liens utiles",
+        extra_style=extra_style,
+        content=body,
+    )
     out = os.path.join(OUTPUT_DIR, "liens-utiles.html")
     with open(out, "w", encoding="utf-8") as f:
         f.write(html)
@@ -1043,29 +621,15 @@ def generate_difficulte_html() -> None:
         for threshold, badge, label in c.SPEED_LEVELS
     )
 
-    html = f"""<!DOCTYPE html>
-<html lang="fr">
-<head>
-<meta charset="UTF-8">
-<title>Calcul de la difficulté</title>
-{_NO_CACHE_META}
-{_FONTS_LINK}
-{_CSS}
-<style>
-.content{{background:var(--surface);padding:1.5em 2em;border:1px solid var(--border);
-         border-radius:4px;max-width:900px}}
-.content h1{{margin-top:0}}
-.content a{{color:var(--accent)}}
-.content math[display=block]{{margin:1em 0;font-size:1.15em}}
-.content table{{width:auto}}
-</style>
-</head>
-<body>
-<nav>
-  <a href="index.html">← Partitions</a>
-</nav>
-<br>
-<div class="content">
+    extra_style = """\
+.content{background:var(--surface);padding:1.5em 2em;border:1px solid var(--border);
+         border-radius:4px;max-width:900px}
+.content h1{margin-top:0}
+.content a{color:var(--accent)}
+.content math[display=block]{margin:1em 0;font-size:1.15em}
+.content table{width:auto}"""
+
+    content = f"""\
 <h1>Calcul de la difficulté</h1>
 
 <p>La difficulté de chaque partition est calculée automatiquement à partir de la mélodie
@@ -1161,10 +725,14 @@ valeur de note <i>d</i> de la mélodie (4 = noire, 8 = croche, 16 = double croch
   <li>Les silences et les respirations ne sont pas pris en compte dans les écarts.</li>
   <li>Un seul accordage est utilisé par partition (un changement d'harmonica en cours de morceau est ignoré).</li>
 </ul>
-</div>
-</body>
-</html>
 """
+
+    html = render(
+        "content_page.html",
+        title="Calcul de la difficulté",
+        extra_style=extra_style,
+        content=content,
+    )
     out = os.path.join(OUTPUT_DIR, "difficulte.html")
     with open(out, "w", encoding="utf-8") as f:
         f.write(html)
