@@ -3,7 +3,7 @@
 \header {
   title = "Il est né le divin enfant"
   %poet = "Placide Cappeau (1808–1877)"
-  %composer = "?"
+  composer = "Traditionnel"
   %date = "XVIIᵉ ou XVIIIᵉ siècle"
   lyricsLang = #'(fr)
   copyrightStatus = "public-domain" % Chanson traditionnelle française

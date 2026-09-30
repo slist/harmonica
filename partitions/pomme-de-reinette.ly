@@ -2,7 +2,7 @@
 
 \header {
   title = "Pomme de reinette"
-  %composer = ""
+  composer = "Traditionnel"
   lyricsLang = #'(fr)
   copyrightStatus = "public-domain" % Chanson traditionnelle française
   composerNationality = "fr"

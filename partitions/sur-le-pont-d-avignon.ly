@@ -3,7 +3,7 @@
 \header {
   title = "Sur le pont d'avignon"
   %instrument = "Harmonica en C"
-  %composer = "Anonyme"
+  composer = "Traditionnel"
   %date = ""
   lyricsLang = #'(fr)
   copyrightStatus = "public-domain" % Chanson traditionnelle française

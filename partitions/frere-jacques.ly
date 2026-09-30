@@ -2,6 +2,7 @@
 
 \header {
   title = "Frère Jacques"
+  composer = "Traditionnel"
   lyricsLang = #'(fr)
   copyrightStatus = "public-domain"
   composerNationality = "fr"

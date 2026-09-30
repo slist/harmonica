@@ -2,6 +2,7 @@
 
 \header {
   title = "When the Saints go marching in"
+  composer = "Traditional"
   lyricsLang = #'(en)
   copyrightStatus = "public-domain"
   composerNationality = "us"

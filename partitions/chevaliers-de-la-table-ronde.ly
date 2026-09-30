@@ -3,7 +3,7 @@
   title = "Chevaliers de la table ronde"
   lyricsLang = #'(fr)
   copyrightStatus = "public-domain" % Chanson traditionnelle française
-  %composer = ""
+  composer = "Traditionnel"
   %opus = ""
   %arranger = ""
   %instrument = "Harmonica chromatique"

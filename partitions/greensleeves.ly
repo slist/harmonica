@@ -3,7 +3,7 @@
 \header {
   title = "Greensleeves"
   %instrument = "Harmonica en C"
-  %composer = "Anonyme"
+  composer = "Traditional"
   %date = ""
   lyricsLang = #'(en)
   copyrightStatus = "public-domain" % Chanson traditionnelle anglaise (XVIe siècle)

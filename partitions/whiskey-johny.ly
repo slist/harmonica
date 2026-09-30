@@ -9,7 +9,7 @@
 \header {
   title = "Whiskey Johny"
   subtitle = "Traditional American Folk Song"
-  %composer = "Traditional (author unknown)"
+  composer = "Traditional (author unknown)"
   %poet = "Traditional"
   lyricsLang = #'(en)
   %copyright = "Public Domain"

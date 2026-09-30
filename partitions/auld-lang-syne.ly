@@ -2,6 +2,7 @@
 
 \header {
   title = "Auld Lang Syne - Ce n'est qu'un \"Au Revoir\""
+  composer = "Traditional (mélodie écossaise)"
   poet = "Robert Burns (1759-1796)"
   copyrightStatus = "public-domain"
   composerNationality = "gb"

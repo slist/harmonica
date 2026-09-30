@@ -9,12 +9,12 @@
 \header {
   title = "Santiano"
   subtitle = "Chant de marins d'origine anglaise"
-  %composer = ""
+  composer = "Hugues Aufray (1929-)"
   %arranger = ""
 
   %lyricsLang = #'(fr)
-  %copyrightStatus = "copyrighted"
-  copyrightStatus = "public-domain"
+  copyrightStatus = "copyrighted"
+  %copyrightStatus = "public-domain"
 
   %composerNationality = "FR"
   %instrument = "Harmonica"

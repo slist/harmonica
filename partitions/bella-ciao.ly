@@ -9,7 +9,7 @@
 \header {
   title = "Bella ciao"
   subtitle = "Musique traditionnelle d'un chant de révolte italien"
-  %composer = ""
+  composer = "Traditionnel"
   %arranger = ""
 
   lyricsLang = #'(it)

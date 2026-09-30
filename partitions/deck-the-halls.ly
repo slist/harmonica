@@ -2,7 +2,7 @@
 
 \header {
   title = "Deck the halls"
-  %composer = ""
+  composer = "Traditional (Welsh melody)"
   lyricsLang = #'(en)
   copyrightStatus = "public-domain" % Mélodie galloise traditionnelle (XVIe siècle)
   composerNationality = "gb"

@@ -2,6 +2,7 @@
 
 \header {
   title = "Il court, il court, le furet"
+  composer = "Traditionnel"
   lyricsLang = #'(fr)
   copyrightStatus = "public-domain"
   composerNationality = "fr"

@@ -2,6 +2,7 @@
 
 \header {
   title = "Mon âne"
+  composer = "Traditionnel"
   lyricsLang = #'(fr)
   copyrightStatus = "public-domain"
   composerNationality = "fr"

@@ -2,6 +2,7 @@
 
 \header {
   title = "Une puce, un pou (Suzuki)"
+  composer = "Traditionnel"
   arranger = "Pour suzuki 5 trous"
   lyricsLang = #'(fr)
   copyrightStatus = "public-domain"

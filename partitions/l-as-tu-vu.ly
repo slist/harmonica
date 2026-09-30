@@ -2,6 +2,7 @@
 
 \header {
   title = "L'as tu-vu?"
+  composer = "Traditionnel"
   lyricsLang = #'(fr)
   copyrightStatus = "public-domain"
   composerNationality = "fr"

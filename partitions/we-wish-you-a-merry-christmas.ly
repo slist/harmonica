@@ -2,6 +2,7 @@
 
 \header {
   title = "We wish you a Merry Christmas"
+  composer = "Traditional"
   lyricsLang = #'(en)
   copyrightStatus = "public-domain"
   composerNationality = "gb"

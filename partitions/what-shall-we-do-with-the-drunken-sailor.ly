@@ -2,6 +2,7 @@
 
 \header {
   title = "What shall we do with the drunken sailor"
+  composer = "Traditional"
   lyricsLang = #'(en)
   copyrightStatus = "public-domain" % Chanson traditionnelle anglaise
   composerNationality = "gb"

@@ -2,6 +2,7 @@
 
 \header {
   title = "Un petit cochon"
+  composer = "Traditionnel"
   lyricsLang = #'(fr)
   copyrightStatus = "public-domain"
   composerNationality = "fr"
