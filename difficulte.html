@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Calcul de la difficulté</title>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Public+Sans:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --bg:#e9e7dc; --surface:#f5f3ea; --ink:#242229; --muted:#736f5f;
+  --accent:#2c3e63; --accent-2:#8a5a2c; --border:#c9c3ab;
+}
+*{box-sizing:border-box}
+body{font-family:'Public Sans',sans-serif;max-width:1400px;margin:0 auto;padding:1em;
+     background:var(--bg);color:var(--ink)}
+h1{font-family:'Cormorant Garamond',serif;font-weight:600;font-style:italic;
+   color:var(--ink);font-size:2.1em;margin:.3em 0}
+.hero{position:relative}
+.hero-art{position:absolute;inset:0;z-index:0;opacity:.16;color:var(--accent-2);pointer-events:none}
+.hero-content{position:relative;z-index:1}
+nav a{margin-right:1em;text-decoration:none;color:var(--accent);font-weight:600}
+nav a:hover{text-decoration:underline}
+table{border-collapse:collapse;width:100%;font-size:0.88em;background:var(--surface)}
+thead th{background:var(--surface);cursor:pointer;user-select:none;white-space:nowrap;
+         padding:7px 9px;border:1px solid var(--border);text-align:center;
+         font-weight:600;color:var(--muted);text-transform:uppercase;font-size:.78em;letter-spacing:.03em}
+thead th:hover{background:#e8e4d4}
+thead th.col-pdf{white-space:normal;word-break:break-word}
+td.col-pdf{width:3em;text-align:center}
+thead th.sort-asc::after{content:" ▲";font-size:.8em}
+thead th.sort-desc::after{content:" ▼";font-size:.8em}
+tbody td{border:1px solid var(--border);padding:5px 8px;text-align:center}
+tbody td:first-child{text-align:left}
+tbody td:nth-child(2){text-align:left}
+tbody tr:hover{background:#efece0}
+.hidden{color:#a9a48f;font-style:italic}
+.badge{font-size:1.1em}
+.harmo-key{font-size:1.15em;font-weight:700;color:var(--accent);text-decoration:none}
+.harmo-key:hover{text-decoration:underline}
+/* login form */
+#login-section{max-width:340px;margin:4em auto;padding:2em;background:var(--surface);
+               border:1px solid var(--border);border-radius:4px;text-align:center;box-shadow:0 2px 8px #0001}
+#login-section h2{margin-top:0;font-family:'Cormorant Garamond',serif}
+#pwd-input{width:100%;padding:.5em;font-size:1em;margin:.5em 0;border:1px solid var(--border);
+           border-radius:4px;font-family:'Public Sans',sans-serif}
+#login-btn{padding:.5em 1.5em;font-size:1em;background:var(--accent);color:#fff;border:none;
+           border-radius:4px;cursor:pointer;font-family:'Public Sans',sans-serif;font-weight:600}
+#login-btn:hover{background:#1e2d4a}
+#login-error{color:#a13a2f;margin-top:.5em;display:none}
+</style>
+<style>
+.content{background:var(--surface);padding:1.5em 2em;border:1px solid var(--border);
+         border-radius:4px;max-width:900px}
+.content h1{margin-top:0}
+.content a{color:var(--accent)}
+.content math[display=block]{margin:1em 0;font-size:1.15em}
+.content table{width:auto}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html">← Partitions</a>
+</nav>
+<br>
+<div class="content">
+<h1>Calcul de la difficulté</h1>
+
+<p>La difficulté de chaque partition est calculée automatiquement à partir de la mélodie
+du fichier LilyPond (variable <code>melodie</code>), pour l'harmonica diatonique utilisé par
+la tablature : Richter 10 trous (Do, Ré, Mi, Fa, Sol, La, Si♭) ou Suzuki 5 trous.</p>
+
+<h2>1. Position des notes</h2>
+<p>Chaque note est convertie en écart en demi-tons par rapport à la tonique de l'harmonica,
+puis associée à un trou <i>h</i> et à une technique (souffle/aspiré, bend, overblow, overdraw),
+avec la même table que la tablature. Les notes hors de la tessiture sont ignorées.</p>
+
+<h2>2. Score technique <i>T</i></h2>
+<table>
+<thead><tr><th>Symbole</th><th>Variable</th><th>Ce qui est compté</th><th>Poids</th></tr></thead>
+<tbody>
+<tr><td>↕</td><td><i>B</i></td><td>notes demandant un bend (altération)</td><td>1</td></tr>
+<tr><td>⊕</td><td><i>O</i></td><td>notes demandant un overblow</td><td>3</td></tr>
+<tr><td>⊗</td><td><i>D</i></td><td>notes demandant un overdraw</td><td>3</td></tr>
+<tr><td>↔</td><td><i>J</i></td><td>grands écarts : sauts d'au moins 3 trous entre deux notes successives,
+  pondérés par leur taille</td><td>1</td></tr>
+<tr><td>▲</td><td><i>A</i></td><td>notes jouées dans les aigus (trous 9 et 10)</td><td>0,5</td></tr>
+</tbody>
+</table>
+
+<math display="block">
+  <mi>T</mi><mo>=</mo>
+  <msub><mi>w</mi><mi>B</mi></msub><mi>B</mi><mo>+</mo>
+  <msub><mi>w</mi><mi>O</mi></msub><mi>O</mi><mo>+</mo>
+  <msub><mi>w</mi><mi>D</mi></msub><mi>D</mi><mo>+</mo>
+  <msub><mi>w</mi><mi>J</mi></msub><mi>J</mi><mo>+</mo>
+  <msub><mi>w</mi><mi>A</mi></msub><mi>A</mi>
+</math>
+
+<p>Avec les poids actuels :</p>
+<math display="block">
+  <mi>T</mi><mo>=</mo>
+  <mn>1</mn><mi>B</mi><mo>+</mo>
+  <mn>3</mn><mi>O</mi><mo>+</mo>
+  <mn>3</mn><mi>D</mi><mo>+</mo>
+  <mn>1</mn><mi>J</mi><mo>+</mo>
+  <mn>0,5</mn><mi>A</mi>
+</math>
+
+<p>En notant <i>h<sub>i</sub></i> le trou de la <i>i</i>-ème note et
+<i>s</i> = 3 le seuil d'un grand écart :</p>
+<math display="block">
+  <mi>J</mi><mo>=</mo>
+  <munder>
+    <mo>∑</mo>
+    <mrow><mi>i</mi><mo>:</mo><mo>|</mo><msub><mi>h</mi><mi>i</mi></msub><mo>−</mo>
+      <msub><mi>h</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>|</mo><mo>≥</mo><mi>s</mi></mrow>
+  </munder>
+  <mrow><mo>(</mo><mo>|</mo><msub><mi>h</mi><mi>i</mi></msub><mo>−</mo>
+    <msub><mi>h</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>|</mo>
+    <mo>−</mo><mi>s</mi><mo>+</mo><mn>1</mn><mo>)</mo></mrow>
+  <mspace width="2em"/>
+  <mi>A</mi><mo>=</mo>
+  <mo>#</mo><mrow><mo>{</mo><mi>i</mi><mo>:</mo><msub><mi>h</mi><mi>i</mi></msub><mo>≥</mo><mn>9</mn><mo>}</mo></mrow>
+</math>
+
+<p>Un saut de 3 trous compte donc 1, un saut de 4 trous compte 2, etc.
+Le badge ↔ affiche le nombre de grands écarts, et <i>J</i> leur somme pondérée.</p>
+
+<table>
+<thead><tr><th>Niveau</th><th>Condition</th></tr></thead>
+<tbody>
+<tr><td>🟢 facile</td><td>T = 0</td></tr>
+<tr><td>🟡 moyen</td><td>0 &lt; T ≤ 5</td></tr>
+<tr><td>🔴 difficile</td><td>T &gt; 5</td></tr>
+</tbody>
+</table>
+
+<h2>3. Indice de vitesse <i>V</i></h2>
+<p>À partir du tempo (<code>\tempo 4 = …</code>, 100 par défaut) et de la plus petite
+valeur de note <i>d</i> de la mélodie (4 = noire, 8 = croche, 16 = double croche ;
+4 par défaut) :</p>
+<math display="block">
+  <mi>V</mi><mo>=</mo>
+  <mfrac><mrow><mi>tempo</mi><mo>×</mo><mi>d</mi></mrow><mn>240</mn></mfrac>
+</math>
+<table>
+<thead><tr><th></th><th>Vitesse</th><th>Condition</th></tr></thead>
+<tbody>
+<tr><td>⚡</td><td>très rapide</td><td>V ≥ 7</td></tr>
+<tr><td>🏃</td><td>rapide</td><td>V ≥ 4</td></tr>
+<tr><td>🎵</td><td>modéré</td><td>V ≥ 2</td></tr>
+<tr><td>🐢</td><td>lent</td><td>V ≥ 0</td></tr>
+</tbody>
+</table>
+
+<h2>4. Tri de la colonne Difficulté</h2>
+<math display="block"><mi>S</mi><mo>=</mo><mi>T</mi><mo>+</mo><mi>V</mi></math>
+
+<h2>Limites</h2>
+<ul>
+  <li>Les notes sont comptées, pas les passages : une chanson longue a un score plus élevé.</li>
+  <li>Les silences et les respirations ne sont pas pris en compte dans les écarts.</li>
+  <li>Un seul accordage est utilisé par partition (un changement d'harmonica en cours de morceau est ignoré).</li>
+</ul>
+</div>
+</body>
+</html>
