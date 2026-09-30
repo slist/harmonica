@@ -19,8 +19,8 @@ body{font-family:'Public Sans',sans-serif;max-width:1400px;margin:0 auto;padding
      background:var(--bg);color:var(--ink)}
 h1{font-family:'Cormorant Garamond',serif;font-weight:600;font-style:italic;
    color:var(--ink);font-size:2.1em;margin:.3em 0}
-.hero{position:relative}
-.hero-art{position:absolute;inset:0;z-index:0;opacity:.16;color:var(--accent-2);pointer-events:none}
+.hero{position:relative;overflow:hidden}
+.hero-art{position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:.16;color:var(--accent-2);pointer-events:none}
 .hero-content{position:relative;z-index:1}
 nav a{margin-right:1em;text-decoration:none;color:var(--accent);font-weight:600}
 nav a:hover{text-decoration:underline}
@@ -55,6 +55,7 @@ tbody tr:hover{background:#efece0}
 </head>
 <body>
 <div class="hero"><svg class="hero-art" viewBox="0 0 900 90" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+ <g transform="translate(160,0)">
   <g stroke="currentColor" stroke-width="1.2" fill="none">
     <line x1="20" y1="20" x2="260" y2="20"/><line x1="20" y1="28" x2="260" y2="28"/>
     <line x1="20" y1="36" x2="260" y2="36"/><line x1="20" y1="44" x2="260" y2="44"/>
@@ -75,37 +76,39 @@ tbody tr:hover{background:#efece0}
     </g>
   </g>
   <g transform="translate(560,22)">
-    <rect x="0" y="0" width="150" height="30" rx="5" fill="none" stroke="currentColor" stroke-width="2"/>
-    <line x1="0" y1="15" x2="150" y2="15" stroke="currentColor" stroke-width="1"/>
+    <rect x="0" y="0" width="156" height="30" rx="5" fill="none" stroke="currentColor" stroke-width="2"/>
+    <line x1="0" y1="15" x2="156" y2="15" stroke="currentColor" stroke-width="1"/>
     <g stroke="currentColor" stroke-width="1.2">
-      <line x1="10" y1="5" x2="10" y2="25"/><line x1="20" y1="5" x2="20" y2="25"/>
-      <line x1="30" y1="5" x2="30" y2="25"/><line x1="40" y1="5" x2="40" y2="25"/>
-      <line x1="50" y1="5" x2="50" y2="25"/><line x1="60" y1="5" x2="60" y2="25"/>
-      <line x1="70" y1="5" x2="70" y2="25"/><line x1="80" y1="5" x2="80" y2="25"/>
-      <line x1="90" y1="5" x2="90" y2="25"/><line x1="100" y1="5" x2="100" y2="25"/>
-      <line x1="110" y1="5" x2="110" y2="25"/><line x1="120" y1="5" x2="120" y2="25"/>
+      <line x1="12" y1="5" x2="12" y2="25"/><line x1="24" y1="5" x2="24" y2="25"/>
+      <line x1="36" y1="5" x2="36" y2="25"/><line x1="48" y1="5" x2="48" y2="25"/>
+      <line x1="60" y1="5" x2="60" y2="25"/><line x1="72" y1="5" x2="72" y2="25"/>
+      <line x1="84" y1="5" x2="84" y2="25"/><line x1="96" y1="5" x2="96" y2="25"/>
+      <line x1="108" y1="5" x2="108" y2="25"/><line x1="120" y1="5" x2="120" y2="25"/>
+      <line x1="132" y1="5" x2="132" y2="25"/><line x1="144" y1="5" x2="144" y2="25"/>
     </g>
-    <rect x="150" y="4" width="14" height="22" rx="3" fill="none" stroke="currentColor" stroke-width="2"/>
+    <!-- Slide button: shorter than the comb, sat against its right end -->
+    <rect x="156" y="8" width="12" height="14" rx="3" fill="none" stroke="currentColor" stroke-width="2"/>
   </g>
+ </g>
 </svg>
 <div class="hero-content"><h1>Gammes &amp; Références</h1></div></div>
 <nav>
   <a href="../">← Partitions</a>
 </nav>
 <br>
-<ul><li><a href="all_gammes_diatonique.pdf?v=71d8f7f">Toutes les gammes diatoniques (PDF)</a></li>
-<li><a href="all_gammes_chromatique.pdf?v=71d8f7f">Toutes les gammes chromatiques (PDF)</a></li>
+<ul><li><a href="all_gammes_diatonique.pdf?v=ab9b1f4">Toutes les gammes diatoniques (PDF)</a></li>
+<li><a href="all_gammes_chromatique.pdf?v=ab9b1f4">Toutes les gammes chromatiques (PDF)</a></li>
 </ul><p>7 fiches de gammes</p>
 <table id="data-table">
 <thead><tr><th onclick='sortTable(this)'>Titre</th><th onclick='sortTable(this)'>Instrument</th><th onclick='sortTable(this)' class='col-pdf'>Diatonique</th><th onclick='sortTable(this)' class='col-pdf'>Chromatique</th><th onclick='sortTable(this)'>MP3</th><th onclick='sortTable(this)'>Droits</th></tr></thead>
 <tbody>
-<tr><td data-sort='cartographie de l&#x27;harmonica en do (c)'>Cartographie de l&#x27;Harmonica en Do (C)</td><td></td><td class='col-pdf'><a href='gamme-harmo-diato-c_diatonique.html' title='Écouter + partition'>🎵🎼</a></td><td class='col-pdf'><a href='gamme-harmo-diato-c_chromatique.html' title='Écouter + partition'>🎵🎼</a></td><td><a href='gamme-harmo-diato-c.mp3?v=71d8f7f'>MP3</a></td><td class='badge' data-sort='public-domain' title='Domaine public — libre de droits'>🆓</td></tr>
-<tr><td data-sort='cartographie de l&#x27;harmonica en ré (d)'>Cartographie de l&#x27;Harmonica en Ré (D)</td><td></td><td class='col-pdf'><a href='gamme-harmo-diato-d_diatonique.html' title='Écouter + partition'>🎵🎼</a></td><td class='col-pdf'><a href='gamme-harmo-diato-d_chromatique.html' title='Écouter + partition'>🎵🎼</a></td><td><a href='gamme-harmo-diato-d.mp3?v=71d8f7f'>MP3</a></td><td class='badge' data-sort='public-domain' title='Domaine public — libre de droits'>🆓</td></tr>
-<tr><td data-sort='cartographie de l&#x27;harmonica en sol (g)'>Cartographie de l&#x27;Harmonica en Sol (G)</td><td></td><td class='col-pdf'><a href='gamme-harmo-diato-g_diatonique.html' title='Écouter + partition'>🎵🎼</a></td><td class='col-pdf'><a href='gamme-harmo-diato-g_chromatique.html' title='Écouter + partition'>🎵🎼</a></td><td><a href='gamme-harmo-diato-g.mp3?v=71d8f7f'>MP3</a></td><td class='badge' data-sort='public-domain' title='Domaine public — libre de droits'>🆓</td></tr>
-<tr><td data-sort='gammes blues'>Gammes Blues</td><td></td><td class='col-pdf'><a href='gamme-blues_diatonique.html' title='Écouter + partition'>🎵🎼</a></td><td class='col-pdf'><a href='gamme-blues_chromatique.html' title='Écouter + partition'>🎵🎼</a></td><td><a href='gamme-blues.mp3?v=71d8f7f'>MP3</a></td><td class='badge' data-sort='public-domain' title='Domaine public — libre de droits'>🆓</td></tr>
-<tr><td data-sort='gammes jazz'>Gammes Jazz</td><td></td><td class='col-pdf'><a href='gamme-jazz_diatonique.html' title='Écouter + partition'>🎵🎼</a></td><td class='col-pdf'><a href='gamme-jazz_chromatique.html' title='Écouter + partition'>🎵🎼</a></td><td><a href='gamme-jazz.mp3?v=71d8f7f'>MP3</a></td><td class='badge' data-sort='public-domain' title='Domaine public — libre de droits'>🆓</td></tr>
-<tr><td data-sort='gammes pentatoniques'>Gammes Pentatoniques</td><td></td><td class='col-pdf'><a href='gamme-pentatonique_diatonique.html' title='Écouter + partition'>🎵🎼</a></td><td class='col-pdf'><a href='gamme-pentatonique_chromatique.html' title='Écouter + partition'>🎵🎼</a></td><td><a href='gamme-pentatonique.mp3?v=71d8f7f'>MP3</a></td><td class='badge' data-sort='public-domain' title='Domaine public — libre de droits'>🆓</td></tr>
-<tr><td data-sort='harmonica en c - rythmique (diatonique)'>Harmonica en C - Rythmique (Diatonique)</td><td></td><td class='col-pdf'><a href='rythmique_diatonique.html' title='Écouter + partition'>🎵🎼</a></td><td class='col-pdf'><a href='rythmique_chromatique.html' title='Écouter + partition'>🎵🎼</a></td><td><a href='rythmique.mp3?v=71d8f7f'>MP3</a></td><td class='badge' data-sort='public-domain' title='Domaine public — libre de droits'>🆓</td></tr>
+<tr><td data-sort='cartographie de l&#x27;harmonica en do (c)'>Cartographie de l&#x27;Harmonica en Do (C)</td><td></td><td class='col-pdf'><a href='gamme-harmo-diato-c_diatonique.html' title='Écouter + partition'>🎵🎼</a></td><td class='col-pdf'><a href='gamme-harmo-diato-c_chromatique.html' title='Écouter + partition'>🎵🎼</a></td><td><a href='gamme-harmo-diato-c.mp3?v=ab9b1f4'>MP3</a></td><td class='badge' data-sort='public-domain' title='Domaine public — libre de droits'>🆓</td></tr>
+<tr><td data-sort='cartographie de l&#x27;harmonica en ré (d)'>Cartographie de l&#x27;Harmonica en Ré (D)</td><td></td><td class='col-pdf'><a href='gamme-harmo-diato-d_diatonique.html' title='Écouter + partition'>🎵🎼</a></td><td class='col-pdf'><a href='gamme-harmo-diato-d_chromatique.html' title='Écouter + partition'>🎵🎼</a></td><td><a href='gamme-harmo-diato-d.mp3?v=ab9b1f4'>MP3</a></td><td class='badge' data-sort='public-domain' title='Domaine public — libre de droits'>🆓</td></tr>
+<tr><td data-sort='cartographie de l&#x27;harmonica en sol (g)'>Cartographie de l&#x27;Harmonica en Sol (G)</td><td></td><td class='col-pdf'><a href='gamme-harmo-diato-g_diatonique.html' title='Écouter + partition'>🎵🎼</a></td><td class='col-pdf'><a href='gamme-harmo-diato-g_chromatique.html' title='Écouter + partition'>🎵🎼</a></td><td><a href='gamme-harmo-diato-g.mp3?v=ab9b1f4'>MP3</a></td><td class='badge' data-sort='public-domain' title='Domaine public — libre de droits'>🆓</td></tr>
+<tr><td data-sort='gammes blues'>Gammes Blues</td><td></td><td class='col-pdf'><a href='gamme-blues_diatonique.html' title='Écouter + partition'>🎵🎼</a></td><td class='col-pdf'><a href='gamme-blues_chromatique.html' title='Écouter + partition'>🎵🎼</a></td><td><a href='gamme-blues.mp3?v=ab9b1f4'>MP3</a></td><td class='badge' data-sort='public-domain' title='Domaine public — libre de droits'>🆓</td></tr>
+<tr><td data-sort='gammes jazz'>Gammes Jazz</td><td></td><td class='col-pdf'><a href='gamme-jazz_diatonique.html' title='Écouter + partition'>🎵🎼</a></td><td class='col-pdf'><a href='gamme-jazz_chromatique.html' title='Écouter + partition'>🎵🎼</a></td><td><a href='gamme-jazz.mp3?v=ab9b1f4'>MP3</a></td><td class='badge' data-sort='public-domain' title='Domaine public — libre de droits'>🆓</td></tr>
+<tr><td data-sort='gammes pentatoniques'>Gammes Pentatoniques</td><td></td><td class='col-pdf'><a href='gamme-pentatonique_diatonique.html' title='Écouter + partition'>🎵🎼</a></td><td class='col-pdf'><a href='gamme-pentatonique_chromatique.html' title='Écouter + partition'>🎵🎼</a></td><td><a href='gamme-pentatonique.mp3?v=ab9b1f4'>MP3</a></td><td class='badge' data-sort='public-domain' title='Domaine public — libre de droits'>🆓</td></tr>
+<tr><td data-sort='harmonica en c - rythmique (diatonique)'>Harmonica en C - Rythmique (Diatonique)</td><td></td><td class='col-pdf'><a href='rythmique_diatonique.html' title='Écouter + partition'>🎵🎼</a></td><td class='col-pdf'><a href='rythmique_chromatique.html' title='Écouter + partition'>🎵🎼</a></td><td><a href='rythmique.mp3?v=ab9b1f4'>MP3</a></td><td class='badge' data-sort='public-domain' title='Domaine public — libre de droits'>🆓</td></tr>
 
 </tbody>
 </table>
