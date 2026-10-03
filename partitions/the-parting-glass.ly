@@ -29,7 +29,7 @@
 
 melodie = {
   %\time 3/4
-  \tempo 4 = 112
+  \tempo 4 = 90 % 112
   %\clef "treble^15"
   %    \ottava #2
 
@@ -56,7 +56,8 @@ melodie = {
   %\key solb \major % 6b - sib, mib, lab, reb, solb, dob
   %\key dob \major  % 7b - sib, mib, lab, reb, solb, dob, fab
 
-  \repeat volta 3 {
+  %\repeat volta 3
+  {
     \partial 4 % anacrouse
     la'8 ( sol ) | fa4 ré ré do8 ré | fa4 fa sol fa8 (sol ) | la4 la la8 (sol) fa (sol) |
     %\break
@@ -70,7 +71,7 @@ melodie = {
   }
   \bar ":|."
 }
-\addlyrics {
+%{\addlyrics {
   Oh, all the mon -- ey that e're I had, I've spent it in good
   com -- pan -- y. And all the harm that e're I've done, A
   las 'twas done to none but me. And all I've done for
@@ -91,17 +92,17 @@ melodie = {
   That I should go and you should not,
   I'll gent -- ly rise and soft -- ly call,
   Good night and joy be with you all.
-}
+%}
 
 % TODO : check si c'est des s ou q qu'il faut faire
 accords = \chordmode {
-  \repeat volta 3 {
+%  \repeat volta 3 {
     s4 re2:m sib fa/la do fa sib 
     la:m do re:m sib fa/la do
     fa4 sib fa/la do ré:m s4 s s fa2 do/mi
     ré:m la:m sol:m fa/la sib do:7
     ré:m sib fa/la do fa4 sib fa/la do ré:m s s
-  }
+%  }
 }
 
 % ============================
@@ -192,7 +193,7 @@ midiScore =
   >>
 
   \midi {
-    \tempo 4 = 112
+    \tempo 4 = 90 % 112
   }
 }
 
