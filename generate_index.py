@@ -305,9 +305,17 @@ def _player_page_html(
   <audio id='audio-player' controls src='{escape(_cache_bust(mp3_file))}'>
     Votre navigateur ne supporte pas la lecture audio.
   </audio>
-  <button class="play-btn" onclick="audioPlay()" title="Démarrer depuis le début">▶ Play</button>
-  <button class="play-btn" id="audio-play-delay" onclick="audioPlayDelayed()"
-          title="Démarrer depuis le début après un compte à rebours de 3 secondes">▶ Play in 3s</button>
+  <span id="audio-idle-buttons">
+    <button class="play-btn" onclick="audioPlay()" title="Démarrer depuis le début">▶ Play</button>
+    <button class="play-btn" id="audio-play-delay" onclick="audioPlayDelayed()"
+            title="Démarrer depuis le début après un compte à rebours de 3 secondes">▶ Play in 3s</button>
+  </span>
+  <span id="audio-playing-buttons" hidden>
+    <button class="play-btn" onclick="audioPause()" title="Mettre en pause">⏸ Pause</button>
+    <button class="play-btn" onclick="audioStop()" title="Arrêter et revenir au début">⏹ Stop</button>
+    <button class="play-btn" id="audio-restart-delay" onclick="audioRestartDelayed()"
+            title="Arrêter puis redémarrer après un compte à rebours de 3 secondes">↻ Restart in 3s</button>
+  </span>
   {_speed_select_html("audioSetSpeed(this.value)")}
 </div>"""
         audio_script = f"<script>\n{render('partials/audio.js')}</script>"
