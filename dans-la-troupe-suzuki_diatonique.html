@@ -43,6 +43,8 @@ body{margin:0;font-family:'Public Sans',sans-serif;background:var(--bg);color:va
 .play-btn{background:var(--accent);color:#fff;border:none;
            border-radius:4px;font-weight:600;padding:.3em .7em;min-width:5.5em}
 .play-btn:hover{background:#1e2d4a}
+.play-btn.blinking{animation:audio-pause-blink 1s step-start infinite}
+@keyframes audio-pause-blink{50%{opacity:.35}}
 </style>
 </head>
 <body>
@@ -70,7 +72,7 @@ body{margin:0;font-family:'Public Sans',sans-serif;background:var(--bg);color:va
   </div>
   <div id="player-bar-media">
     <div id="audio-controls">
-  <audio id='audio-player' controls src='dans-la-troupe-suzuki.mp3?v=6a6c795'>
+  <audio id='audio-player' controls src='dans-la-troupe-suzuki.mp3?v=53ef82a'>
     Votre navigateur ne supporte pas la lecture audio.
   </audio>
   <span id="audio-idle-buttons">
@@ -79,7 +81,7 @@ body{margin:0;font-family:'Public Sans',sans-serif;background:var(--bg);color:va
             title="Démarrer depuis le début après un compte à rebours de 3 secondes">▶ Play in 3s</button>
   </span>
   <span id="audio-playing-buttons" hidden>
-    <button class="play-btn" onclick="audioPause()" title="Mettre en pause">⏸ Pause</button>
+    <button class="play-btn" id="audio-pause-btn" onclick="audioPause()" title="Mettre en pause / reprendre">⏸ Pause</button>
     <button class="play-btn" onclick="audioStop()" title="Arrêter et revenir au début">⏹ Stop</button>
     <button class="play-btn" id="audio-restart-delay" onclick="audioRestartDelayed()"
             title="Arrêter puis redémarrer après un compte à rebours de 3 secondes">↻ Restart in 3s</button>
@@ -88,7 +90,7 @@ body{margin:0;font-family:'Public Sans',sans-serif;background:var(--bg);color:va
 </div>
   </div>
 </div>
-<iframe class='pdf-page' src='dans-la-troupe-suzuki_diatonique.pdf?v=6a6c795'></iframe>
+<iframe class='pdf-page' src='dans-la-troupe-suzuki_diatonique.pdf?v=53ef82a'></iframe>
 <script>
 function audioSetSpeed(v){
   var a = document.getElementById('audio-player');
@@ -100,11 +102,17 @@ function audioPlay(){
 }
 function audioPause(){
   var a = document.getElementById('audio-player');
-  if(a){a.pause();}
+  if(!a) return;
+  if(a.paused){a.play();} else {a.pause();}
 }
+var _audioStopping = false;
 function audioStop(){
   var a = document.getElementById('audio-player');
-  if(a){a.pause(); a.currentTime = 0;}
+  if(a){_audioStopping = true; a.pause(); a.currentTime = 0;}
+}
+function audioSetPauseBlink(active){
+  var btn = document.getElementById('audio-pause-btn');
+  if(btn){btn.classList.toggle('blinking', active);}
 }
 function audioShowIdleButtons(){
   var idle = document.getElementById('audio-idle-buttons');
@@ -176,12 +184,24 @@ function audioRestartDelayed(){
 (function(){
   var a = document.getElementById('audio-player');
   if(!a) return;
-  a.addEventListener('play', audioShowPlayingButtons);
+  a.addEventListener('play', function(){
+    audioSetPauseBlink(false);
+    audioShowPlayingButtons();
+  });
   a.addEventListener('pause', function(){
-    if(_audioRestartPending) return;
+    if(_audioRestartPending){_audioStopping = false; return;}
+    if(_audioStopping){
+      _audioStopping = false;
+      audioSetPauseBlink(false);
+      audioShowIdleButtons();
+      return;
+    }
+    audioSetPauseBlink(true);
+  });
+  a.addEventListener('ended', function(){
+    audioSetPauseBlink(false);
     audioShowIdleButtons();
   });
-  a.addEventListener('ended', audioShowIdleButtons);
 })();
 </script>
 <script src="https://www.youtube.com/iframe_api"></script>
