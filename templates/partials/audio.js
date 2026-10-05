@@ -8,11 +8,17 @@ function audioPlay(){
 }
 function audioPause(){
   var a = document.getElementById('audio-player');
-  if(a){a.pause();}
+  if(!a) return;
+  if(a.paused){a.play();} else {a.pause();}
 }
+var _audioStopping = false;
 function audioStop(){
   var a = document.getElementById('audio-player');
-  if(a){a.pause(); a.currentTime = 0;}
+  if(a){_audioStopping = true; a.pause(); a.currentTime = 0;}
+}
+function audioSetPauseBlink(active){
+  var btn = document.getElementById('audio-pause-btn');
+  if(btn){btn.classList.toggle('blinking', active);}
 }
 function audioShowIdleButtons(){
   var idle = document.getElementById('audio-idle-buttons');
@@ -84,10 +90,22 @@ function audioRestartDelayed(){
 (function(){
   var a = document.getElementById('audio-player');
   if(!a) return;
-  a.addEventListener('play', audioShowPlayingButtons);
+  a.addEventListener('play', function(){
+    audioSetPauseBlink(false);
+    audioShowPlayingButtons();
+  });
   a.addEventListener('pause', function(){
-    if(_audioRestartPending) return;
+    if(_audioRestartPending){_audioStopping = false; return;}
+    if(_audioStopping){
+      _audioStopping = false;
+      audioSetPauseBlink(false);
+      audioShowIdleButtons();
+      return;
+    }
+    audioSetPauseBlink(true);
+  });
+  a.addEventListener('ended', function(){
+    audioSetPauseBlink(false);
     audioShowIdleButtons();
   });
-  a.addEventListener('ended', audioShowIdleButtons);
 })();

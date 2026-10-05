@@ -311,7 +311,7 @@ def _player_page_html(
             title="Démarrer depuis le début après un compte à rebours de 3 secondes">▶ Play in 3s</button>
   </span>
   <span id="audio-playing-buttons" hidden>
-    <button class="play-btn" onclick="audioPause()" title="Mettre en pause">⏸ Pause</button>
+    <button class="play-btn" id="audio-pause-btn" onclick="audioPause()" title="Mettre en pause / reprendre">⏸ Pause</button>
     <button class="play-btn" onclick="audioStop()" title="Arrêter et revenir au début">⏹ Stop</button>
     <button class="play-btn" id="audio-restart-delay" onclick="audioRestartDelayed()"
             title="Arrêter puis redémarrer après un compte à rebours de 3 secondes">↻ Restart in 3s</button>
