@@ -70,7 +70,7 @@ body{margin:0;font-family:'Public Sans',sans-serif;background:var(--bg);color:va
   </div>
   <div id="player-bar-media">
     <div id="audio-controls">
-  <audio id='audio-player' controls src='old-macdonal-had-a-farm.mp3?v=38fa1e2'>
+  <audio id='audio-player' controls src='old-macdonal-had-a-farm.mp3?v=8c89401'>
     Votre navigateur ne supporte pas la lecture audio.
   </audio>
   <button class="play-btn" onclick="audioPlay()" title="Démarrer depuis le début">▶ Play</button>
@@ -80,7 +80,7 @@ body{margin:0;font-family:'Public Sans',sans-serif;background:var(--bg);color:va
 </div>
   </div>
 </div>
-<iframe class='pdf-page' src='old-macdonal-had-a-farm_chromatique.pdf?v=38fa1e2'></iframe>
+<iframe class='pdf-page' src='old-macdonal-had-a-farm_chromatique.pdf?v=8c89401'></iframe>
 <script>
 function audioSetSpeed(v){
   var a = document.getElementById('audio-player');
@@ -99,6 +99,11 @@ function audioPlayDelayed(){
     clearInterval(_audioCountdown);
     _audioCountdown = null;
     btn.textContent = '▶ Play in 3s';
+    return;
+  }
+  if(!a.paused){
+    a.pause();
+    a.currentTime = 0;
     return;
   }
   var n = 3;
@@ -144,6 +149,10 @@ function ytPlayDelayed(){
     clearInterval(_ytCountdown);
     _ytCountdown = null;
     btn.textContent = '▶ Play in 3s';
+    return;
+  }
+  if(ytPlayer && ytPlayer.getPlayerState && ytPlayer.getPlayerState() === YT.PlayerState.PLAYING){
+    ytPlayer.pauseVideo();
     return;
   }
   var n = 3;
