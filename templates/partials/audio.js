@@ -17,6 +17,11 @@ function audioPlayDelayed(){
     btn.textContent = '▶ Play in 3s';
     return;
   }
+  if(!a.paused){
+    a.pause();
+    a.currentTime = 0;
+    return;
+  }
   var n = 3;
   btn.textContent = n + '…';
   _audioCountdown = setInterval(function(){

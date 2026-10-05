@@ -28,6 +28,10 @@ function ytPlayDelayed(){
     btn.textContent = '▶ Play in 3s';
     return;
   }
+  if(ytPlayer && ytPlayer.getPlayerState && ytPlayer.getPlayerState() === YT.PlayerState.PLAYING){
+    ytPlayer.pauseVideo();
+    return;
+  }
   var n = 3;
   btn.textContent = n + '…';
   _ytCountdown = setInterval(function(){
