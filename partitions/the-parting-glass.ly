@@ -69,7 +69,8 @@ melodie = {
     %\break
     fa4 ré ré do8 (ré) | fa4 fa sol fa8 (sol) | la4 ré do8 (la) sol (la) | fa4 ré ré\fermata
   }
-  \bar ":|."
+  \bar "|."
+  %\bar ":|."
 }
 %{\addlyrics {
   Oh, all the mon -- ey that e're I had, I've spent it in good
