@@ -48,7 +48,7 @@
 
 coda = \mark \markup { \musicglyph #"scripts.coda" }
 
-melodie = {
+melodieIntro = {
   \time 5/4
   \tempo "Allegro molto" 4 = 170
   
@@ -66,7 +66,9 @@ melodie = {
   % \set Score.proportionalNotationDuration = #(ly:make-moment 1/16)
   
   \bar "||"
-  \mark \markup { \musicglyph #"scripts.segno" }
+}
+
+melodieSegno = {  \mark \markup { \musicglyph #"scripts.segno" }
   
   do8\f ( la mi2. ) r4 | do'8( la mib2. ) r4 | do'8( la re,2. ) r4 | do'8-- re-. r4 r4 r2 |
   %\break
@@ -78,7 +80,9 @@ melodie = {
   fa8-- mi8-. r4 r4 r2 | \bar "||" fa8\f ( re la2. ) r4 | fa'8 ( re lab2. ) r4 | fa'8 ( re sol,2. ) r4 | fa'8-- sol8-. r4 r4 r2 \bar "||" 
   %\break
   do,8\f^\markup { \box "B" } ( la sold'2. ) r4 | do,8 ( la sol'2. ) r4 | do,8 ( la fad'2. ) r4 \mark \markup { \bold "To Coda" } \bar "||"
-  
+}
+
+melodieSuite = {
   fa8-- mi8-. r8 mi4^\marcato r8 fa4^\marcato sol4^\marcato | mi4^\marcato\f r8 mi4^\marcato r8 fa4^\marcato sol4^\marcato |
   %\break
   mi4^\marcato r4 r4 r2 |
@@ -99,28 +103,21 @@ melodie = {
   %\break
   dod2. ( dod8 ) dod re dod | do2. ( dod8) dod si sol | sib8 la r8 mi'4^\marcato r8 fa4^\marcato sol4^\marcato \bar "||" la4^\marcato r4 r4 r2\mark \markup { \bold "D.S. al Coda" } | r1 r4 \bar "||"
   %\break
+}
+
+melodieCoda = {
   % Coda section
   \coda 
   la,4^\marcato r8 la4^\marcato r8 sib4^\marcato do^\marcato | si^\marcato r4 r4 sol'8 la4.~ | la2.~ la2
   
-  %do si | sib la r8 la4^\marcato r8 do8^\marcato
-  
-  %do^\markup \center-align "Si vous acceptez cette mission, vous devez continuer..."
-  %   do^\markup "Si vous acceptez cette mission, vous devez continuer..."
-
-
-  
-  %do do do do do \mark \markup { \musicglyph #"scripts.coda" \hspace #0.5 \italic "To Coda" }
-  %\break
-
-  %do do do do do  \mark \markup{\musicglyph #"scripts.coda"} do do do do do 
-  %\break
-  %do do do do do  \mark \markup { \italic "D.S. al Coda" } do do do do do 
-  %\break
-  %do do do do do  \mark \markup{\musicglyph #"scripts.coda"} do do do do do 
-  %\break
-
   \bar "|."
+}
+
+melodie = {
+  \melodieIntro
+  \melodieSegno
+  \melodieSuite
+  \melodieCoda
 }
 \addlyrics {
 }
@@ -181,8 +178,19 @@ midiScore =
 \score {
   \new Staff {
     \set Staff.midiInstrument = #"harmonica"
+    % Parcours D.S. al Coda déplié : intro, segno → fin, retour au segno
+    % jusqu'au "To Coda", puis coda. Chaque \relative recale la hauteur de
+    % départ (la dernière note avant la coda est un la'').
     \relative do'' {
-      \melodie
+      \melodieIntro
+      \melodieSegno
+      \melodieSuite
+    }
+    \relative do'' {
+      \melodieSegno
+    }
+    \relative la'' {
+      \melodieCoda
     }
   }
   \midi {

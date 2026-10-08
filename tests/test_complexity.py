@@ -184,3 +184,17 @@ def test_difficulty_cell_reports_each_factor_in_the_tooltip():
     assert "▲3" in html
     assert "2 altération(s) / bend(s)" in html
     assert "1 overblow(s)" in html
+
+
+def test_melodie_split_into_variables_is_analysed_like_inline():
+    inline = r"""
+    melodie = { do'' re mi do'' }
+    \diatonicHarmonicaTab
+    """
+    split = r"""
+    partieA = { do'' re }
+    partieB = { mi do'' }
+    melodie = { \partieA \partieB }
+    \diatonicHarmonicaTab
+    """
+    assert analyze_difficulty(split) == analyze_difficulty(inline)

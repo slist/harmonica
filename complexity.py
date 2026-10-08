@@ -94,6 +94,24 @@ def brace_block(text: str, start: int) -> str:
     return text[start:i - 1]
 
 
+def inline_music_variables(content: str, melody: str) -> str:
+    """Expand `\\name` references to `name = { ... }` blocks defined in the file.
+
+    Lets a song split `melodie` into parts (e.g. for a D.S. al Coda MIDI path)
+    while the notes are still analysed once, in written order.
+    """
+    defs = {m.group(1): brace_block(content, m.end())
+            for m in re.finditer(r'\b([A-Za-z]+)\s*=\s*\{', content)
+            if m.group(1) != 'melodie'}
+    for _ in range(5):
+        expanded = re.sub(r'\\([A-Za-z]+)\b',
+                          lambda m: defs.get(m.group(1), m.group(0)), melody)
+        if expanded == melody:
+            break
+        melody = expanded
+    return melody
+
+
 # --------- Difficulty analysis ---------
 
 def analyze_difficulty(content: str) -> dict:
@@ -116,6 +134,7 @@ def analyze_difficulty(content: str) -> dict:
 
     m_mel = re.search(r'\bmelodie\s*=\s*\{', content)
     melody = brace_block(content, m_mel.end()) if m_mel else content
+    melody = inline_music_variables(content, melody)
 
     current = 60
     names_sorted = sorted(notes_map.keys(), key=len, reverse=True)
