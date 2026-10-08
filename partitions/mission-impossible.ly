@@ -6,12 +6,11 @@
   copyrightStatus = "copyrighted"
   composerNationality = "ar"
   youtube = "https://www.youtube.com/watch?v=_1UMdc18hl8"
+  enteredby = "Stéphane List"
+  source = "https://www.free-scores.com/PDF_FR/anderson-gustav-mission-impossible-89474.pdf"
 }
 
-% From: https://www.free-scores.com/PDF_FR/anderson-gustav-mission-impossible-89474.pdf
-
 \include "../include/harmonica.ly"
-%\include "lilypond-book-preamble.ly"
 \include "../include/style.ly"
 
 \language "français"
@@ -54,7 +53,7 @@ melodieIntro = {
   
   \compressEmptyMeasures
   \override MultiMeasureRest.expand-limit = 3
-  \set Score.proportionalNotationDuration = #(ly:make-moment 1 1)
+  \set Score.proportionalNotationDuration = #1
   R1*5/4*4
   \unset Score.proportionalNotationDuration
   
@@ -89,7 +88,7 @@ melodieSuite = {
   
   \compressEmptyMeasures
   \override MultiMeasureRest.expand-limit = 1
-  \set Score.proportionalNotationDuration = #(ly:make-moment 1 1)
+  \set Score.proportionalNotationDuration = #1
   R1*5/4*2
   \unset Score.proportionalNotationDuration
   
