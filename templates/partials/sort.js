@@ -5,7 +5,7 @@
     var tbody=table.tBodies[0];
     var rows=Array.from(tbody.rows);
     var col=th.cellIndex;
-    if(_col===col){_asc=!_asc;}else{_col=col;_asc=true;}
+    if(_col===col){_asc=!_asc;}else{_col=col;_asc=!th.classList.contains('sort-desc-first');}
     rows.sort(function(a,b){
       var va=(a.cells[col]&&a.cells[col].dataset.sort!==undefined)?a.cells[col].dataset.sort:a.cells[col].textContent.trim();
       var vb=(b.cells[col]&&b.cells[col].dataset.sort!==undefined)?b.cells[col].dataset.sort:b.cells[col].textContent.trim();

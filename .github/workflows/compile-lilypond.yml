@@ -37,6 +37,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
+        with:
+          fetch-depth: 0  # historique complet pour la date d'ajout (git log)
 
       - name: Install latest LilyPond
         run: |

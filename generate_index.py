@@ -4,6 +4,7 @@ import hashlib
 import logging
 import os
 import re
+import subprocess
 import sys
 import unicodedata
 from html import escape
@@ -205,6 +206,18 @@ def collect_outputs(base: str, output_dir: str) -> dict:
     }
 
 
+def git_added_date(path: str) -> str:
+    """ISO date (YYYY-MM-DD) of the first commit that added `path`, '' if unknown."""
+    try:
+        out = subprocess.run(
+            ["git", "log", "--follow", "--diff-filter=A", "--format=%as", "--", path],
+            capture_output=True, text=True, check=True,
+        ).stdout.split()
+    except (OSError, subprocess.CalledProcessError):
+        return ""
+    return out[-1] if out else ""
+
+
 def collect_songs() -> list[dict]:
     """Scan partitions/*.ly and return enriched song list."""
     if not os.path.isdir(PARTITIONS_DIR):
@@ -220,6 +233,7 @@ def collect_songs() -> list[dict]:
         base = fname[:-3]
         meta = parse_ly_metadata(full)
         meta['base'] = base
+        meta['addedDate'] = git_added_date(full)
         meta['outputs'] = collect_outputs(base, OUTPUT_DIR)
         songs.append(meta)
     songs.sort(key=lambda s: title_sort_key(s.get('title') or s['base']))
@@ -403,6 +417,11 @@ def _table_header(cols: list[tuple]) -> str:
     return f"<thead><tr>{ths}</tr></thead>"
 
 
+def _newest_first(songs: list[dict]) -> list[dict]:
+    """Default table order: most recently added first (ties keep title order)."""
+    return sorted(songs, key=lambda s: s.get('addedDate', ''), reverse=True)
+
+
 def _build_nav_maps(songs: list[dict]) -> dict[str, dict[str, tuple]]:
     """For 'diat' and 'chro', map a song's base -> (prev_song, next_song) among the
     songs that actually have a page for that tuning, in table order."""
@@ -416,6 +435,14 @@ def _build_nav_maps(songs: list[dict]) -> dict[str, dict[str, tuple]]:
             nav[s["base"]] = (prev_s, next_s)
         maps[tuning_key] = nav
     return maps
+
+
+def _added_cell(iso_date: str) -> str:
+    if not iso_date:
+        return "<td data-sort='0'>—</td>"
+    y, m, d = iso_date.split("-")
+    key = int(y + m + d)
+    return f"<td data-sort='{key}'>{d}/{m}/{y}</td>"
 
 
 def _song_row(meta: dict, public_only: bool, pdf_prefix: str = "", nav_maps: dict | None = None) -> str:
@@ -463,6 +490,7 @@ def _song_row(meta: dict, public_only: bool, pdf_prefix: str = "", nav_maps: dic
         row += "<td class='hidden col-pdf'>—</td>"
     row += f"<td class='badge'>{lyrics_icon(lyrics)}</td>"
     row += copyright_cell(status, composer)
+    row += _added_cell(meta.get('addedDate', ''))
     row += "</tr>\n"
     return row
 
@@ -473,7 +501,7 @@ _TABLE_COLS = [
     ("Œuvre", ""), ("Compositeur", ""), ("Clé", ""),
     ("Diatonique", "col-pdf"), ("Difficulté 🎵", ""),
     ("Chromatique", "col-pdf"),
-    ("Paroles", ""), ("Droits", ""),
+    ("Paroles", ""), ("Droits", ""), ("Ajouté", "sort-desc-first sort-desc"),
 ]
 
 _DIFFICULTY_HELP = (
@@ -488,7 +516,7 @@ def generate_index_html(songs: list[dict]) -> None:
 
     nav_maps = _build_nav_maps(songs)
     thead = _table_header(_TABLE_COLS)
-    rows  = "".join(_song_row(s, public_only=True, nav_maps=nav_maps) for s in songs)
+    rows  = "".join(_song_row(s, public_only=True, nav_maps=nav_maps) for s in _newest_first(songs))
 
     html = render(
         "index.html",
@@ -557,7 +585,7 @@ def generate_gammes_html(gammes: list[dict]) -> None:
 def generate_private_html(songs: list[dict], sha256_hash: str) -> None:
     nav_maps = _build_nav_maps(songs)
     thead = _table_header(_TABLE_COLS)
-    rows  = "".join(_song_row(s, public_only=False, nav_maps=nav_maps) for s in songs)
+    rows  = "".join(_song_row(s, public_only=False, nav_maps=nav_maps) for s in _newest_first(songs))
 
     html = render(
         "private.html",
