@@ -4,6 +4,7 @@ import hashlib
 import logging
 import os
 import re
+import shutil
 import subprocess
 import sys
 import unicodedata
@@ -55,6 +56,7 @@ OUTPUT_DIR     = "output"
 PARTITIONS_DIR = "partitions"
 GAMMES_DIR     = "gammes"
 LIENS_UTILES_MD = "liens_utiles.md"
+NOTES_PAGE = os.path.join("static", "notes-harmonica.html")  # built by notes_page.py
 
 # Password hash for the private page (override with PRIVATE_PASSWORD env var)
 _pw = os.environ.get("PRIVATE_PASSWORD") or "harmonica"
@@ -648,6 +650,15 @@ def _mn(x: float) -> str:
     return f"<mn>{_fr_num(x)}</mn>"
 
 
+def copy_notes_page() -> None:
+    """Copy the pre-built static notes page (see notes_page.py) into the output dir."""
+    if not os.path.isfile(NOTES_PAGE):
+        logger.warning(f"⚠️  {NOTES_PAGE} introuvable (lancer python notes_page.py)")
+        return
+    shutil.copyfile(NOTES_PAGE, os.path.join(OUTPUT_DIR, "notes-harmonica.html"))
+    logger.info("✓ notes-harmonica.html copié")
+
+
 def generate_difficulte_html() -> None:
     """Document the difficulty formula of complexity.py, with its current weights."""
     c = complexity
@@ -823,6 +834,7 @@ def main() -> None:
     generate_private_html(songs, PRIVATE_HASH)
     generate_liens_utiles_html()
     generate_difficulte_html()
+    copy_notes_page()
     log_summary(songs)
 
 

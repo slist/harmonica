@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block extra_style %}
+<style>
+.notes-intro{max-width:60em;color:var(--muted)}
+.toolbar{margin:1em 0;display:flex;gap:1.5em;flex-wrap:wrap;align-items:center}
+.toolbar label{cursor:pointer;font-weight:600;color:var(--accent)}
+.jump a{margin-right:.8em;text-decoration:none;color:var(--accent);font-weight:600}
+figure.harp{margin:1.5em 0;padding:.8em 1em;background:var(--surface);border:1px solid var(--border);border-radius:6px}
+figure.harp h2{font-family:'Cormorant Garamond',serif;font-style:italic;margin:.2em 0 .4em}
+figure.harp svg{width:100%;height:auto;max-width:900px;display:block}
+.cell{stroke-width:1.2}
+.cell.blow{fill:#dbe3f2;stroke:var(--accent)}
+.cell.draw{fill:#f1e0cc;stroke:var(--accent-2)}
+.cell.bend-blow{fill:#eef2fa;stroke:var(--accent);stroke-dasharray:3 2}
+.cell.bend-draw{fill:#faf1e6;stroke:var(--accent-2);stroke-dasharray:3 2}
+.cell.over{fill:#f6d9d4;stroke:#a13a2f}
+.cell.slide-blow{fill:#c3d0ea;stroke:var(--accent)}
+.cell.slide-draw{fill:#ebcfae;stroke:var(--accent-2)}
+.body{fill:var(--ink)}
+.hole-num{fill:#fff;font-weight:700;font-size:15px;text-anchor:middle}
+.row-label{fill:var(--muted);font-size:11.5px;text-anchor:end}
+svg text{font-family:'Public Sans',sans-serif}
+svg text[class^=n-]{font-size:13px;font-weight:600;text-anchor:middle;fill:var(--ink)}
+body.names-fr .n-en,body.names-en .n-fr{display:none}
+.legend{display:flex;gap:1.2em;flex-wrap:wrap;font-size:.85em;color:var(--muted);margin:.5em 0}
+.legend i{display:inline-block;width:1.6em;height:.9em;border-radius:4px;border:1.2px solid;vertical-align:-.1em;margin-right:.3em}
+</style>
+{% endblock %}
+{% block body %}
+<nav>
+  <a href="index.html">← Partitions</a>
+</nav>
+{% include "partials/hero.html" %}
+<p class="notes-intro">
+  Notes de chaque trou selon le modèle d'harmonica. Les octaves ne sont pas indiquées : elles montent de
+  gauche à droite. Les bends (en pointillés) font descendre la note ; les overblows et overdraws (en rouge)
+  la font monter. Chromatique : « bouton » = coulisse enfoncée (+ ½ ton).
+</p>
+<div class="toolbar">
+  <span>
+    <label><input type="radio" name="names" value="fr" checked> Do Ré Mi</label>
+    &nbsp;
+    <label><input type="radio" name="names" value="en"> C D E</label>
+  </span>
+  <span class="jump">
+    {% for s in sections %}<a href="#{{ s.id }}">{{ s.title.split(' (')[0] }}</a>{% endfor %}
+  </span>
+</div>
+<div class="legend">
+  <span><i style="background:#dbe3f2;border-color:var(--accent)"></i>soufflé</span>
+  <span><i style="background:#f1e0cc;border-color:var(--accent-2)"></i>aspiré</span>
+  <span><i style="background:#eef2fa;border-color:var(--accent);border-style:dashed"></i>bend</span>
+  <span><i style="background:#f6d9d4;border-color:#a13a2f"></i>overblow / overdraw</span>
+</div>
+{% for s in sections %}
+<figure class="harp" id="{{ s.id }}">
+  <h2>{{ s.title }}</h2>
+  {{ s.svg | safe }}
+</figure>
+{% endfor %}
+<script>
+document.querySelectorAll('input[name=names]').forEach(function(r){
+  r.addEventListener('change',function(){
+    document.body.className='names-'+r.value;
+  });
+});
+document.body.className='names-fr';
+</script>
+{% endblock %}
