@@ -5,7 +5,7 @@
 #(define compile-midi (ly:get-option 'compile-midi))
 
 \header {
-  title = "Cartographie de l'Harmonica en Do (C)"
+  title = "Cartographie de l'harmonica diatonique en Do (C)"
   subtitle = "Étude complète des notes, altérations, gammes"
   opus = "Op. 1"
   lyricsLang = #'(fr)
@@ -82,13 +82,13 @@ melodie = {
   \sectionTitle "Gamme pentatonique mineure de Mi"
   mi,,, sol la si re
   mi    sol la si re
-  mi    sol la si re mi
+  mi    sol la si
   \break
 
   \sectionTitle "Gamme pentatonique blues de Mi"
   mi,,, sol la sib si re
   mi    sol la sib si re
-  mi    sol la sib si re mi
+  mi    sol la sib si
   \break
 
   \bar "|."
@@ -126,12 +126,12 @@ melodie = {
   % penta mineure de Mi
   Mi Sol La Si "Ré"
   Mi Sol La Si "Ré"
-  Mi Sol La Si "Ré" Mi
+  Mi Sol La Si
 
   % penta blues de Mi
   Mi Sol La Si♭ Si "Ré"
   Mi Sol La Si♭ Si "Ré"
-  Mi Sol La Si♭ Si "Ré" Mi
+  Mi Sol La Si♭ Si
 }
 
 % ============================

@@ -92,7 +92,7 @@ def parse_ly_metadata(ly_path: str) -> dict:
         "copyrightStatus": "unknown", "lyricsLang": [],
         "key": "unknown", "composer": "", "title": "",
         "composerNationality": "", "difficulty": {}, "youtube": "",
-        "diatonicHarmonicaKeys": "C",
+        "diatonicHarmonicaKeys": "C", "instrument": "",
     }
     if not os.path.exists(ly_path):
         logger.warning(f"  ⚠️  Fichier .ly introuvable : '{ly_path}'")
@@ -121,6 +121,7 @@ def parse_ly_metadata(ly_path: str) -> dict:
                     metadata["composer"] = s.strip()
                     break
     metadata["title"]                = find(rf'^\s*title\s*=\s*"{_QUOTED}"', re.MULTILINE)
+    metadata["instrument"]           = find(rf'^\s*instrument\s*=\s*"{_QUOTED}"', re.MULTILINE)
     metadata["composerNationality"]  = find(rf'composerNationality\s*=\s*"{_QUOTED}"')
     metadata["youtube"]               = find(rf'youtube\s*=\s*"{_QUOTED}"')
 
@@ -549,27 +550,20 @@ def generate_gammes_html(gammes: list[dict]) -> None:
     gammes_out = os.path.join(OUTPUT_DIR, "gammes")
     os.makedirs(gammes_out, exist_ok=True)
 
-    cols = [
-        ("Titre", ""), ("Instrument", ""),
-        ("Diatonique", "col-pdf"), ("Chromatique", "col-pdf"), ("MP3", ""), ("Droits", ""),
-    ]
+    cols = [("Titre", ""), ("Partition", "col-pdf"), ("MP3", "")]
     thead = _table_header(cols)
 
     rows = ""
     for g in gammes:
-        title    = g['title'] or g['base']
-        instru   = g.get('composer', '') or ""
-        diat     = g['outputs']['diat']
-        chro     = g['outputs']['chro']
-        mp3s     = g['outputs']['mp3s']
-        status   = g['copyrightStatus']
+        title = g['title'] or g['base']
+        # each gamme is written for one instrument only (header `instrument`)
+        chromatic = 'chromatique' in g.get('instrument', '').lower()
+        tuning, files = ('chromatique', g['outputs']['chro']) if chromatic else ('diatonique', g['outputs']['diat'])
+        mp3s = g['outputs']['mp3s']
         rows += "<tr>"
         rows += f"<td data-sort='{escape(title.lower())}'>{escape(title)}</td>"
-        rows += f"<td>{escape(instru)}</td>"
-        rows += f"<td class='col-pdf'>{_pdf_cell(diat, mp3s, gammes_out, g['base'], 'diatonique', title, 'index.html')}</td>"
-        rows += f"<td class='col-pdf'>{_pdf_cell(chro, mp3s, gammes_out, g['base'], 'chromatique', title, 'index.html')}</td>"
+        rows += f"<td class='col-pdf'>{_pdf_cell(files, mp3s, gammes_out, g['base'], tuning, title, 'index.html')}</td>"
         rows += f"<td>{_mp3_link(mp3s)}</td>"
-        rows += copyright_cell(status, instru)
         rows += "</tr>\n"
 
     # links to merged gamme PDFs (if they exist)

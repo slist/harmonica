@@ -1,13 +1,11 @@
 \version "2.24.3"
 
 #(define compile-diatonique (ly:get-option 'compile-diatonique))
-#(define compile-chromatique (ly:get-option 'compile-chromatique))
 #(define compile-midi (ly:get-option 'compile-midi))
 
 \header {
-  title = "Cartographie de l'Harmonica en Ré (D)"
+  title = "Cartographie de l'harmonica diatonique en Ré (D)"
   subtitle = "Étude complète des notes, altérations, gammes"
-  opus = "Op. 2"
   lyricsLang = #'(fr)
   copyrightStatus = "public-domain"
   instrument = "Harmonica diatonique en Ré (D)"
@@ -27,56 +25,62 @@
 }
 
 \paper {
-  markup-system-spacing.basic-distance = #8
-  system-system-spacing.basic-distance = #24
+  markup-system-spacing.basic-distance = #8 % Espace entre titre et première portée
+  system-system-spacing.basic-distance = #24 % Espace entre les portées
 }
 
+% Notes en hauteurs absolues (do' = do central, comme sur la tablature de l'harmonica)
 melodie = {
   \clef "treble^8"
 
-  \sectionTitle "Notes soufflées de 1 à 10"
-  re mi la re' mi' la' re'' mi'' la'' re'''
+  \sectionTitle "Notes soufflées de 1 à 10 (-2 = +3)"
+  re' fad' la' re'' fad'' la'' re''' fad''' la''' re''''
   \break
-
   \sectionTitle "Notes aspirées de 1 à 10"
-  mi,,, la dod mi' sol' si' dod'' mi'' sol'' si''
+  mi' la' dod'' mi'' sol'' si'' dod''' mi''' sol''' si'''
   \break
-
-  \sectionTitle "Altérations (bends)"
-  mib,,, reb dob sib lab solb
+  \sectionTitle "Altérations (bends, overblows, overdraws)"
+  mib' fa' sol' lab' sib' si' do'' mib'' fa'' lab'' sib'' do''' mib''' fa''' lab''' sib''' do'''' dod''''
   \break
-
-  \sectionTitle "Gamme de Ré majeur"
-  re,,, mi fad sol la si dod re'
-  \break
-
-  \sectionTitle "Gamme mixolydienne de Ré (blues/folk)"
-  re,,, mi fad sol la si do re'
-  \break
-
+  \sectionTitle "Toutes les notes"
+  re' mib' mi' fa' fad' sol' lab' la' sib' si' do'' dod''
+  re'' mib'' mi'' fa'' fad'' sol'' lab'' la'' sib'' si'' do''' dod'''
+  re''' mib''' mi''' fa''' fad''' sol''' lab''' la''' sib''' si''' do'''' dod''''
+  re''''
+  \pageBreak
   \sectionTitle "Gamme pentatonique majeure de Ré"
-  re,,, mi fad la si re'
+  re' mi' fad' la' si' re'' mi'' fad'' la'' si'' re''' mi''' fad''' la''' si''' re''''
   \break
-
   \sectionTitle "Gamme pentatonique mineure de Ré"
-  re,,, fa sol la do re'
+  re' fa' sol' la' do'' re'' fa'' sol'' la'' do''' re''' fa''' sol''' la''' do'''' re''''
   \break
-
-  \sectionTitle "Gamme blues de Ré"
-  re,,, fa sol solb la do re'
+  \sectionTitle "Gamme pentatonique blues de Ré"
+  re' fa' sol' lab' la' do'' re'' fa'' sol'' lab'' la'' do''' re''' fa''' sol''' lab''' la''' do'''' re''''
+  \break
+  \sectionTitle "Gamme mixolydienne de Ré"
+  re' mi' fad' sol' la' si' do'' re'' mi'' fad'' sol'' la'' si'' do''' re''' mi''' fad''' sol''' la''' si''' do'''' re''''
+  \pageBreak
+  \sectionTitle "Gamme pentatonique mineure de Fa♯"
+  fad' la' si' dod'' mi'' fad'' la'' si'' dod''' mi''' fad''' la''' si''' dod''''
+  \break
+  \sectionTitle "Gamme pentatonique blues de Fa♯"
+  fad' la' si' do'' dod'' mi'' fad'' la'' si'' do''' dod''' mi''' fad''' la''' si''' do'''' dod''''
+  \break
 
   \bar "|."
 }
 \addlyrics {
-  \override LyricText.font-size = #1
-  Ré Mi La Ré Mi La Ré Mi La Ré
-  Mi La Do♯ Mi Sol Si Do♯ Mi Sol Si
-  Ré♭ Do♭ Si♭ La♭ Sol♭ Mi♭
-  Ré Mi Fa♯ Sol La Si Do♯ Ré
-  Ré Mi Fa♯ Sol La Si Do Ré
-  Ré Mi Fa♯ La Si Ré
-  Ré Fa Sol La Do Ré
-  Ré Fa Sol Sol♭ La Do Ré
+  \override LyricText.font-size = #1  % Augmente la taille (0 est la taille normale)
+  "Ré" "Fa♯" "La" "Ré" "Fa♯" "La" "Ré" "Fa♯" "La" "Ré"
+  "Mi" "La" "Do♯" "Mi" "Sol" "Si" "Do♯" "Mi" "Sol" "Si"
+  "Mi♭" "Fa" "Sol" "La♭" "Si♭" "Si" "Do" "Mi♭" "Fa" "La♭" "Si♭" "Do" "Mi♭" "Fa" "La♭" "Si♭" "Do" "Do♯"
+  "Ré" "Mi♭" "Mi" "Fa" "Fa♯" "Sol" "La♭" "La" "Si♭" "Si" "Do" "Do♯" "Ré" "Mi♭" "Mi" "Fa" "Fa♯" "Sol" "La♭" "La" "Si♭" "Si" "Do" "Do♯" "Ré" "Mi♭" "Mi" "Fa" "Fa♯" "Sol" "La♭" "La" "Si♭" "Si" "Do" "Do♯" "Ré"
+  "Ré" "Mi" "Fa♯" "La" "Si" "Ré" "Mi" "Fa♯" "La" "Si" "Ré" "Mi" "Fa♯" "La" "Si" "Ré"
+  "Ré" "Fa" "Sol" "La" "Do" "Ré" "Fa" "Sol" "La" "Do" "Ré" "Fa" "Sol" "La" "Do" "Ré"
+  "Ré" "Fa" "Sol" "La♭" "La" "Do" "Ré" "Fa" "Sol" "La♭" "La" "Do" "Ré" "Fa" "Sol" "La♭" "La" "Do" "Ré"
+  "Ré" "Mi" "Fa♯" "Sol" "La" "Si" "Do" "Ré" "Mi" "Fa♯" "Sol" "La" "Si" "Do" "Ré" "Mi" "Fa♯" "Sol" "La" "Si" "Do" "Ré"
+  "Fa♯" "La" "Si" "Do♯" "Mi" "Fa♯" "La" "Si" "Do♯" "Mi" "Fa♯" "La" "Si" "Do♯"
+  "Fa♯" "La" "Si" "Do" "Do♯" "Mi" "Fa♯" "La" "Si" "Do" "Do♯" "Mi" "Fa♯" "La" "Si" "Do" "Do♯"
 }
 
 % ============================
@@ -87,23 +91,7 @@ diatoniqueScore =
 \score {
   <<
     \new Staff {
-      \diatonicDHarmonicaTab \relative re' {
-        \melodie
-      }
-    }
-  >>
-  \layout { }
-}
-
-% ============================
-% SCORE CHROMATIQUE
-% ============================
-
-chromatiqueScore =
-\score {
-  <<
-    \new Staff {
-      \chromaticHarmonicaTab \relative re' {
+      \diatonicDHarmonicaTab {
         \melodie
       }
     }
@@ -119,7 +107,7 @@ midiScore =
 \score {
   \new Staff {
     \set Staff.midiInstrument = #"harmonica"
-    \relative re' {
+    {
       \melodie
     }
   }
@@ -131,12 +119,9 @@ midiScore =
 % Inclusion conditionnelle des scores
 #(if compile-diatonique
      (ly:parser-include-string "\\diatoniqueScore"))
-#(if compile-chromatique
-     (ly:parser-include-string "\\chromatiqueScore"))
 #(if compile-midi
      (ly:parser-include-string "\\midiScore"))
 
 % CI-IGNORE-BELOW : lignes de test manuel local, toujours ignorées par la compilation GitHub Actions
 %\diatoniqueScore
-%\chromatiqueScore
 %\midiScore

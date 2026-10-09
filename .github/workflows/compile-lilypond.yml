@@ -119,8 +119,12 @@ jobs:
             tmp_file=$(strip_ci_ignored "${file}")
             trap 'rm -f "${tmp_file}"' RETURN
 
-            lilypond -dcompile-diatonique  -o "output/gammes/${base}_diatonique" "${tmp_file}" || { echo "❌ Failed: ${base} (diatonique)";  return 1; }
-            lilypond -dcompile-chromatique -o "output/gammes/${base}_chromatique" "${tmp_file}" || { echo "❌ Failed: ${base} (chromatique)"; return 1; }
+            # Une gamme est écrite pour un seul instrument (champ `instrument` du header)
+            if grep -qiE '^[[:space:]]*instrument[[:space:]]*=.*chromatique' "${tmp_file}"; then
+              lilypond -dcompile-chromatique -o "output/gammes/${base}_chromatique" "${tmp_file}" || { echo "❌ Failed: ${base} (chromatique)"; return 1; }
+            else
+              lilypond -dcompile-diatonique  -o "output/gammes/${base}_diatonique" "${tmp_file}" || { echo "❌ Failed: ${base} (diatonique)";  return 1; }
+            fi
             lilypond --formats=midi -dcompile-midi -o "output/gammes/${base}" "${tmp_file}"    || { echo "❌ Failed: ${base} (midi)";        return 1; }
           }
           export -f compile_gamme

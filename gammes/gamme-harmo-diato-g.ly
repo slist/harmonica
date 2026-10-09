@@ -1,67 +1,97 @@
 \version "2.24.3"
 
 #(define compile-diatonique (ly:get-option 'compile-diatonique))
-#(define compile-chromatique (ly:get-option 'compile-chromatique))
 #(define compile-midi (ly:get-option 'compile-midi))
 
 \header {
-  title = "Cartographie de l'Harmonica en Sol (G)"
-  subtitle = "Étude complète des notes et altérations"
-  opus = "Op. 1"
-  lyricsLang = #'(en)
+  title = "Cartographie de l'harmonica diatonique en Sol (G)"
+  subtitle = "Étude complète des notes, altérations, gammes"
+  lyricsLang = #'(fr)
   copyrightStatus = "public-domain"
-  instrument = "Harmonica diatonique en G"
+  instrument = "Harmonica diatonique en Sol (G)"
 }
 
 \include "../include/harmonica.ly"
 \include "../include/style.ly"
 
+\language "français"
+
 \layout {
   \context {
     \Lyrics
-    %\override LyricText.font-size = #-1
     \override LyricHyphen.minimum-distance = #0.5
     \override LyricSpace.minimum-distance = #0.6
   }
 }
 
 \paper {
-  markup-system-spacing.basic-distance = #30 % Espace entre titre et première portée
-  system-system-spacing.basic-distance = #30 % Espace entre les portées
+  markup-system-spacing.basic-distance = #8 % Espace entre titre et première portée
+  system-system-spacing.basic-distance = #24 % Espace entre les portées
 }
 
+% Notes en hauteurs absolues (do' = do central, comme sur la tablature de l'harmonica)
 melodie = {
   \clef "treble^8"
-  
+
   \sectionTitle "Notes soufflées de 1 à 10 (-2 = +3)"
-  g b d g b d g b d g
+  sol' si' re'' sol'' si'' re''' sol''' si''' re'''' sol''''
   \break
-  
   \sectionTitle "Notes aspirées de 1 à 10"
-  a,,, d fis a c e fis a c e  
+  la' re'' fad'' la'' do''' mi''' fad''' la''' do'''' mi''''
+  \break
+  \sectionTitle "Altérations (bends, overblows, overdraws)"
+  lab' sib' do'' reb'' mib'' mi'' fa'' lab'' sib'' reb''' mib''' fa''' lab''' sib''' reb'''' mib'''' fa'''' fad''''
+  \break
+  \sectionTitle "Toutes les notes"
+  sol' lab' la' sib' si' do'' reb'' re'' mib'' mi'' fa'' fad''
+  sol'' lab'' la'' sib'' si'' do''' reb''' re''' mib''' mi''' fa''' fad'''
+  sol''' lab''' la''' sib''' si''' do'''' reb'''' re'''' mib'''' mi'''' fa'''' fad''''
+  sol''''
+  \pageBreak
+  \sectionTitle "Gamme pentatonique majeure de Sol"
+  sol' la' si' re'' mi'' sol'' la'' si'' re''' mi''' sol''' la''' si''' re'''' mi'''' sol''''
+  \break
+  \sectionTitle "Gamme pentatonique mineure de Sol"
+  sol' sib' do'' re'' fa'' sol'' sib'' do''' re''' fa''' sol''' sib''' do'''' re'''' fa'''' sol''''
+  \break
+  \sectionTitle "Gamme pentatonique blues de Sol"
+  sol' sib' do'' reb'' re'' fa'' sol'' sib'' do''' reb''' re''' fa''' sol''' sib''' do'''' reb'''' re'''' fa'''' sol''''
+  \break
+  \sectionTitle "Gamme mixolydienne de Sol"
+  sol' la' si' do'' re'' mi'' fa'' sol'' la'' si'' do''' re''' mi''' fa''' sol''' la''' si''' do'''' re'''' mi'''' fa'''' sol''''
+  \pageBreak
+  \sectionTitle "Gamme pentatonique mineure de Si"
+  si' re'' mi'' fad'' la'' si'' re''' mi''' fad''' la''' si''' re'''' mi'''' fad''''
+  \break
+  \sectionTitle "Gamme pentatonique blues de Si"
+  si' re'' mi'' fa'' fad'' la'' si'' re''' mi''' fa''' fad''' la''' si''' re'''' mi'''' fa'''' fad''''
   \break
 
-  \sectionTitle "Altérations"
-  aes,,, des c f e ees aes ees' bes' des fis f   
-  
   \bar "|."
 }
 \addlyrics {
   \override LyricText.font-size = #1  % Augmente la taille (0 est la taille normale)
-  G B D G B D G B D G
-  A D F♯ A C E F♯ A C E
-  A♭ D♭ C F E E♭ A♭ E♭ B♭ D♭ F♯ F
+  "Sol" "Si" "Ré" "Sol" "Si" "Ré" "Sol" "Si" "Ré" "Sol"
+  "La" "Ré" "Fa♯" "La" "Do" "Mi" "Fa♯" "La" "Do" "Mi"
+  "La♭" "Si♭" "Do" "Ré♭" "Mi♭" "Mi" "Fa" "La♭" "Si♭" "Ré♭" "Mi♭" "Fa" "La♭" "Si♭" "Ré♭" "Mi♭" "Fa" "Fa♯"
+  "Sol" "La♭" "La" "Si♭" "Si" "Do" "Ré♭" "Ré" "Mi♭" "Mi" "Fa" "Fa♯" "Sol" "La♭" "La" "Si♭" "Si" "Do" "Ré♭" "Ré" "Mi♭" "Mi" "Fa" "Fa♯" "Sol" "La♭" "La" "Si♭" "Si" "Do" "Ré♭" "Ré" "Mi♭" "Mi" "Fa" "Fa♯" "Sol"
+  "Sol" "La" "Si" "Ré" "Mi" "Sol" "La" "Si" "Ré" "Mi" "Sol" "La" "Si" "Ré" "Mi" "Sol"
+  "Sol" "Si♭" "Do" "Ré" "Fa" "Sol" "Si♭" "Do" "Ré" "Fa" "Sol" "Si♭" "Do" "Ré" "Fa" "Sol"
+  "Sol" "Si♭" "Do" "Ré♭" "Ré" "Fa" "Sol" "Si♭" "Do" "Ré♭" "Ré" "Fa" "Sol" "Si♭" "Do" "Ré♭" "Ré" "Fa" "Sol"
+  "Sol" "La" "Si" "Do" "Ré" "Mi" "Fa" "Sol" "La" "Si" "Do" "Ré" "Mi" "Fa" "Sol" "La" "Si" "Do" "Ré" "Mi" "Fa" "Sol"
+  "Si" "Ré" "Mi" "Fa♯" "La" "Si" "Ré" "Mi" "Fa♯" "La" "Si" "Ré" "Mi" "Fa♯"
+  "Si" "Ré" "Mi" "Fa" "Fa♯" "La" "Si" "Ré" "Mi" "Fa" "Fa♯" "La" "Si" "Ré" "Mi" "Fa" "Fa♯"
 }
 
 % ============================
 % SCORE DIATONIQUE
 % ============================
 
-diatoniqueScore = 
+diatoniqueScore =
 \score {
   <<
-    \new Staff { 
-      \diatonicGHarmonicaTab \relative c'' {
+    \new Staff {
+      \diatonicGHarmonicaTab {
         \melodie
       }
     }
@@ -77,71 +107,21 @@ midiScore =
 \score {
   \new Staff {
     \set Staff.midiInstrument = #"harmonica"
-    \relative c'' {
+    {
       \melodie
     }
   }
   \midi {
-    \tempo 4 = 108
+    \tempo 4 = 100
   }
-}
-
-% ============================
-% SCORE CHROMATIQUE
-% ============================
-
-chromatiqueScore =
-\score {
-  <<
-    \new Staff {
-      \chromaticHarmonicaTab \relative c'' {
-        \melodie
-      }
-    }
-  >>
-  \layout { }
 }
 
 % Inclusion conditionnelle des scores
 #(if compile-diatonique
      (ly:parser-include-string "\\diatoniqueScore"))
-#(if compile-chromatique
-     (ly:parser-include-string "\\chromatiqueScore"))
 #(if compile-midi
      (ly:parser-include-string "\\midiScore"))
 
-% ============================
-% HISTOIRE DU BÉMOL
-% ============================
-
-\markup {
-  \column {
-    \vspace #3  % Un peu d'espace après la musique
-    \draw-hline % Une ligne horizontale pour séparer
-    \vspace #1
-    \fill-line { \bold \fontsize #2 "Le saviez-vous ? L'origine du Bémol" }
-    \vspace #1
-    \justify {
-      Le symbole du bémol (\flat) trouve son origine au Moyen \concat { Âge. }
-      À cette époque, pour différencier les deux types de "Si", on utilisait 
-      deux écritures distinctes :
-    }
-    \vspace #0.5
-    \line { 
-      • Le \bold "b carré" \italic "(b quadratum)" pour le Si naturel, qui a donné 
-      naissance au \bold "bécarre" (\natural) et au \bold "dièse" (\sharp). 
-    }
-    \vspace #0.5
-    \line { 
-      • Le \bold "b rond" \italic "(b molle)" pour le Si bémol, qui a donné notre 
-      \bold "bémol" (\flat) et le mot lui-même : "B-molle" (le B mou).
-    }
-    \vspace #1
-    \italic \fill-line { "" "— Tiré de l'histoire de la notation musicale —" }
-  }
-}
-
 % CI-IGNORE-BELOW : lignes de test manuel local, toujours ignorées par la compilation GitHub Actions
 %\diatoniqueScore
-%\chromatiqueScore
 %\midiScore
