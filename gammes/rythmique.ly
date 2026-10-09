@@ -1,9 +1,9 @@
 \version "2.24.3"
 
 \header {
-  title = "Harmonica en C - Rythmique (Diatonique)"
+  title = "Rythmique — harmonica diatonique en Do (C)"
   %subtitle = "Marc CORNELISSEN www.marcmusique.com"
-  %instrument = "Harmonica en C"
+  instrument = "Harmonica diatonique en Do (C)"
   %composer = "Marc CORNELISSEN www.marcmusique.com"
   copyrightStatus = "public-domain"
   lyricsLang = #'(fr)

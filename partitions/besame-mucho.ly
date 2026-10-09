@@ -196,7 +196,7 @@ midiScore =
 \score {
   \new Staff {
     \set Staff.midiInstrument = #"harmonica"
-    \relative do' {
+    \unfoldRepeats \relative do' {
       \melodie
     }
   }

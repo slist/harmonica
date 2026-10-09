@@ -106,7 +106,7 @@ midiScore =
 \score {
   \new Staff {
     \set Staff.midiInstrument = #"harmonica"
-      \melodie
+      \unfoldRepeats \melodie
   }
   \midi {
     \tempo 4 = 110

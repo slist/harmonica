@@ -4,6 +4,8 @@ import hashlib
 import logging
 import os
 import re
+import shutil
+import subprocess
 import sys
 import unicodedata
 from html import escape
@@ -54,6 +56,7 @@ OUTPUT_DIR     = "output"
 PARTITIONS_DIR = "partitions"
 GAMMES_DIR     = "gammes"
 LIENS_UTILES_MD = "liens_utiles.md"
+NOTES_PAGE = os.path.join("static", "notes-harmonica.html")  # built by notes_page.py
 
 # Password hash for the private page (override with PRIVATE_PASSWORD env var)
 _pw = os.environ.get("PRIVATE_PASSWORD") or "harmonica"
@@ -89,7 +92,7 @@ def parse_ly_metadata(ly_path: str) -> dict:
         "copyrightStatus": "unknown", "lyricsLang": [],
         "key": "unknown", "composer": "", "title": "",
         "composerNationality": "", "difficulty": {}, "youtube": "",
-        "diatonicHarmonicaKeys": "C",
+        "diatonicHarmonicaKeys": "C", "instrument": "",
     }
     if not os.path.exists(ly_path):
         logger.warning(f"  ⚠️  Fichier .ly introuvable : '{ly_path}'")
@@ -118,6 +121,7 @@ def parse_ly_metadata(ly_path: str) -> dict:
                     metadata["composer"] = s.strip()
                     break
     metadata["title"]                = find(rf'^\s*title\s*=\s*"{_QUOTED}"', re.MULTILINE)
+    metadata["instrument"]           = find(rf'^\s*instrument\s*=\s*"{_QUOTED}"', re.MULTILINE)
     metadata["composerNationality"]  = find(rf'composerNationality\s*=\s*"{_QUOTED}"')
     metadata["youtube"]               = find(rf'youtube\s*=\s*"{_QUOTED}"')
 
@@ -205,6 +209,29 @@ def collect_outputs(base: str, output_dir: str) -> dict:
     }
 
 
+def git_added_date(path: str) -> str:
+    """ISO date (YYYY-MM-DD) of the first commit that added `path`, '' if unknown.
+
+    Follows renames (files moved between folders keep their original date) but stops
+    at a copy: git's --follow also reports a new file that merely resembles another
+    one as a copy of it, which would otherwise give it that other file's older date.
+    """
+    try:
+        out = subprocess.run(
+            ["git", "log", "--follow", "--name-status", "--format=@%as", "--", path],
+            capture_output=True, text=True, check=True,
+        ).stdout.splitlines()
+    except (OSError, subprocess.CalledProcessError):
+        return ""
+    date = ""
+    for line in out:
+        if line.startswith("@"):
+            date = line[1:]
+        elif line[:1] in ("A", "C"):
+            break
+    return date
+
+
 def collect_songs() -> list[dict]:
     """Scan partitions/*.ly and return enriched song list."""
     if not os.path.isdir(PARTITIONS_DIR):
@@ -220,6 +247,7 @@ def collect_songs() -> list[dict]:
         base = fname[:-3]
         meta = parse_ly_metadata(full)
         meta['base'] = base
+        meta['addedDate'] = git_added_date(full)
         meta['outputs'] = collect_outputs(base, OUTPUT_DIR)
         songs.append(meta)
     songs.sort(key=lambda s: title_sort_key(s.get('title') or s['base']))
@@ -305,9 +333,17 @@ def _player_page_html(
   <audio id='audio-player' controls src='{escape(_cache_bust(mp3_file))}'>
     Votre navigateur ne supporte pas la lecture audio.
   </audio>
-  <button class="play-btn" onclick="audioPlay()" title="Démarrer depuis le début">▶ Play</button>
-  <button class="play-btn" id="audio-play-delay" onclick="audioPlayDelayed()"
-          title="Démarrer depuis le début après un compte à rebours de 3 secondes">▶ Play in 3s</button>
+  <span id="audio-idle-buttons">
+    <button class="play-btn" onclick="audioPlay()" title="Démarrer depuis le début">▶ Play</button>
+    <button class="play-btn" id="audio-play-delay" onclick="audioPlayDelayed()"
+            title="Démarrer depuis le début après un compte à rebours de 3 secondes">▶ Play in 3s</button>
+  </span>
+  <span id="audio-playing-buttons" hidden>
+    <button class="play-btn" id="audio-pause-btn" onclick="audioPause()" title="Mettre en pause / reprendre">⏸ Pause</button>
+    <button class="play-btn" onclick="audioStop()" title="Arrêter et revenir au début">⏹ Stop</button>
+    <button class="play-btn" id="audio-restart-delay" onclick="audioRestartDelayed()"
+            title="Arrêter puis redémarrer après un compte à rebours de 3 secondes">↻ Restart in 3s</button>
+  </span>
   {_speed_select_html("audioSetSpeed(this.value)")}
 </div>"""
         audio_script = f"<script>\n{render('partials/audio.js')}</script>"
@@ -395,6 +431,11 @@ def _table_header(cols: list[tuple]) -> str:
     return f"<thead><tr>{ths}</tr></thead>"
 
 
+def _newest_first(songs: list[dict]) -> list[dict]:
+    """Default table order: most recently added first (ties keep title order)."""
+    return sorted(songs, key=lambda s: s.get('addedDate', ''), reverse=True)
+
+
 def _build_nav_maps(songs: list[dict]) -> dict[str, dict[str, tuple]]:
     """For 'diat' and 'chro', map a song's base -> (prev_song, next_song) among the
     songs that actually have a page for that tuning, in table order."""
@@ -408,6 +449,14 @@ def _build_nav_maps(songs: list[dict]) -> dict[str, dict[str, tuple]]:
             nav[s["base"]] = (prev_s, next_s)
         maps[tuning_key] = nav
     return maps
+
+
+def _added_cell(iso_date: str) -> str:
+    if not iso_date:
+        return "<td data-sort='0'>—</td>"
+    y, m, d = iso_date.split("-")
+    key = int(y + m + d)
+    return f"<td data-sort='{key}'>{d}/{m}/{y}</td>"
 
 
 def _song_row(meta: dict, public_only: bool, pdf_prefix: str = "", nav_maps: dict | None = None) -> str:
@@ -455,6 +504,7 @@ def _song_row(meta: dict, public_only: bool, pdf_prefix: str = "", nav_maps: dic
         row += "<td class='hidden col-pdf'>—</td>"
     row += f"<td class='badge'>{lyrics_icon(lyrics)}</td>"
     row += copyright_cell(status, composer)
+    row += _added_cell(meta.get('addedDate', ''))
     row += "</tr>\n"
     return row
 
@@ -465,7 +515,7 @@ _TABLE_COLS = [
     ("Œuvre", ""), ("Compositeur", ""), ("Clé", ""),
     ("Diatonique", "col-pdf"), ("Difficulté 🎵", ""),
     ("Chromatique", "col-pdf"),
-    ("Paroles", ""), ("Droits", ""),
+    ("Paroles", ""), ("Droits", ""), ("Ajouté", "sort-desc-first sort-desc"),
 ]
 
 _DIFFICULTY_HELP = (
@@ -480,7 +530,7 @@ def generate_index_html(songs: list[dict]) -> None:
 
     nav_maps = _build_nav_maps(songs)
     thead = _table_header(_TABLE_COLS)
-    rows  = "".join(_song_row(s, public_only=True, nav_maps=nav_maps) for s in songs)
+    rows  = "".join(_song_row(s, public_only=True, nav_maps=nav_maps) for s in _newest_first(songs))
 
     html = render(
         "index.html",
@@ -500,27 +550,20 @@ def generate_gammes_html(gammes: list[dict]) -> None:
     gammes_out = os.path.join(OUTPUT_DIR, "gammes")
     os.makedirs(gammes_out, exist_ok=True)
 
-    cols = [
-        ("Titre", ""), ("Instrument", ""),
-        ("Diatonique", "col-pdf"), ("Chromatique", "col-pdf"), ("MP3", ""), ("Droits", ""),
-    ]
+    cols = [("Titre", ""), ("Partition", "col-pdf"), ("MP3", "")]
     thead = _table_header(cols)
 
     rows = ""
     for g in gammes:
-        title    = g['title'] or g['base']
-        instru   = g.get('composer', '') or ""
-        diat     = g['outputs']['diat']
-        chro     = g['outputs']['chro']
-        mp3s     = g['outputs']['mp3s']
-        status   = g['copyrightStatus']
+        title = g['title'] or g['base']
+        # each gamme is written for one instrument only (header `instrument`)
+        chromatic = 'chromatique' in g.get('instrument', '').lower()
+        tuning, files = ('chromatique', g['outputs']['chro']) if chromatic else ('diatonique', g['outputs']['diat'])
+        mp3s = g['outputs']['mp3s']
         rows += "<tr>"
         rows += f"<td data-sort='{escape(title.lower())}'>{escape(title)}</td>"
-        rows += f"<td>{escape(instru)}</td>"
-        rows += f"<td class='col-pdf'>{_pdf_cell(diat, mp3s, gammes_out, g['base'], 'diatonique', title, 'index.html')}</td>"
-        rows += f"<td class='col-pdf'>{_pdf_cell(chro, mp3s, gammes_out, g['base'], 'chromatique', title, 'index.html')}</td>"
+        rows += f"<td class='col-pdf'>{_pdf_cell(files, mp3s, gammes_out, g['base'], tuning, title, 'index.html')}</td>"
         rows += f"<td>{_mp3_link(mp3s)}</td>"
-        rows += copyright_cell(status, instru)
         rows += "</tr>\n"
 
     # links to merged gamme PDFs (if they exist)
@@ -549,7 +592,7 @@ def generate_gammes_html(gammes: list[dict]) -> None:
 def generate_private_html(songs: list[dict], sha256_hash: str) -> None:
     nav_maps = _build_nav_maps(songs)
     thead = _table_header(_TABLE_COLS)
-    rows  = "".join(_song_row(s, public_only=False, nav_maps=nav_maps) for s in songs)
+    rows  = "".join(_song_row(s, public_only=False, nav_maps=nav_maps) for s in _newest_first(songs))
 
     html = render(
         "private.html",
@@ -610,6 +653,15 @@ def _fr_num(x: float) -> str:
 
 def _mn(x: float) -> str:
     return f"<mn>{_fr_num(x)}</mn>"
+
+
+def copy_notes_page() -> None:
+    """Copy the pre-built static notes page (see notes_page.py) into the output dir."""
+    if not os.path.isfile(NOTES_PAGE):
+        logger.warning(f"⚠️  {NOTES_PAGE} introuvable (lancer python notes_page.py)")
+        return
+    shutil.copyfile(NOTES_PAGE, os.path.join(OUTPUT_DIR, "notes-harmonica.html"))
+    logger.info("✓ notes-harmonica.html copié")
 
 
 def generate_difficulte_html() -> None:
@@ -787,6 +839,7 @@ def main() -> None:
     generate_private_html(songs, PRIVATE_HASH)
     generate_liens_utiles_html()
     generate_difficulte_html()
+    copy_notes_page()
     log_summary(songs)
 
 

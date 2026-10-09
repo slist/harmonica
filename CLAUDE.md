@@ -36,7 +36,8 @@ pages (song list, difficulty rating, copyright status, audio/PDF player pages).
 
 1. **`.github/workflows/compile-lilypond.yml`** (triggers on `.ly`/`.py` changes): installs the
    latest LilyPond release dynamically (not pinned), compiles every `partitions/*.ly` and
-   `gammes/*.ly` into diatonic/chromatic/plain-score PDFs + MIDI, renders MIDI → WAV → MP3 via
+   `gammes/*.ly` into diatonic/chromatic/plain-score PDFs + MIDI (a gamme is compiled for one
+   instrument only: chromatic if its `instrument` header says so, diatonic otherwise), renders MIDI → WAV → MP3 via
    `fluidsynth` + `lame`, runs `merge_pdf.py`, then `generate_index.py`, checks for broken
    links with `lychee`, and deploys `output/` to GitHub Pages.
 2. **`.github/workflows/tests.yml`** and **`lint.yml`**: pytest and ruff, independent of the
