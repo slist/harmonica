@@ -209,15 +209,26 @@ def collect_outputs(base: str, output_dir: str) -> dict:
 
 
 def git_added_date(path: str) -> str:
-    """ISO date (YYYY-MM-DD) of the first commit that added `path`, '' if unknown."""
+    """ISO date (YYYY-MM-DD) of the first commit that added `path`, '' if unknown.
+
+    Follows renames (files moved between folders keep their original date) but stops
+    at a copy: git's --follow also reports a new file that merely resembles another
+    one as a copy of it, which would otherwise give it that other file's older date.
+    """
     try:
         out = subprocess.run(
-            ["git", "log", "--follow", "--diff-filter=A", "--format=%as", "--", path],
+            ["git", "log", "--follow", "--name-status", "--format=@%as", "--", path],
             capture_output=True, text=True, check=True,
-        ).stdout.split()
+        ).stdout.splitlines()
     except (OSError, subprocess.CalledProcessError):
         return ""
-    return out[-1] if out else ""
+    date = ""
+    for line in out:
+        if line.startswith("@"):
+            date = line[1:]
+        elif line[:1] in ("A", "C"):
+            break
+    return date
 
 
 def collect_songs() -> list[dict]:
