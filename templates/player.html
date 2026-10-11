@@ -7,16 +7,26 @@
 <style>
 {% include "partials/player.css" %}
 </style>
+<script>
+{% include "partials/theme.js" %}
+</script>
 </head>
 <body>
 <div id="player-bar">
-  <div id="player-bar-top">
-    {{ prev_btn | safe }}
+<div id="player-bar-top">
+  {{ prev_btn | safe }}
     <a href="{{ back_href }}" onclick="if(history.length>1){history.back();return false;}">← Retour</a>
     <h1>{{ title }}</h1>
     {{ yt_toggle | safe }}
     {{ yt_html | safe }}
     {{ next_btn | safe }}
+    <div class="theme-control">
+      <label for="theme-select">Thème</label>
+      <select id="theme-select">
+        <option value="dark">Sombre</option>
+        <option value="light">Clair</option>
+      </select>
+    </div>
   </div>
   <div id="player-bar-media">
     {{ audio_html | safe }}

@@ -8,9 +8,19 @@
 <style>
 {% include "partials/style.css" %}
 </style>
+<script>
+{% include "partials/theme.js" %}
+</script>
 {% block extra_style %}{% endblock %}
 </head>
 <body>
+<div class="theme-control">
+  <label for="theme-select">Thème</label>
+  <select id="theme-select">
+    <option value="dark">Sombre</option>
+    <option value="light">Clair</option>
+  </select>
+</div>
 {% block body %}{% endblock %}
 </body>
 </html>
