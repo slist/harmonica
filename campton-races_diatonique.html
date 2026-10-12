@@ -11,14 +11,27 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Public+Sans:wght@400;500;600;700&display=swap">
 <style>
 :root{
+  color-scheme: dark;
+  --bg:#111827; --surface:#1b2430; --ink:#edf2f7; --muted:#a7b4c4;
+  --accent:#8db3ff; --border:#36465c;
+  --control-bg:#101924; --button-ink:#0b1320; --button-hover:#7aa5f7;
+}
+:root[data-theme="light"]{
+  color-scheme:light;
   --bg:#e9e7dc; --surface:#f5f3ea; --ink:#242229; --muted:#736f5f;
   --accent:#2c3e63; --border:#c9c3ab;
+  --control-bg:#fff; --button-ink:#fff; --button-hover:#1e2d4a;
 }
 *{box-sizing:border-box}
+.theme-control{display:flex;align-items:center;gap:.45em;font-size:.9em;color:var(--muted)}
+.theme-control label{font-weight:600}
+.theme-control select{padding:.3em .45em;border:1px solid var(--border);border-radius:4px;
+                      background:var(--control-bg);color:var(--ink);font:inherit;cursor:pointer}
 body{margin:0;font-family:'Public Sans',sans-serif;background:var(--bg);color:var(--ink)}
 #player-bar{position:sticky;top:0;z-index:10;background:var(--surface);border-bottom:1px solid var(--border);
-            box-shadow:0 2px 4px #0002;padding:.6em 1em;display:flex;flex-direction:column;gap:.5em}
+            box-shadow:0 2px 4px #0007;padding:.6em 1em;display:flex;flex-direction:column;gap:.5em}
 #player-bar-top{display:flex;align-items:center;gap:1em;flex-wrap:wrap}
+#player-bar-top>.theme-control{margin-left:auto}
 #player-bar a{color:var(--accent);text-decoration:none;font-weight:600;white-space:nowrap}
 #player-bar a:hover{text-decoration:underline}
 .nav-prev,.nav-next{font-size:1.3em;line-height:1;padding:0 .1em}
@@ -31,7 +44,7 @@ body{margin:0;font-family:'Public Sans',sans-serif;background:var(--bg);color:va
 #audio-controls{display:flex;align-items:center;gap:.5em;flex-wrap:wrap}
 #player-bar-media audio{flex:2 1 260px;min-width:200px}
 #no-audio{color:var(--muted);font-style:italic}
-.pdf-page{width:100%;height:100vh;border:none}
+.pdf-page{width:100%;height:100vh;border:none;background:var(--bg)}
 #yt-toggle{background:none;border:1px solid var(--border);border-radius:4px;font-size:1em;
            line-height:1;padding:.3em .5em;cursor:pointer;color:var(--muted)}
 #yt-toggle[hidden],#yt-block[hidden]{display:none}
@@ -39,18 +52,46 @@ body{margin:0;font-family:'Public Sans',sans-serif;background:var(--bg);color:va
 #yt-player{width:320px;height:180px}
 #yt-controls{display:flex;flex-direction:column;gap:.9em}
 #yt-controls button,#yt-controls select,#audio-controls button,#audio-controls select{
-           font-size:.85em;padding:.15em .4em;cursor:pointer;font-family:'Public Sans',sans-serif}
-.play-btn{background:var(--accent);color:#fff;border:none;
+           font-size:.85em;padding:.15em .4em;cursor:pointer;font-family:'Public Sans',sans-serif;background:var(--control-bg);color:var(--ink);border:1px solid var(--border);border-radius:4px}
+.play-btn{background:var(--accent);color:var(--button-ink);border:none;
            border-radius:4px;font-weight:600;padding:.3em .7em;min-width:5.5em}
-.play-btn:hover{background:#1e2d4a}
+.play-btn:hover{background:var(--button-hover)}
 .play-btn.blinking{animation:audio-pause-blink 1s step-start infinite}
 @keyframes audio-pause-blink{50%{opacity:.35}}
 </style>
+<script>
+(function(){
+  var storageKey='harmonica-theme';
+  var theme='dark';
+  try{
+    var savedTheme=localStorage.getItem(storageKey);
+    if(savedTheme==='light'||savedTheme==='dark') theme=savedTheme;
+  }catch(error){
+    console.error('Impossible de lire le thème enregistré.',error);
+  }
+  document.documentElement.dataset.theme=theme;
+
+  document.addEventListener('DOMContentLoaded',function(){
+    var selector=document.getElementById('theme-select');
+    if(!selector) return;
+    selector.value=theme;
+    selector.addEventListener('change',function(){
+      theme=selector.value==='light'?'light':'dark';
+      document.documentElement.dataset.theme=theme;
+      try{
+        localStorage.setItem(storageKey,theme);
+      }catch(error){
+        console.error('Impossible d’enregistrer le thème choisi.',error);
+      }
+    });
+  });
+})();
+</script>
 </head>
 <body>
 <div id="player-bar">
-  <div id="player-bar-top">
-    <a class='nav-prev' href='cadet-roussel_diatonique.html' title='Précédent : Cadet Roussel'>◀</a>
+<div id="player-bar-top">
+  <a class='nav-prev' href='cadet-roussel_diatonique.html' title='Précédent : Cadet Roussel'>◀</a>
     <a href="index.html" onclick="if(history.length>1){history.back();return false;}">← Retour</a>
     <h1>Campton Races — Diatonique</h1>
     <button id="yt-toggle" type="button" onclick="ytShow()"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" style="vertical-align:-3px"><path fill="#FF0000" d="M23.5 6.2a2.9 2.9 0 0 0-2-2C19.7 3.7 12 3.7 12 3.7s-7.7 0-9.5.5a2.9 2.9 0 0 0-2 2A30 30 0 0 0 0 12a30 30 0 0 0 .5 5.8 2.9 2.9 0 0 0 2 2c1.8.5 9.5.5 9.5.5s7.7 0 9.5-.5a2.9 2.9 0 0 0 2-2A30 30 0 0 0 24 12a30 30 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6V8.4L15.8 12z"/></svg> YouTube</button>
@@ -69,10 +110,17 @@ body{margin:0;font-family:'Public Sans',sans-serif;background:var(--bg);color:va
   </div>
 </div>
     <a class='nav-next' href='katyusha_diatonique.html' title='Suivant : Casatschok - Katioucha - Katyusha'>▶</a>
+    <div class="theme-control">
+      <label for="theme-select">Thème</label>
+      <select id="theme-select">
+        <option value="dark">Sombre</option>
+        <option value="light">Clair</option>
+      </select>
+    </div>
   </div>
   <div id="player-bar-media">
     <div id="audio-controls">
-  <audio id='audio-player' controls src='campton-races.mp3?v=5829680'>
+  <audio id='audio-player' controls src='campton-races.mp3?v=83ee587'>
     Votre navigateur ne supporte pas la lecture audio.
   </audio>
   <span id="audio-idle-buttons">
@@ -90,7 +138,7 @@ body{margin:0;font-family:'Public Sans',sans-serif;background:var(--bg);color:va
 </div>
   </div>
 </div>
-<iframe class='pdf-page' src='campton-races_diatonique.pdf?v=5829680'></iframe>
+<iframe class='pdf-page' src='campton-races_diatonique.pdf?v=83ee587'></iframe>
 <script>
 function audioSetSpeed(v){
   var a = document.getElementById('audio-player');
