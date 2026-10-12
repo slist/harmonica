@@ -33,8 +33,7 @@ melodie = {
   %\clef "treble^15"
   %    \ottava #2
 
-  \clef "treble^8"
-  %\clef "treble_8"
+  % La clé est définie dans chaque score (voir plus bas)
 
   % DIESE
   %\key sol \major % Sol majeur (un dièse : fa♯)
@@ -116,6 +115,7 @@ diatoniqueScore =
     }
     \new Staff { 
       \diatonicHarmonicaTab \relative do''' {
+        \clef "treble^8"
         \melodie
       }
     }
@@ -136,6 +136,8 @@ chromatiqueScore =
     }
     \new Staff { 
       \chromaticHarmonicaTab \relative do'' {
+        % clé de sol normale : la mélodie est écrite une octave plus bas qu'en diatonique
+        \clef "treble"
         \melodie
       }
     }
@@ -156,6 +158,7 @@ partitionScore =
     }
     \new Staff {
       \relative do''' {
+        \clef "treble^8"
         \melodie
       }
     }
