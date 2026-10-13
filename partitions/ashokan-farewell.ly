@@ -29,7 +29,7 @@
 
 melodie = {
   \time 3/4
-  \tempo 4 = 120
+  \tempo 4 = 90
   %\clef "treble^15"
   %    \ottava #2
 
@@ -226,7 +226,7 @@ midiScore =
   >>
 
   \midi {
-    \tempo 4 = 120
+    \tempo 4 = 90
   }
 }
 
@@ -256,7 +256,7 @@ accompagnementMidiScore =
   >>
 
   \midi {
-    \tempo 4 = 120
+    \tempo 4 = 90
   }
 }
 
