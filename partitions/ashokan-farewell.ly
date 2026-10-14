@@ -57,40 +57,27 @@ melodie = {
   %\key dob \major  % 7b - sib, mib, lab, reb, solb, dob, fab
 
   \partial 4 % anacrouse
-  la8 dod | 
+  la8 dod |
   \repeat volta 2 {
-    ré4. dod8 si8 la |
-    fad2 mi8 fad |
-    sol4. fad8 mi ré |
-    ré2. |
-    \break
-
-    la4 ré fad |
-    la ré fad |
-  }
-  \alternative {
-    {
-      fad4. sol8 fad4 |
-      mi2 la,8 dod |
-      \break
-
+    \repeat volta 2 {
+      ré4. dod8 si8 la | fad2 mi8 fad | sol4. fad8 mi ré | ré2. | la4 ré fad | la ré fad |
     }
-    {
-      la4 dod mi |
-      ré2 fad,8 sol |
+    \alternative {
+      {
+        fad4. sol8 fad4 | mi2 la,8 dod |
+      }
+      {
+        la4 dod mi | ré2 fad,8 sol |
+      }
     }
-  }
-  \repeat volta 2 {
+    \bar "||"
     la4. fad8 ré4 | ré'2 la4
-    \break
     si4. dod8 ré4 | la8 fad4. mi4 | fad4. mi8 ré4 | ré2 fad4 | mi2. |
-    \break
     la2 fad8 mi | ré4 fad la | mi'2. | si4. dod8 ré4 | la4 fad4. ré8 | 
   }
   \alternative {
     {
       la4 ré fad | la8 ré4. fad,4 | mi4. ré8 dod4 | ré2 la'8 dod | 
-      \break
     }
     {
       la,8 ré fad la ré fad | la ré4. fad,4 | mi4. la,8 dod4 | ré2 
@@ -100,33 +87,24 @@ melodie = {
 }
 
 accords = \chordmode {
-  %\set chordChanges = ##f
-
   s4
-
   \repeat volta 2 {
-    ré2. |
-    ré/fad |
-    sol |
-    mi:m |
-    ré |
-    si:m |
-  }
-  \alternative {
-    {
-      sol | la:7 |
+    \repeat volta 2 {
+      ré2. | ré:7/fad | sol | mi:m | ré | si:m |
+    }
+    \alternative {
+      {
+        sol | la:7 |
+      }
+      {
+        la:7| ré |
+      }
     }
     {
-      la:7| ré |
+      ré | ré:7/fad |
+      sol | ré | s | si:m | la |
+      la:7 | ré | do | sol | ré |
     }
-  }
-  
-  \repeat volta 2
-  {
-
-    ré | ré:7/fad |
-    sol | ré | s | si:m | la |
-    la:7 | ré | do | sol | ré |
   }
   \alternative {
     {
@@ -170,7 +148,7 @@ chromatiqueScore =
       \accords
     }
     \new Staff { 
-      \chromaticHarmonicaTab \relative do'' {
+      \chromaticHarmonicaTab \relative do''' {
         \melodie
       }
     }
