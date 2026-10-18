@@ -17,12 +17,18 @@ ENGLISH_NOTES = {'c': 0, 'd': 2, 'e': 4, 'f': 5, 'g': 7, 'a': 9, 'b': 11}
 
 TUNING_ROOTS: dict[str, int] = {
     'diatonicHarmonicaTab':       0,
+    'diatonicCHarmonicaTab':      0,
     'diatonicDHarmonicaTab':      2,
     'diatonicEHarmonicaTab':      4,
+    'diatonicEbHarmonicaTab':     3,
+    'diatonicDbHarmonicaTab':     1,
     'diatonicGHarmonicaTab':      7,
     'diatonicAHarmonicaTab':      9,
+    'diatonicAbHarmonicaTab':     8,
     'diatonicFHarmonicaTab':      5,
+    'diatonicFSharpHarmonicaTab': 6,
     'diatonicBbHarmonicaTab':     10,
+    'diatonicBHarmonicaTab':      11,
     'diatonicSuzukiFiveHarmonicaTab': 0,
 }
 

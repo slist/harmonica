@@ -48,6 +48,23 @@ melodie = {
     }
 
 
+def test_diatonic_tunings_recognize_their_major_scales():
+    scales = [
+        (r"\diatonicEbHarmonicaTab", "ees4 f g aes bes c d ees", "c''", 0),
+        (r"\diatonicDbHarmonicaTab", "des4 ees f ges aes bes c des", "c''", 0),
+        (r"\diatonicAbHarmonicaTab", "aes4 bes c des ees f g aes", "c''", 2),
+        (r"\diatonicBHarmonicaTab", "b4 cis dis e fis gis ais b", "c'", 0),
+        (r"\diatonicFSharpHarmonicaTab", "fis4 gis ais b cis dis eis fis", "c''", 0),
+        (r"\diatonicCHarmonicaTab", "c4 d e f g a b c", "c''", 0),
+    ]
+    for tuning, scale, relative_start, bends in scales:
+        content = f"melodie = {{ {scale} }}\n{tuning} \\relative {relative_start} {{ \\melodie }}"
+        diff = analyze_difficulty(content)
+        assert diff["bends"] == bends, tuning
+        assert diff["overblows"] == 0, tuning
+        assert diff["overdraws"] == 0, tuning
+
+
 def test_french_note_names_match_english_equivalent():
     content = r"""
 \language "français"

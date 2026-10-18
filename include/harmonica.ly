@@ -175,10 +175,15 @@ dip =
 
 #(define (get-diatonic-d-ritcher-tab NoteEvent) (get-diatonic-ritcher-tab NoteEvent 2))
 #(define (get-diatonic-e-ritcher-tab NoteEvent) (get-diatonic-ritcher-tab NoteEvent 4))
+#(define (get-diatonic-eb-ritcher-tab NoteEvent) (get-diatonic-ritcher-tab NoteEvent 3))
+#(define (get-diatonic-db-ritcher-tab NoteEvent) (get-diatonic-ritcher-tab NoteEvent 1))
 #(define (get-diatonic-g-ritcher-tab NoteEvent) (get-diatonic-ritcher-tab NoteEvent 7))
 #(define (get-diatonic-a-ritcher-tab NoteEvent) (get-diatonic-ritcher-tab NoteEvent 9))
+#(define (get-diatonic-ab-ritcher-tab NoteEvent) (get-diatonic-ritcher-tab NoteEvent 8))
 #(define (get-diatonic-f-ritcher-tab NoteEvent) (get-diatonic-ritcher-tab NoteEvent 5))
+#(define (get-diatonic-f-sharp-ritcher-tab NoteEvent) (get-diatonic-ritcher-tab NoteEvent 6))
 #(define (get-diatonic-bb-ritcher-tab NoteEvent) (get-diatonic-ritcher-tab NoteEvent 10))
+#(define (get-diatonic-b-ritcher-tab NoteEvent) (get-diatonic-ritcher-tab NoteEvent 11))
 
 #(define (get-chromatic-c-solo-tab NoteEvent)
    (case (ly:pitch-semitones (ly:music-property NoteEvent 'pitch))
@@ -279,10 +284,15 @@ New version for multiple notes
     ((diatonic-c-ritcher) (get-diatonic-c-ritcher-tab note))
     ((diatonic-d-ritcher) (get-diatonic-d-ritcher-tab note))
     ((diatonic-e-ritcher) (get-diatonic-e-ritcher-tab note))
+    ((diatonic-eb-ritcher) (get-diatonic-eb-ritcher-tab note))
+    ((diatonic-db-ritcher) (get-diatonic-db-ritcher-tab note))
     ((diatonic-g-ritcher) (get-diatonic-g-ritcher-tab note))
     ((diatonic-a-ritcher) (get-diatonic-a-ritcher-tab note))
+    ((diatonic-ab-ritcher) (get-diatonic-ab-ritcher-tab note))
     ((diatonic-f-ritcher) (get-diatonic-f-ritcher-tab note))
+    ((diatonic-f-sharp-ritcher) (get-diatonic-f-sharp-ritcher-tab note))
     ((diatonic-bb-ritcher) (get-diatonic-bb-ritcher-tab note))
+    ((diatonic-b-ritcher) (get-diatonic-b-ritcher-tab note))
     ((diatonic-suzuki-5-c) (get-diatonic-suzuki-5-c-tab note))
     ((chromatic-c-solo) (get-chromatic-c-solo-tab note))
     (else (get-diatonic-c-ritcher-tab note))))
@@ -397,14 +407,25 @@ New version for multiple notes
 #(define add-diatonic-c-ritcher-tabs  (make-tab-adder 'diatonic-c-ritcher))
 #(define add-diatonic-d-ritcher-tabs  (make-tab-adder 'diatonic-d-ritcher))
 #(define add-diatonic-e-ritcher-tabs  (make-tab-adder 'diatonic-e-ritcher))
+#(define add-diatonic-eb-ritcher-tabs (make-tab-adder 'diatonic-eb-ritcher))
+#(define add-diatonic-db-ritcher-tabs (make-tab-adder 'diatonic-db-ritcher))
 #(define add-diatonic-g-ritcher-tabs  (make-tab-adder 'diatonic-g-ritcher))
 #(define add-diatonic-a-ritcher-tabs  (make-tab-adder 'diatonic-a-ritcher))
+#(define add-diatonic-ab-ritcher-tabs (make-tab-adder 'diatonic-ab-ritcher))
 #(define add-diatonic-f-ritcher-tabs  (make-tab-adder 'diatonic-f-ritcher))
+#(define add-diatonic-f-sharp-ritcher-tabs (make-tab-adder 'diatonic-f-sharp-ritcher))
 #(define add-diatonic-bb-ritcher-tabs (make-tab-adder 'diatonic-bb-ritcher))
+#(define add-diatonic-b-ritcher-tabs (make-tab-adder 'diatonic-b-ritcher))
 #(define add-diatonic-suzuki-5-c-tabs (make-tab-adder 'diatonic-suzuki-5-c))
 #(define add-chromatic-c-solo-tabs    (make-tab-adder 'chromatic-c-solo))
 
 diatonicHarmonicaTab =
+#(define-music-function
+  (parser location music)
+  (ly:music?)
+  (add-diatonic-c-ritcher-tabs music))
+
+diatonicCHarmonicaTab =
 #(define-music-function
   (parser location music)
   (ly:music?)
@@ -422,6 +443,18 @@ diatonicEHarmonicaTab =
   (ly:music?)
   (add-diatonic-e-ritcher-tabs music))
 
+diatonicEbHarmonicaTab =
+#(define-music-function
+  (parser location music)
+  (ly:music?)
+  (add-diatonic-eb-ritcher-tabs music))
+
+diatonicDbHarmonicaTab =
+#(define-music-function
+  (parser location music)
+  (ly:music?)
+  (add-diatonic-db-ritcher-tabs music))
+
 diatonicGHarmonicaTab =
 #(define-music-function
   (parser location music)
@@ -434,17 +467,35 @@ diatonicAHarmonicaTab =
   (ly:music?)
   (add-diatonic-a-ritcher-tabs music))
 
+diatonicAbHarmonicaTab =
+#(define-music-function
+  (parser location music)
+  (ly:music?)
+  (add-diatonic-ab-ritcher-tabs music))
+
 diatonicFHarmonicaTab =
 #(define-music-function
   (parser location music)
   (ly:music?)
   (add-diatonic-f-ritcher-tabs music))
 
+diatonicFSharpHarmonicaTab =
+#(define-music-function
+  (parser location music)
+  (ly:music?)
+  (add-diatonic-f-sharp-ritcher-tabs music))
+
 diatonicBbHarmonicaTab =
 #(define-music-function
   (parser location music)
   (ly:music?)
   (add-diatonic-bb-ritcher-tabs music))
+
+diatonicBHarmonicaTab =
+#(define-music-function
+  (parser location music)
+  (ly:music?)
+  (add-diatonic-b-ritcher-tabs music))
 
 diatonicSuzukiFiveHarmonicaTab =
 #(define-music-function
