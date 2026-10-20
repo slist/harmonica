@@ -26,15 +26,13 @@ melodie = {
   \time 4/4
   \clef "treble^8"
   \key do \major % Tonalité de Do majeur (aucune altération)
+  \tempo 4 = 100
+
 
   do''4 do'' sol'' sol'' | la'' la'' sol''2 |
-  \break
   fa''4 fa'' mi'' mi'' | re'' re'' do''2 |
-  \break
   sol''4 sol'' fa'' fa'' | mi'' mi'' re''2 |
-  \break
   sol''4 sol'' fa'' fa'' | mi'' mi'' re''2 |
-  \break
   do''4 do'' sol'' sol'' | la'' la'' sol''2 |
   fa''4 fa'' mi'' mi'' | re'' re'' do''2 |
   \bar "|."
