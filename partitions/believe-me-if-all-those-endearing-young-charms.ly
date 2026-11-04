@@ -228,13 +228,12 @@ accompagnementMidiScore =
 
 \markup {
   \column {
-    \bold "La sicilienne"
+    \bold "Note de rythme : La sicilienne"
     \vspace #0.5
     \fill-line {
       \wordwrap {
-        Le terme sicilienne désigne un type de danse lente et mélancolique, originaire de Sicile, qui se caractérise par un rythme ternaire et une atmosphère expressive.
-        Dans cette partition, la mélodie est jouée dans un style sicilien, avec des nuances et des phrasés qui reflètent l'émotion et la sensibilité de la musique traditionnelle irlandaise.
-        Ce rythme particulier est composé d'une croche pointée suivie d'une double croche puis d'une croche, créant une sensation de balancement et de fluidité dans l'interprétation.
+        La mélodie de ce morceau traditionnel repose sur une utilisation fréquente du rythme de la sicilienne. 
+        Ce motif ternaire caractéristique, composé d'une croche pointée suivie d'une double croche puis d'une croche, donne toute sa fluidité et son balancement à l'interprétation.
       }
     }
   }
