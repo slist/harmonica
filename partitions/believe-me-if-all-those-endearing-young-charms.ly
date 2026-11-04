@@ -217,6 +217,27 @@ accompagnementMidiScore =
 #(if compile-midi
      (ly:parser-include-string "\\midiScore"))
 
+\markup {
+  \column {
+    \vspace #1
+    \fill-line { \bold "Commentaires" }
+  }
+}
+
+\markup {
+  \column {
+    \bold "La sicilienne"
+    \vspace #0.5
+    \fill-line {
+      \wordwrap {
+        Le terme sicilienne désigne un type de danse lente et mélancolique, originaire de Sicile, qui se caractérise par un rythme ternaire et une atmosphère expressive.
+        Dans cette partition, la mélodie est jouée dans un style sicilien, avec des nuances et des phrasés qui reflètent l'émotion et la sensibilité de la musique traditionnelle irlandaise.
+        Ce rythme particulier est composé d'une croche pointée suivie d'une double croche puis d'une croche, créant une sensation de balancement et de fluidité dans l'interprétation. 
+    }
+  }
+}
+
+
 % CI-IGNORE-BELOW : lignes de test manuel local, toujours ignorées par la compilation GitHub Actions
 \diatoniqueScore
 %\chromatiqueScore
