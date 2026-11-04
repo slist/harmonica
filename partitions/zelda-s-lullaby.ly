@@ -170,6 +170,8 @@ midiScore =
     % Accords joués au piano
     \new Staff {
       \set Staff.midiInstrument = #"acoustic grand"
+      \set Staff.midiMinimumVolume = #0.2
+      \set Staff.midiMaximumVolume = #0.35
       \unfoldRepeats \accords
     }
   >>
