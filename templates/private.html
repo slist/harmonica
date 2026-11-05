@@ -48,6 +48,7 @@
   function show(){
     document.getElementById("login-section").style.display="none";
     document.getElementById("protected-content").style.display="block";
+    try{sessionStorage.setItem("lastList",location.pathname.endsWith("/")?location.pathname+"private.html":location.pathname);}catch(e){}
   }
   window.checkPwd=async function(){
     var v=document.getElementById("pwd-input").value;

@@ -15,7 +15,7 @@
 <div id="player-bar">
 <div id="player-bar-top">
   {{ prev_btn | safe }}
-    <a href="{{ back_href }}" onclick="if(history.length>1){history.back();return false;}">← Retour</a>
+    <a id="back-link" href="{{ back_href }}">← Retour</a>
     <h1>{{ title }}</h1>
     {{ yt_toggle | safe }}
     {{ yt_html | safe }}
@@ -33,6 +33,17 @@
   </div>
 </div>
 {{ pdf_html | safe }}
+<script>
+// Retour vers la liste d'où l'on vient (index.html ou private.html), pas la page précédente
+(function(){
+  try{
+    var l=sessionStorage.getItem("lastList");
+    var dir=function(p){return p.substring(0,p.lastIndexOf("/")+1);};
+    if(l&&dir(l)===dir(location.pathname))
+      document.getElementById("back-link").href=l.substring(l.lastIndexOf("/")+1);
+  }catch(e){}
+})();
+</script>
 {{ audio_script | safe }}
 {{ yt_script | safe }}
 </body>
