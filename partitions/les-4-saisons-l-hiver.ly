@@ -2,7 +2,7 @@
 \header {
   title = "Concerto No. 4 en Fa mineur, op.8, RV 297 - Les 4 saisons"
   subtitle = "L'hiver (L'inverno - Winter)"
-  subsubtitle = "2° Mouvement"
+  subsubtitle = "2e mouvement"
   
   % Ce concerto est divisé en trois mouvements
   % - Allegro non molto

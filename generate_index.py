@@ -701,7 +701,7 @@ la tablature : Richter 10 trous (Do, Ré, Mi, Fa, Sol, La, Si♭) ou Suzuki 5 tr
 
 <h2>1. Position des notes</h2>
 <p>Chaque note est convertie en écart en demi-tons par rapport à la tonique de l'harmonica,
-puis associée à un trou <i>h</i> et à une technique (souffle/aspiré, bend, overblow, overdraw),
+puis associée à un trou <i>h</i> et à une technique (soufflé/aspiré, bend, overblow, overdraw),
 avec la même table que la tablature. Les notes hors de la tessiture sont ignorées.</p>
 
 <h2>2. Score technique <i>T</i></h2>

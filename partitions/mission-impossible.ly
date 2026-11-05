@@ -233,16 +233,19 @@ midiScore =
 
 \markup {
   \column {
-    %   \vspace #1
-    %   \bold "Indications de nuances"
     \vspace #0.5
-    \line {       "   • pp = pianissimo : très doux" }
-    \line {       "   • p = piano : doux" }
-    \line { \bold "   • mp" " = mezzo-piano : moyennement doux" }
-    \line { \bold "   • mf = mezzo-forte : moyennement fort" }
-    \line { \bold "   • f" " = forte : fort" }
-    \line {       "   • ff = fortissimo : très fort" }
-    \line {       "   • sfz = sforzando : accent fort et soudain" }
+    \fontsize #1 \bold "Nuances"
+    \vspace #0.3
+    \override #'(padding . 0.8)
+    \override #'(column-padding . 2)
+    \table #'(1 -1 -1)
+    {
+      \dynamic pp \dynamic p \dynamic mp \dynamic mf \dynamic f \dynamic ff \dynamic sfz
+      \italic "pianissimo" \italic "piano" \italic "mezzo-piano"
+      \italic "mezzo-forte" \italic "forte" \italic "fortissimo" \italic "sforzando"
+      "très doux" "doux" "moyennement doux"
+      "moyennement fort" "fort" "très fort" "accent fort et soudain"
+    }
     \vspace #1
   }
 }

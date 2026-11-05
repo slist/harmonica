@@ -63,7 +63,7 @@ J'aime beaucoup jouer de l'harmonica, et les ressources disponibles sur Internet
 - <https://www.youtube.com/@TomlinHarmonica>
 - <https://www.youtube.com/@ianalaxer>
 - <https://www.youtube.com/@HarmonicaBluesy>
-- <https://www.youtube.com/@Mr.H-Harmonica> De belles interprétations en Chromatique
+- <https://www.youtube.com/@Mr.H-Harmonica> De belles interprétations en chromatique
 
 
 #### Cours pour débutants par Liam Ward
@@ -94,7 +94,7 @@ J'aime beaucoup jouer de l'harmonica, et les ressources disponibles sur Internet
   - [Take Me Home, Country Roads - John Denver harmonica lesson (Saturday Song Study #9)](https://www.youtube.com/watch?v=v8XcpyPjRpg) - Morceau d'application : « Take Me Home, Country Roads »
   - [3 top tips for beginner harmonica (Harmonica Q&A Live)](https://www.youtube.com/watch?v=pYXMTZwIct0) - Trois conseils pour les débutants : beaucoup écouter, oser se tromper, trouver un professeur
   - [Bending for beginners (Harmonica Q&A Live)](https://www.youtube.com/watch?v=UANJ8OZPOP0) - Apprendre le bending pour les débutants
-  - [The six harmonica keys you need (Harmonica Q&A Live)](https://www.youtube.com/watch?v=z4z8utmByis) - Les tonalités d'harmonica les plus courantes: G A B♭ C D F
+  - [The six harmonica keys you need (Harmonica Q&A Live)](https://www.youtube.com/watch?v=z4z8utmByis) - Les tonalités d'harmonica les plus courantes : G A B♭ C D F
   - [Warbles/trills - move head or harp? (Harmonica Q&A Live)](https://www.youtube.com/watch?v=_8VyEkviNxM) - Le trémolo : bouger la tête ou l'harmonica ?
   - [Holding the harmonica and microphone (Harmonica Q&A Live)](https://www.youtube.com/watch?v=jIsKAs-66aQ) - Tenir l'harmonica avec un microphone
   - [How to clean a harmonica (Harmonica Q&A Live)](https://www.youtube.com/watch?v=b_F8x0vRlAA) - Comment nettoyer son harmonica

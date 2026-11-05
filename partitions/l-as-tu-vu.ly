@@ -1,7 +1,7 @@
 \version "2.24.3"
 
 \header {
-  title = "L'as tu-vu?"
+  title = "L'as-tu vu ?"
   composer = "Traditionnel"
   lyricsLang = #'(fr)
   copyrightStatus = "public-domain"

@@ -27,7 +27,7 @@ melodieD = {
   \tempo "swing" 4 = 120
   \key re \major % Ré majeur (fa♯, do♯)
   
-  r4 ^\markup \box { \italic "Harmonica Diatonique en D" }
+  r4 ^\markup \box { \italic "Harmonica diatonique en D" }
   la4 re mi | fad1 | r4 re8 mi fad4 re | la1 | r2 fad'4 la
   \break
   si1 | r4 la8 fad mi4. re8 | fad1 | r2 la,8 re fad4
@@ -44,7 +44,7 @@ melodieG = {
   \time 4/4  
   \key sol \major % Sol majeur (un dièse : fa♯)
   
-  r4 ^\markup \box { \italic "Harmonica Diatonique en G" }
+  r4 ^\markup \box { \italic "Harmonica diatonique en G" }
   
   re'4 sol8 la4 si8~ \bar "||"
   \break

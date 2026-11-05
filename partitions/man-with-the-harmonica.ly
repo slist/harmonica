@@ -176,13 +176,18 @@ midiScore =
 \markup {
   \column {
     \vspace #0.5
-    \line { "   • pp = pianissimo : très doux" }
-    \line { "   • p = piano : doux" }
-    \line { "   • mp = mezzo-piano : moyennement doux" }
-    \line { "   • mf = mezzo-forte : moyennement fort" }
-    \line { "   • f = forte : fort" }
-    \line { "   • ff = fortissimo : très fort" }
-    \line { "   • sfz = sforzando : accent fort et soudain" }
+    \fontsize #1 \bold "Nuances"
+    \vspace #0.3
+    \override #'(padding . 0.8)
+    \override #'(column-padding . 2)
+    \table #'(1 -1 -1)
+    {
+      \dynamic pp \dynamic p \dynamic mp \dynamic mf \dynamic f \dynamic ff \dynamic sfz
+      \italic "pianissimo" \italic "piano" \italic "mezzo-piano"
+      \italic "mezzo-forte" \italic "forte" \italic "fortissimo" \italic "sforzando"
+      "très doux" "doux" "moyennement doux"
+      "moyennement fort" "fort" "très fort" "accent fort et soudain"
+    }
     \vspace #1
   }
 }
@@ -213,14 +218,21 @@ Selon le contexte, cela peut vouloir dire :
     \vspace #1
     \bold "Abréviations"
     \vspace #0.5
-    \line { "dim. = diminuendo = diminuer progressivement le volume de la note ou du passage." }
-    \line { "cresc. = crescendo = augmenter le volume progressivement." }
-    \vspace #0.5
-    \line { "accel. = accelerando = accélérer progressivement le tempo." }
-    \line { "rit. = ritardando = ralentir progressivement le tempo." }
-    \line { "rall. = rallentado = ralentir progressivement le tempo (souvent un peu plus long que \"rit.\"." }
-    \line { "molto rall. = molto rallentado = ralentir fortement le tempo." }
-    
+    \override #'(padding . 0.8)
+    \override #'(column-padding . 2)
+    \table #'(-1 -1 -1)
+    {
+      \bold \italic "dim." \bold \italic "cresc." \bold \italic "accel."
+      \bold \italic "rit." \bold \italic "rall." \bold \italic "molto rall."
+      \italic "diminuendo" \italic "crescendo" \italic "accelerando"
+      \italic "ritardando" \italic "rallentando" \italic "molto rallentando"
+      "diminuer progressivement le volume de la note ou du passage"
+      "augmenter le volume progressivement"
+      "accélérer progressivement le tempo"
+      "ralentir progressivement le tempo"
+      "ralentir progressivement le tempo (souvent un peu plus long que « rit. »)"
+      "ralentir fortement le tempo"
+    }
   }
 }
 

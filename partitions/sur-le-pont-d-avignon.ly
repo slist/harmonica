@@ -1,7 +1,7 @@
 \version "2.24.3"
 
 \header {
-  title = "Sur le pont d'avignon"
+  title = "Sur le pont d'Avignon"
   %instrument = "Harmonica en C"
   composer = "Traditionnel"
   %date = ""
