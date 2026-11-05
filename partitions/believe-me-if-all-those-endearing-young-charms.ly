@@ -219,6 +219,8 @@ accompagnementMidiScore =
 #(if compile-midi
      (ly:parser-include-string "\\midiScore"))
 
+\pageBreak
+
 \markup {
   \column {
     \vspace #1
@@ -241,6 +243,7 @@ accompagnementMidiScore =
 
 \markup {
   \column {
+    \vspace #1.5
     \bold "Motif ternaire"
     \vspace #0.5
     \fill-line {
