@@ -236,16 +236,13 @@ midiScore =
     \vspace #0.5
     \fontsize #1 \bold "Nuances"
     \vspace #0.3
-    \override #'(padding . 0.8)
-    \override #'(column-padding . 2)
-    \table #'(1 -1 -1)
-    {
-      \dynamic pp \dynamic p \dynamic mp \dynamic mf \dynamic f \dynamic ff \dynamic sfz
-      \italic "pianissimo" \italic "piano" \italic "mezzo-piano"
-      \italic "mezzo-forte" \italic "forte" \italic "fortissimo" \italic "sforzando"
-      "très doux" "doux" "moyennement doux"
-      "moyennement fort" "fort" "très fort" "accent fort et soudain"
-    }
+    \line { \pad-to-box #'(0 . 7) #'(0 . 0) \left-align { \dynamic pp } \pad-to-box #'(0 . 14) #'(0 . 0) \left-align { \italic "pianissimo" } \left-align { "très doux" } }
+    \line { \pad-to-box #'(0 . 7) #'(0 . 0) \left-align { \dynamic p } \pad-to-box #'(0 . 14) #'(0 . 0) \left-align { \italic "piano" } \left-align { "doux" } }
+    \line { \pad-to-box #'(0 . 7) #'(0 . 0) \left-align { \dynamic mp } \pad-to-box #'(0 . 14) #'(0 . 0) \left-align { \italic "mezzo-piano" } \left-align { "moyennement doux" } }
+    \line { \pad-to-box #'(0 . 7) #'(0 . 0) \left-align { \dynamic mf } \pad-to-box #'(0 . 14) #'(0 . 0) \left-align { \italic "mezzo-forte" } \left-align { "moyennement fort" } }
+    \line { \pad-to-box #'(0 . 7) #'(0 . 0) \left-align { \dynamic f } \pad-to-box #'(0 . 14) #'(0 . 0) \left-align { \italic "forte" } \left-align { "fort" } }
+    \line { \pad-to-box #'(0 . 7) #'(0 . 0) \left-align { \dynamic ff } \pad-to-box #'(0 . 14) #'(0 . 0) \left-align { \italic "fortissimo" } \left-align { "très fort" } }
+    \line { \pad-to-box #'(0 . 7) #'(0 . 0) \left-align { \dynamic sfz } \pad-to-box #'(0 . 14) #'(0 . 0) \left-align { \italic "sforzando" } \left-align { "accent fort et soudain" } }
     \vspace #1
   }
 }
