@@ -50,15 +50,31 @@
   print-page-number = ##t
   oddFooterMarkup = \markup \fill-line {
     \null
-    \on-the-fly #print-page-number-check-first-page #my-print-page-number
+    \on-the-fly #header-not-first-page #my-print-page-number
   }
   evenFooterMarkup = \oddFooterMarkup
 }
 %}
 
+#(define (header-not-first-page layout props arg)
+   (if (= (chain-assoc-get 'page:page-number props -1) 1)
+       empty-stencil
+       (interpret-markup layout props arg)))
+
 \paper {
   system-system-spacing.minimum-distance = #20
   indent = 0\mm
+  % Pas d'instrument dans l'en-tête des pages 2 et suivantes (numéro de page seulement)
+  oddHeaderMarkup = \markup \fill-line {
+    " "
+    \on-the-fly #header-not-first-page
+    \fromproperty #'page:page-number-string
+  }
+  evenHeaderMarkup = \markup \fill-line {
+    \on-the-fly #header-not-first-page
+    \fromproperty #'page:page-number-string
+    " "
+  }
 }
 
 
