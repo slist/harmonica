@@ -239,6 +239,19 @@ accompagnementMidiScore =
   }
 }
 
+\markup {
+  \column {
+    \bold "Motif ternaire"
+    \vspace #0.5
+    \fill-line {
+      \wordwrap {
+        Un motif ternaire est un motif musical basé sur un rythme en trois temps, souvent représenté par une mesure à 3/4 ou 6/8.
+        Dans ce morceau, le motif ternaire est utilisé pour créer une sensation de mouvement fluide et dansant, typique des airs traditionnels irlandais.
+      }
+    }
+  }
+}
+
 
 % CI-IGNORE-BELOW : lignes de test manuel local, toujours ignorées par la compilation GitHub Actions
 \diatoniqueScore
