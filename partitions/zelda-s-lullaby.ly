@@ -155,7 +155,7 @@ midiScore =
 \score {
   <<
     % Noms des accords sur la partition
-    \new ChordNames {
+    \new ChordNames \with { \remove "Staff_performer" } {
       \accords
     }
 
@@ -185,7 +185,7 @@ accompagnementMidiScore =
 \score {
   <<
     % Noms des accords sur la partition
-    \new ChordNames {
+    \new ChordNames \with { \remove "Staff_performer" } {
       \accords
     }
 
