@@ -54,15 +54,12 @@ jobs:
           echo "/opt/lilypond-${LILYPOND_VERSION}/bin" >> "${GITHUB_PATH}"
           echo "VERSION_LILYPOND=${LILYPOND_VERSION}" >> "${GITHUB_ENV}"
           "/opt/lilypond-${LILYPOND_VERSION}/bin/lilypond" --version
-    
-      #- name: Install LilyPond, fluidsynth and lame
+
       - name: Install fluidsynth and lame
         run: |
           set -euo pipefail
           sudo apt-get update
-          # sudo apt-get install -y lilypond fluidsynth fluid-soundfont-gm lame
-          sudo apt-get install -y lilypond fluidsynth fluid-soundfont-gm lame
-          # lilypond --version
+          sudo apt-get install -y --no-install-recommends fluidsynth fluid-soundfont-gm lame
 
       - name: Set up Python
         uses: actions/setup-python@v7
@@ -132,8 +129,10 @@ jobs:
       - name: Generate MP3 files from MIDI
         run: |
           set -euo pipefail
-          # Converts all .midi files found anywhere under output/ (including output/gammes/)
-          find output -type f -name "*.midi" -print0 | while IFS= read -r -d '' midi_file; do
+          # Converts all .midi files found anywhere under output/ (including output/gammes/), in parallel
+          midi_to_mp3() {
+            local midi_file="$1"
+            local dir base wav_file mp3_file
             dir=$(dirname "${midi_file}")
             base=$(basename "${midi_file}" .midi)
             wav_file="${dir}/${base}.wav"
@@ -143,8 +142,12 @@ jobs:
             fluidsynth -ni /usr/share/sounds/sf2/FluidR3_GM.sf2 "${midi_file}" -F "${wav_file}" -r 44100 \
               && lame --preset standard "${wav_file}" "${mp3_file}" \
               && rm "${wav_file}" \
-              || { rm -f "${wav_file}"; echo "❌ Failed MP3 conversion for ${base}"; exit 1; }
-          done
+              || { rm -f "${wav_file}"; echo "❌ Failed MP3 conversion for ${base}"; return 1; }
+          }
+          export -f midi_to_mp3
+
+          find output -type f -name "*.midi" -print0 \
+            | xargs -0 -P$(nproc) -I{} bash -c 'midi_to_mp3 "$@"' _ {}
 
       - name: Merge PDF files
         run: python merge_pdf.py
