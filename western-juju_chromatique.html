@@ -92,7 +92,7 @@ body{margin:0;font-family:'Public Sans',sans-serif;background:var(--bg);color:va
 <div id="player-bar">
 <div id="player-bar-top">
   <a class='nav-prev' href='we-wish-you-a-merry-christmas_chromatique.html' title='Précédent : We wish you a Merry Christmas'>◀</a>
-    <a href="index.html" onclick="if(history.length>1){history.back();return false;}">← Retour</a>
+    <a id="back-link" href="index.html">← Retour</a>
     <h1>Western JuJu — Chromatique</h1>
     
     
@@ -107,7 +107,7 @@ body{margin:0;font-family:'Public Sans',sans-serif;background:var(--bg);color:va
   </div>
   <div id="player-bar-media">
     <div id="audio-controls">
-  <audio id='audio-player' controls src='western-juju.mp3?v=e0fc0cb'>
+  <audio id='audio-player' controls src='western-juju.mp3?v=155d7ac'>
     Votre navigateur ne supporte pas la lecture audio.
   </audio>
   <span id="audio-idle-buttons">
@@ -125,7 +125,18 @@ body{margin:0;font-family:'Public Sans',sans-serif;background:var(--bg);color:va
 </div>
   </div>
 </div>
-<iframe class='pdf-page' src='western-juju_chromatique.pdf?v=e0fc0cb'></iframe>
+<iframe class='pdf-page' src='western-juju_chromatique.pdf?v=155d7ac'></iframe>
+<script>
+// Retour vers la liste d'où l'on vient (index.html ou private.html), pas la page précédente
+(function(){
+  try{
+    var l=sessionStorage.getItem("lastList");
+    var dir=function(p){return p.substring(0,p.lastIndexOf("/")+1);};
+    if(l&&dir(l)===dir(location.pathname))
+      document.getElementById("back-link").href=l.substring(l.lastIndexOf("/")+1);
+  }catch(e){}
+})();
+</script>
 <script>
 function audioSetSpeed(v){
   var a = document.getElementById('audio-player');

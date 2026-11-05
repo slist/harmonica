@@ -163,10 +163,10 @@ tbody tr:hover{background:var(--row-hover)}
 </nav>
 <br>
 <ul>
-  <li><a href="all_diatonique.pdf?v=e0fc0cb">Toutes les partitions diatoniques (PDF)</a></li>
-  <li><a href="all_chromatique.pdf?v=e0fc0cb">Toutes les partitions chromatiques (PDF)</a></li>
-  <li><a href="all_partition.pdf?v=e0fc0cb">Toutes les partitions sans tablature harmonica (PDF)</a></li>
-  <li><a href="all_suzuki5.pdf?v=e0fc0cb">Toutes les partitions pour Suzuki 5 trous (PDF)</a></li>
+  <li><a href="all_diatonique.pdf?v=155d7ac">Toutes les partitions diatoniques (PDF)</a></li>
+  <li><a href="all_chromatique.pdf?v=155d7ac">Toutes les partitions chromatiques (PDF)</a></li>
+  <li><a href="all_partition.pdf?v=155d7ac">Toutes les partitions sans tablature harmonica (PDF)</a></li>
+  <li><a href="all_suzuki5.pdf?v=155d7ac">Toutes les partitions pour Suzuki 5 trous (PDF)</a></li>
 </ul>
 <p>109 partitions (toutes, y compris sous droits)</p>
 <table id="data-table">
@@ -344,6 +344,7 @@ tbody tr:hover{background:var(--row-hover)}
   function show(){
     document.getElementById("login-section").style.display="none";
     document.getElementById("protected-content").style.display="block";
+    try{sessionStorage.setItem("lastList",location.pathname.endsWith("/")?location.pathname+"private.html":location.pathname);}catch(e){}
   }
   window.checkPwd=async function(){
     var v=document.getElementById("pwd-input").value;
