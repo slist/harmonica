@@ -43,13 +43,14 @@ SPECIAL_TAB_LABELS: dict[str, str] = {
 
 COUNTRY_FLAGS: dict[str, str] = {
     'ar': '🇦🇷', 'at': '🇦🇹', 'ca': '🇨🇦', 'de': '🇩🇪', 'fr': '🇫🇷', 'gb': '🇬🇧',
-    'ie': '🇮🇪', 'it': '🇮🇹', 'ru': '🇷🇺', 'us': '🇺🇸',
+    'ie': '🇮🇪', 'it': '🇮🇹', 'jp': '🇯🇵', 'mx': '🇲🇽', 'ru': '🇷🇺', 'us': '🇺🇸',
+    'en': '🇬🇧',
 }
 
 COUNTRY_NAMES: dict[str, str] = {
     'ar': 'Argentine', 'at': 'Autriche', 'ca': 'Canada', 'de': 'Allemagne', 'fr': 'France',
-    'gb': 'Royaume-Uni', 'ie': 'Irlande', 'it': 'Italie', 'ru': 'Russie',
-    'us': 'États-Unis',
+    'gb': 'Royaume-Uni', 'ie': 'Irlande', 'it': 'Italie', 'jp': 'Japon', 'mx': 'Mexique',
+    'ru': 'Russie', 'us': 'États-Unis', 'en': 'Angleterre',
 }
 
 OUTPUT_DIR     = "output"
@@ -469,7 +470,7 @@ def _song_row(meta: dict, public_only: bool, pdf_prefix: str = "", nav_maps: dic
     nat        = meta['composerNationality'].lower()
     flag_emoji = COUNTRY_FLAGS.get(nat, '')
     country    = COUNTRY_NAMES.get(nat, '')
-    flag       = f"<span title='{escape(country)}'>{flag_emoji}</span>" if flag_emoji and country else flag_emoji
+    flag       = flag_emoji
     diff       = meta['difficulty']
     youtube    = meta.get('youtube', '')
     diat_keys  = meta.get('diatonicHarmonicaKeys', 'C')
@@ -492,7 +493,8 @@ def _song_row(meta: dict, public_only: bool, pdf_prefix: str = "", nav_maps: dic
 
     row  = "<tr>"
     row += f"<td data-sort='{escape(title.lower())}'>{escape(title)}</td>"
-    row += f"<td data-sort='{escape(composer.lower())}'>{composer_cell}</td>"
+    composer_title = f" title='{escape(country)}'" if flag_emoji and country else ""
+    row += f"<td data-sort='{escape(composer.lower())}'{composer_title}>{composer_cell}</td>"
     row += f"<td data-sort='{key_num}'>{escape(key)}</td>"
     if show_links:
         row += f"<td class='col-pdf'>{_pdf_cell(diat, mp3s, OUTPUT_DIR, base, 'diatonique', title, 'index.html', pdf_prefix, youtube, diat_prev, diat_next, diat_keys)}</td>"

@@ -20,3 +20,28 @@
     });
   };
 })();
+
+/* Tooltips au toucher : les attributs title ne s'affichent pas sans survol (Android/iOS). */
+(function(){
+  var tip=null,timer=null;
+  function hide(){if(tip){tip.remove();tip=null;}clearTimeout(timer);}
+  document.addEventListener('click',function(e){
+    var el=e.target.closest&&e.target.closest('td[title],span[title]');
+    if(!el||!window.matchMedia('(hover: none)').matches){hide();return;}
+    var text=el.getAttribute('title');
+    if(!text){return;}
+    hide();
+    tip=document.createElement('div');
+    tip.textContent=text.replace(/ \| /g,'\n');
+    tip.style.cssText='position:absolute;z-index:1000;max-width:80vw;white-space:pre-line;'+
+      'padding:.5em .8em;border-radius:6px;font-size:.9rem;line-height:1.4;pointer-events:none;'+
+      'background:var(--ink);color:var(--bg);box-shadow:0 2px 8px rgba(0,0,0,.35)';
+    document.body.appendChild(tip);
+    var r=el.getBoundingClientRect();
+    var left=Math.max(8,Math.min(r.left+window.scrollX,window.scrollX+document.documentElement.clientWidth-tip.offsetWidth-8));
+    tip.style.left=left+'px';
+    tip.style.top=(r.bottom+window.scrollY+6)+'px';
+    timer=setTimeout(hide,4000);
+  });
+  window.addEventListener('scroll',hide,{passive:true});
+})();
