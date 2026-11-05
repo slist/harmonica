@@ -25,10 +25,15 @@
   \column {
     \vspace #0.5
     \fill-line {
-      \wordwrap {
-        Votre mission, si toutefois vous l’acceptez, consiste à interpréter ce morceau à l’harmonica.
-        Attention : cette partition s’autodétruira dans cinq minutes…
-        Bonne chance !
+      \column {
+        \center-align {
+          \italic "Votre mission, si toutefois vous l’acceptez,"
+          \italic "consiste à interpréter ce morceau à l’harmonica."
+          \vspace #0.6
+          \line { \bold "Attention :" \italic "cette partition s’autodétruira dans cinq secondes…" }
+          \vspace #0.6
+          \bold "Bonne chance !"
+        }
       }
     }
     \vspace #1
