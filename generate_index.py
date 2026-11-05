@@ -164,6 +164,13 @@ def copyright_cell(status: str, composer: str) -> str:
     return f"<td class='badge' data-sort='{escape(status)}' title='{escape(tooltip)}'>{icon}</td>"
 
 
+LANG_NAMES = {
+    "fr": "Français", "en": "Anglais", "de": "Allemand", "es": "Espagnol",
+    "it": "Italien", "pt": "Portugais", "nl": "Néerlandais", "pl": "Polonais",
+    "ru": "Russe", "sv": "Suédois", "da": "Danois", "no": "Norvégien",
+}
+
+
 def lyrics_icon(langs: list) -> str:
     icons = {
         "fr": "🇫🇷", "en": "🇬🇧", "de": "🇩🇪", "es": "🇪🇸",
@@ -504,7 +511,9 @@ def _song_row(meta: dict, public_only: bool, pdf_prefix: str = "", nav_maps: dic
         row += "<td class='hidden col-pdf'>—</td>"
         row += difficulty_cell(diff)
         row += "<td class='hidden col-pdf'>—</td>"
-    row += f"<td class='badge'>{lyrics_icon(lyrics)}</td>"
+    lyrics_names = ", ".join(LANG_NAMES.get(l, l) for l in lyrics)
+    lyrics_title = f" title='{escape(lyrics_names)}'" if lyrics_names else ""
+    row += f"<td class='badge'{lyrics_title}>{lyrics_icon(lyrics)}</td>"
     row += copyright_cell(status, composer)
     row += _added_cell(meta.get('addedDate', ''))
     row += "</tr>\n"
