@@ -58,6 +58,15 @@ body{margin:0;font-family:'Public Sans',sans-serif;background:var(--bg);color:va
 .play-btn:hover{background:var(--button-hover)}
 .play-btn.blinking{animation:audio-pause-blink 1s step-start infinite}
 @keyframes audio-pause-blink{50%{opacity:.35}}
+#compat{margin:.6em 1em;background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:.4em .8em}
+#compat summary{cursor:pointer;font-weight:600;color:var(--accent)}
+#compat .compat-body{font-size:.9em;color:var(--ink)}
+#compat table{border-collapse:collapse;margin:.5em 0}
+#compat th,#compat td{padding:.25em .7em;border-bottom:1px solid var(--border);text-align:left}
+#compat tr.ok td:nth-child(3){color:#3fa86b;font-weight:700}
+#compat tr.few td:nth-child(3){color:#d99a2b;font-weight:700}
+#compat tr.many td:nth-child(3){color:#d9534f}
+#compat tr.current{background:var(--control-bg)}
 </style>
 <script>
 (function(){
@@ -120,7 +129,7 @@ body{margin:0;font-family:'Public Sans',sans-serif;background:var(--bg);color:va
   </div>
   <div id="player-bar-media">
     <div id="audio-controls">
-  <audio id='audio-player' controls src='isn-t-she-lovely.mp3?v=2983d27'>
+  <audio id='audio-player' controls src='isn-t-she-lovely.mp3?v=326f3f2'>
     Votre navigateur ne supporte pas la lecture audio.
   </audio>
   <span id="audio-idle-buttons">
@@ -138,7 +147,33 @@ body{margin:0;font-family:'Public Sans',sans-serif;background:var(--bg);color:va
 </div>
   </div>
 </div>
-<iframe class='pdf-page' src='isn-t-she-lovely_diatonique.pdf?v=2983d27'></iframe>
+<details id="compat">
+  <summary>Harmonicas compatibles</summary>
+  <div class="compat-body">
+    <p>La tablature ci-dessous est écrite pour un harmonica en <b>C</b>.
+    La colonne « Altérations » compte les notes qui demandent un bend, un overblow, un overdraw ou qui sortent de la tessiture, si on joue la mélodie dans sa tonalité d'origine sur chaque harmonica (une autre tablature serait alors nécessaire).</p>
+    <p>La dernière colonne indique de combien de demi-tons le morceau sonne plus haut ou plus bas si l'on joue
+    <i>la même tablature</i> sur un harmonica d'une autre tonalité : aucune altération supplémentaire, seule la hauteur change.</p>
+    <table>
+      <thead><tr><th>Harmonica</th><th>Position</th><th>Altérations</th><th>Détail</th><th>Même tablature</th></tr></thead>
+      <tbody>
+<tr class='few current'><td>C</td><td>—</td><td>1</td><td>1 bend</td><td>tablature ci-dessus</td></tr>
+<tr class='few'><td>F</td><td>—</td><td>2</td><td>2 bend</td><td>+5 ½ ton</td></tr>
+<tr class='many'><td>G</td><td>—</td><td>10</td><td>10 bend (octave +1)</td><td>−5 ½ ton</td></tr>
+<tr class='many'><td>Bb</td><td>—</td><td>18</td><td>16 bend, 2 overblow (octave +1)</td><td>−2 ½ ton</td></tr>
+<tr class='many'><td>D</td><td>—</td><td>23</td><td>14 bend, 9 overblow</td><td>+2 ½ ton</td></tr>
+<tr class='many'><td>Ab</td><td>—</td><td>35</td><td>26 bend, 8 overblow, 1 hors tessiture</td><td>−4 ½ ton</td></tr>
+<tr class='many'><td>Eb</td><td>—</td><td>39</td><td>32 bend, 7 hors tessiture (octave -1)</td><td>+3 ½ ton</td></tr>
+<tr class='many'><td>A</td><td>—</td><td>32</td><td>14 bend, 8 overblow, 10 overdraw (octave +1)</td><td>−3 ½ ton</td></tr>
+<tr class='many'><td>Db</td><td>—</td><td>44</td><td>29 bend, 7 overblow, 8 overdraw</td><td>+1 ½ ton</td></tr>
+<tr class='many'><td>E</td><td>—</td><td>43</td><td>19 bend, 14 overblow, 10 overdraw</td><td>+4 ½ ton</td></tr>
+<tr class='many'><td>B</td><td>—</td><td>49</td><td>28 bend, 8 overblow, 13 overdraw (octave +1)</td><td>−1 ½ ton</td></tr>
+<tr class='many'><td>F#</td><td>—</td><td>56</td><td>41 bend, 6 overblow, 9 hors tessiture (octave -1)</td><td>−6 ½ ton</td></tr>
+      </tbody>
+    </table>
+  </div>
+</details>
+<iframe class='pdf-page' src='isn-t-she-lovely_diatonique.pdf?v=326f3f2'></iframe>
 <script>
 // Retour vers la liste d'où l'on vient (index.html ou private.html), pas la page précédente
 (function(){

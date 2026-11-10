@@ -58,6 +58,15 @@ body{margin:0;font-family:'Public Sans',sans-serif;background:var(--bg);color:va
 .play-btn:hover{background:var(--button-hover)}
 .play-btn.blinking{animation:audio-pause-blink 1s step-start infinite}
 @keyframes audio-pause-blink{50%{opacity:.35}}
+#compat{margin:.6em 1em;background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:.4em .8em}
+#compat summary{cursor:pointer;font-weight:600;color:var(--accent)}
+#compat .compat-body{font-size:.9em;color:var(--ink)}
+#compat table{border-collapse:collapse;margin:.5em 0}
+#compat th,#compat td{padding:.25em .7em;border-bottom:1px solid var(--border);text-align:left}
+#compat tr.ok td:nth-child(3){color:#3fa86b;font-weight:700}
+#compat tr.few td:nth-child(3){color:#d99a2b;font-weight:700}
+#compat tr.many td:nth-child(3){color:#d9534f}
+#compat tr.current{background:var(--control-bg)}
 </style>
 <script>
 (function(){
@@ -120,7 +129,7 @@ body{margin:0;font-family:'Public Sans',sans-serif;background:var(--bg);color:va
   </div>
   <div id="player-bar-media">
     <div id="audio-controls">
-  <audio id='audio-player' controls src='Le-loup-le-renard-et-la-belette.mp3?v=2983d27'>
+  <audio id='audio-player' controls src='Le-loup-le-renard-et-la-belette.mp3?v=326f3f2'>
     Votre navigateur ne supporte pas la lecture audio.
   </audio>
   <span id="audio-idle-buttons">
@@ -138,7 +147,8 @@ body{margin:0;font-family:'Public Sans',sans-serif;background:var(--bg);color:va
 </div>
   </div>
 </div>
-<iframe class='pdf-page' src='Le-loup-le-renard-et-la-belette_chromatique.pdf?v=2983d27'></iframe>
+
+<iframe class='pdf-page' src='Le-loup-le-renard-et-la-belette_chromatique.pdf?v=326f3f2'></iframe>
 <script>
 // Retour vers la liste d'où l'on vient (index.html ou private.html), pas la page précédente
 (function(){

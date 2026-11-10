@@ -212,11 +212,34 @@ valeur de note <i>d</i> de la mélodie (4 = noire, 8 = croche, 16 = double croch
 <h2>4. Tri de la colonne Difficulté</h2>
 <math display="block"><mi>S</mi><mo>=</mo><mi>T</mi><mo>+</mo><mi>V</mi></math>
 
+<h2>5. Harmonicas compatibles</h2>
+<p>Ce bloc, affiché sur les pages des partitions diatoniques Richter, ne fait pas partie du score de
+difficulté. Il indique, pour chacune des 12 tonalités d'harmonica (Do, Ré♭, Ré, Mi♭, Mi, Fa, Fa♯,
+Sol, La♭, La, Si♭, Si), quelles notes de la mélodie sont jouables sans technique particulière si on la joue
+dans sa tonalité d'origine, avec la même table de positions que ci-dessus.</p>
+<ul>
+  <li><b>Altérations</b> : nombre de notes demandant un bend (1 point par note),
+    un overblow (3), un overdraw (3) ou situées hors
+    de la tessiture de l'harmonica (5). Ces points servent uniquement à classer les
+    harmonicas, du plus au moins adapté ; le tableau affiche le nombre de notes concernées.</li>
+  <li><b>Octave</b> : pour chaque harmonica, l'octave qui minimise ces points est retenue
+    (« octave +1 » : la mélodie est jouée une octave plus haut que dans la partition).</li>
+  <li><b>Position</b> : 1<sup>re</sup> si la tonique du morceau est celle de l'harmonica, 2<sup>e</sup>
+    (« cross harp ») si elle est une quinte au-dessus, 3<sup>e</sup> une seconde au-dessus, etc.
+    La tonique est lue dans la première armure <code>\key</code> de la mélodie.</li>
+  <li><b>Même tablature</b> : jouer la tablature fournie sur un harmonica d'une autre tonalité donne
+    exactement les mêmes gestes (aucune altération en plus ou en moins) : seule la hauteur du morceau
+    change, d'un décalage (<i>transposition</i>) compris entre −6 et +5 demi-tons. Par exemple, la tablature
+    d'un morceau écrit pour un harmonica en Mi♭ se joue sur un harmonica en Ré, et le morceau sonne alors
+    un demi-ton plus bas.</li>
+</ul>
+
 <h2>Limites</h2>
 <ul>
   <li>Les notes sont comptées, pas les passages : une chanson longue a un score plus élevé.</li>
   <li>Les silences et les respirations ne sont pas pris en compte dans les écarts.</li>
   <li>Un seul accordage est utilisé par partition (un changement d'harmonica en cours de morceau est ignoré).</li>
+  <li>Les harmonicas compatibles ne sont calculés que pour le diatonique Richter (ni Suzuki 5 trous, ni chromatique).</li>
 </ul>
 
 </div>
