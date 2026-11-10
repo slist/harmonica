@@ -120,6 +120,38 @@ def fmt_counts(c: Counter) -> str:
     return ', '.join(parts) or 'aucune'
 
 
+def analyze_compatibility(content: str) -> dict | None:
+    """Compatibilité de la mélodie avec les 12 harmonicas Richter (mélodie non transposée).
+
+    Retourne None si la partition n'est pas pour un diatonique Richter ou n'a pas de notes.
+    `shift` = décalage de hauteur (demi-tons, -6..+5) obtenu en jouant la tablature
+    de la partition sur cet harmonica au lieu de celui pour lequel elle est écrite.
+    """
+    parsed = parse_melody(content)
+    pitches = [p for p, _ in parsed['notes']]
+    if not pitches or parsed['layout'] is not RICHTER_LAYOUT:
+        return None
+    tonic = detect_tonic(content)
+    file_root = parsed['root']
+    rows = []
+    for name, off in HARP_KEYS.items():
+        octv, c = best_octave(pitches, off, 0)
+        pos = None
+        if tonic:
+            pos = POSITION_BY_OFFSET.get((tonic[0] - off) % 12)
+        rows.append({
+            'harmonica': name, 'position': pos, 'penalty': penalty(c), 'counts': c,
+            'alterations': c['bend'] + c['overblow'] + c['overdraw'] + c['out'],
+            'octave': octv, 'is_file': off == file_root,
+            'shift': (off - file_root + 6) % 12 - 6,
+        })
+    rows.sort(key=lambda r: (r['penalty'], not r['is_file']))
+    return {
+        'notes': len(pitches), 'low': min(pitches), 'high': max(pitches),
+        'tonic': tonic, 'file_key': fmt_key(file_root), 'rows': rows,
+    }
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument('ly_file', help='partition .ly à analyser')
@@ -129,33 +161,24 @@ def main() -> int:
     with open(args.ly_file, encoding='utf-8') as f:
         content = f.read()
 
-    parsed = parse_melody(content)
-    pitches = [p for p, _ in parsed['notes']]
-    if not pitches:
-        print('Aucune note trouvée dans le bloc melodie.', file=sys.stderr)
+    info = analyze_compatibility(content)
+    if not info:
+        print('Aucune note trouvée dans le bloc melodie (ou partition non Richter).', file=sys.stderr)
         return 1
-
-    tonic = detect_tonic(content)
+    pitches = [p for p, _ in parse_melody(content)['notes']]
+    tonic = info['tonic']
     tonic_txt = f"{fmt_key(tonic[0])} {'majeur' if tonic[1] == 'major' else 'mineur'}" if tonic else 'inconnue'
     print(f"{args.ly_file}")
-    print(f"{len(pitches)} notes, tonalité du morceau : {tonic_txt}")
-    print(f"Hauteurs : {min(pitches)}..{max(pitches)} (MIDI, 60 = do central)\n")
+    print(f"{info['notes']} notes, tonalité du morceau : {tonic_txt}")
+    print(f"Hauteurs : {info['low']}..{info['high']} (MIDI, 60 = do central)\n")
 
     # 1) Sans transposition : chaque harmonica, octave libre
     print("== 1. Mélodie telle quelle (octave libre) ==")
     print(f"{'Harmonica':<10}{'Position':<10}{'Altérations':<8}  Détail")
-    rows = []
-    for name, off in HARP_KEYS.items():
-        octv, c = best_octave(pitches, off, 0)
-        alt = c['bend'] + c['overblow'] + c['overdraw'] + c['out']
-        pos = ''
-        if tonic:
-            n = POSITION_BY_OFFSET.get((tonic[0] - off) % 12)
-            pos = f"{n}e" if n else ''
-        rows.append((penalty(c), name, pos, alt, octv, c))
-    for pen, name, pos, alt, octv, c in sorted(rows):
-        note = f" [octave {octv // 12:+d}]" if octv else ''
-        print(f"{name:<10}{pos:<10}{alt:<8}  {fmt_counts(c)}{note}")
+    for r in info['rows']:
+        pos = f"{r['position']}e" if r['position'] else ''
+        note = f" [octave {r['octave'] // 12:+d}]" if r['octave'] else ''
+        print(f"{r['harmonica']:<10}{pos:<10}{r['alterations']:<8}  {fmt_counts(r['counts'])}{note}")
 
     # 2) Avec transposition
     print(f"\n== 2. Meilleures transpositions (-6..+5 demi-tons), top {args.top} ==")

@@ -16,6 +16,12 @@ from markdown.extensions.toc import slugify_unicode
 
 import complexity
 from complexity import analyze_difficulty, brace_block, difficulty_cell, strip_comments
+from harmonica_compat import (
+    WEIGHT_OUT_OF_RANGE,
+    analyze_compatibility,
+    fmt_counts,
+    fmt_key,
+)
 
 logging.basicConfig(level=logging.INFO, format="%(message)s")
 logger = logging.getLogger(__name__)
@@ -93,7 +99,7 @@ def parse_ly_metadata(ly_path: str) -> dict:
         "copyrightStatus": "unknown", "lyricsLang": [],
         "key": "unknown", "composer": "", "title": "",
         "composerNationality": "", "difficulty": {}, "youtube": "",
-        "diatonicHarmonicaKeys": "C", "instrument": "", "hidden": False,
+        "diatonicHarmonicaKeys": "C", "instrument": "", "hidden": False, "compat": None,
     }
     if not os.path.exists(ly_path):
         logger.warning(f"  ⚠️  Fichier .ly introuvable : '{ly_path}'")
@@ -137,6 +143,7 @@ def parse_ly_metadata(ly_path: str) -> dict:
         metadata["key"] = m.group(1)
 
     metadata["difficulty"] = analyze_difficulty(content)
+    metadata["compat"] = analyze_compatibility(content)
     metadata["diatonicHarmonicaKeys"] = diatonic_harmonica_keys(content)
     return metadata
 
@@ -336,6 +343,7 @@ def _nav_link_html(direction: str, href: str, title: str) -> str:
 def _player_page_html(
     title: str, mp3_file: str, pdf_files: list[str], back_href: str, youtube_id: str = "",
     prev_href: str = "", prev_title: str = "", next_href: str = "", next_title: str = "",
+    compat_html: str = "",
 ) -> str:
     prev_btn = _nav_link_html("prev", prev_href, prev_title)
     next_btn = _nav_link_html("next", next_href, next_title)
@@ -383,7 +391,7 @@ def _player_page_html(
         prev_btn=prev_btn, next_btn=next_btn,
         yt_toggle=yt_toggle, yt_html=yt_html, yt_script=yt_script,
         audio_html=audio_html, audio_script=audio_script,
-        pdf_html=pdf_html,
+        pdf_html=pdf_html, compat_html=compat_html,
     )
 
 
@@ -391,6 +399,7 @@ def _write_player_page(
     output_dir: str, base: str, tuning: str, title: str,
     pdf_files: list[str], mp3_files: list[str], back_href: str, prefix: str = "",
     youtube_url: str = "", prev_song: dict | None = None, next_song: dict | None = None,
+    compat_html: str = "",
 ) -> str:
     """Write a standalone page combining the sheet music PDF with a sticky audio player."""
     fname = f"{base}_{tuning}.html"
@@ -411,22 +420,57 @@ def _write_player_page(
         youtube_id=_youtube_video_id(youtube_url),
         prev_href=prev_href, prev_title=f"Précédent : {prev_title}" if prev_title else "",
         next_href=next_href, next_title=f"Suivant : {next_title}" if next_title else "",
+        compat_html=compat_html,
     )
     with open(os.path.join(output_dir, fname), "w", encoding="utf-8") as fh:
         fh.write(html)
     return fname
 
 
+def compat_html_for(compat: dict | None, harmonica_keys: str = "") -> str:
+    """Bloc repliable « Harmonicas compatibles » de la page joueur diatonique."""
+    if not compat:
+        return ""
+
+    def _shift(r: dict) -> str:
+        if r["is_file"]:
+            return "tablature ci-dessus"
+        if r["shift"] == 0:
+            return "identique"
+        return f"{r['shift']:+d} ½ ton".replace("-", "−")
+
+    rows = ""
+    for r in compat["rows"]:
+        a = r["alterations"]
+        cls = "ok" if a == 0 else "few" if a <= 5 else "many"
+        pos = f"{r['position']}<sup>e</sup>" if r["position"] else "—"
+        if r["position"] == 1:
+            pos = "1<sup>re</sup>"
+        detail = fmt_counts(r["counts"])
+        octave = f" (octave {r['octave'] // 12:+d})" if r["octave"] else ""
+        rows += (
+            f"<tr class='{cls}{' current' if r['is_file'] else ''}'>"
+            f"<td>{escape(r['harmonica'])}</td><td>{pos}</td>"
+            f"<td>{a}</td><td>{escape(detail + octave)}</td><td>{_shift(r)}</td></tr>\n"
+        )
+    tonic = compat["tonic"]
+    tonic_txt = ""
+    if tonic:
+        tonic_txt = f" Tonalité du morceau : {fmt_key(tonic[0])} {'majeur' if tonic[1] == 'major' else 'mineur'}."
+    return render("partials/compat.html", rows=rows, file_key=compat["file_key"], tonic_txt=tonic_txt).rstrip("\n")
+
+
 def _pdf_cell(
     files: list[str], mp3_files: list[str], output_dir: str, base: str, tuning: str,
     title: str, back_href: str, prefix: str = "", youtube_url: str = "",
     prev_song: dict | None = None, next_song: dict | None = None, harmonica_keys: str = "",
+    compat_html: str = "",
 ) -> str:
     if not files:
         return "<span class='hidden'>—</span>"
     fname = _write_player_page(
         output_dir, base, tuning, title, files, mp3_files, back_href, prefix, youtube_url,
-        prev_song, next_song,
+        prev_song, next_song, compat_html,
     )
     href = escape(prefix + fname)
     if harmonica_keys:
@@ -508,7 +552,7 @@ def _song_row(meta: dict, public_only: bool, pdf_prefix: str = "", nav_maps: dic
     row += f"<td data-sort='{escape(composer.lower())}'{composer_title}>{composer_cell}</td>"
     row += f"<td data-sort='{key_num}'>{escape(key)}</td>"
     if show_links:
-        row += f"<td class='col-pdf'>{_pdf_cell(diat, mp3s, OUTPUT_DIR, base, 'diatonique', title, 'index.html', pdf_prefix, youtube, diat_prev, diat_next, diat_keys)}</td>"
+        row += f"<td class='col-pdf'>{_pdf_cell(diat, mp3s, OUTPUT_DIR, base, 'diatonique', title, 'index.html', pdf_prefix, youtube, diat_prev, diat_next, diat_keys, compat_html_for(meta.get('compat'), diat_keys))}</td>"
         row += difficulty_cell(diff)
         row += f"<td class='col-pdf'>{_pdf_cell(chro, mp3s, OUTPUT_DIR, base, 'chromatique', title, 'index.html', pdf_prefix, youtube, chro_prev, chro_next)}</td>"
     else:
@@ -786,11 +830,34 @@ valeur de note <i>d</i> de la mélodie (4 = noire, 8 = croche, 16 = double croch
 <h2>4. Tri de la colonne Difficulté</h2>
 <math display="block"><mi>S</mi><mo>=</mo><mi>T</mi><mo>+</mo><mi>V</mi></math>
 
+<h2>5. Harmonicas compatibles</h2>
+<p>Ce bloc, affiché sur les pages des partitions diatoniques Richter, ne fait pas partie du score de
+difficulté. Il indique, pour chacune des 12 tonalités d'harmonica (Do, Ré♭, Ré, Mi♭, Mi, Fa, Fa♯,
+Sol, La♭, La, Si♭, Si), quelles notes de la mélodie sont jouables sans technique particulière si on la joue
+dans sa tonalité d'origine, avec la même table de positions que ci-dessus.</p>
+<ul>
+  <li><b>Altérations</b> : nombre de notes demandant un bend ({_fr_num(c.WEIGHT_BEND)} point par note),
+    un overblow ({_fr_num(c.WEIGHT_OVERBLOW)}), un overdraw ({_fr_num(c.WEIGHT_OVERDRAW)}) ou situées hors
+    de la tessiture de l'harmonica ({_fr_num(WEIGHT_OUT_OF_RANGE)}). Ces points servent uniquement à classer les
+    harmonicas, du plus au moins adapté ; le tableau affiche le nombre de notes concernées.</li>
+  <li><b>Octave</b> : pour chaque harmonica, l'octave qui minimise ces points est retenue
+    (« octave +1 » : la mélodie est jouée une octave plus haut que dans la partition).</li>
+  <li><b>Position</b> : 1<sup>re</sup> si la tonique du morceau est celle de l'harmonica, 2<sup>e</sup>
+    (« cross harp ») si elle est une quinte au-dessus, 3<sup>e</sup> une seconde au-dessus, etc.
+    La tonique est lue dans la première armure <code>\\key</code> de la mélodie.</li>
+  <li><b>Même tablature</b> : jouer la tablature fournie sur un harmonica d'une autre tonalité donne
+    exactement les mêmes gestes (aucune altération en plus ou en moins) : seule la hauteur du morceau
+    change, d'un décalage (<i>transposition</i>) compris entre −6 et +5 demi-tons. Par exemple, la tablature
+    d'un morceau écrit pour un harmonica en Mi♭ se joue sur un harmonica en Ré, et le morceau sonne alors
+    un demi-ton plus bas.</li>
+</ul>
+
 <h2>Limites</h2>
 <ul>
   <li>Les notes sont comptées, pas les passages : une chanson longue a un score plus élevé.</li>
   <li>Les silences et les respirations ne sont pas pris en compte dans les écarts.</li>
   <li>Un seul accordage est utilisé par partition (un changement d'harmonica en cours de morceau est ignoré).</li>
+  <li>Les harmonicas compatibles ne sont calculés que pour le diatonique Richter (ni Suzuki 5 trous, ni chromatique).</li>
 </ul>
 """
 

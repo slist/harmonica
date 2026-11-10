@@ -1,0 +1,14 @@
+<details id="compat">
+  <summary>Harmonicas compatibles</summary>
+  <div class="compat-body">
+    <p>La tablature ci-dessous est écrite pour un harmonica en <b>{{ file_key }}</b>.{{ tonic_txt }}
+    La colonne « Altérations » compte les notes qui demandent un bend, un overblow, un overdraw ou qui sortent de la tessiture, si on joue la mélodie dans sa tonalité d'origine sur chaque harmonica (une autre tablature serait alors nécessaire).</p>
+    <p>La dernière colonne indique de combien de demi-tons le morceau sonne plus haut ou plus bas si l'on joue
+    <i>la même tablature</i> sur un harmonica d'une autre tonalité : aucune altération supplémentaire, seule la hauteur change.</p>
+    <table>
+      <thead><tr><th>Harmonica</th><th>Position</th><th>Altérations</th><th>Détail</th><th>Même tablature</th></tr></thead>
+      <tbody>
+{{ rows | safe }}      </tbody>
+    </table>
+  </div>
+</details>
