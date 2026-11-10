@@ -17,7 +17,7 @@ from markdown.extensions.toc import slugify_unicode
 import complexity
 from complexity import analyze_difficulty, brace_block, difficulty_cell, strip_comments
 from harmonica_compat import (
-    WEIGHT_OUT_OF_RANGE,
+    HARP_KEYS,
     analyze_compatibility,
     fmt_counts,
     fmt_key,
@@ -60,6 +60,8 @@ COUNTRY_NAMES: dict[str, str] = {
 }
 
 OUTPUT_DIR     = "output"
+HARP_ORDER = list(HARP_KEYS)  # C, Db, D, ..., B
+TRANSPOSED_DIR = "tonalites"  # sous-dossier de output/ : partitions transposées, par tonalité
 PARTITIONS_DIR = "partitions"
 GAMMES_DIR     = "gammes"
 LIENS_UTILES_MD = "liens_utiles.md"
@@ -427,37 +429,49 @@ def _write_player_page(
     return fname
 
 
-def compat_html_for(compat: dict | None, harmonica_keys: str = "") -> str:
-    """Bloc repliable « Harmonicas compatibles » de la page joueur diatonique."""
+def _transposed_cell(r: dict, base: str, title: str) -> str:
+    """Cellule « Partition transposée » : lien vers la page de la variante si elle existe."""
+    if r["is_file"]:
+        return "tablature ci-dessus"
+    shift = f"{r['shift']:+d} ½ ton".replace("-", "−")
+    key_dir = r["harmonica"].replace("#", "sharp")
+    folder = os.path.join(OUTPUT_DIR, TRANSPOSED_DIR, key_dir)
+    pdfs = collect_outputs(base, folder)["diat"] if base else []
+    if not pdfs:
+        return shift
+    page = _write_player_page(
+        folder, base, "diatonique", f"{title} — harmonica en {r['harmonica']}",
+        pdfs, [], "../../index.html",
+    )
+    href = escape(f"{TRANSPOSED_DIR}/{key_dir}/{page}")
+    return f"<a href='{href}' title='Même tablature, partition transposée'>partition en {escape(r['harmonica'])}</a> ({shift})"
+
+
+def compat_html_for(compat: dict | None, base: str = "", title: str = "") -> str:
+    """Bloc repliable « Jouer sur un autre harmonica » de la page joueur diatonique."""
     if not compat:
         return ""
 
-    def _shift(r: dict) -> str:
-        if r["is_file"]:
-            return "tablature ci-dessus"
-        if r["shift"] == 0:
-            return "identique"
-        return f"{r['shift']:+d} ½ ton".replace("-", "−")
+    own = next(r for r in compat["rows"] if r["is_file"])
+    if own["alterations"]:
+        alt_txt = f"Elle demande {own['alterations']} altération(s) : {fmt_counts(own['counts'])}."
+    else:
+        alt_txt = "Elle ne demande aucune altération (bend, overblow, overdraw)."
 
     rows = ""
-    for r in compat["rows"]:
-        a = r["alterations"]
-        cls = "ok" if a == 0 else "few" if a <= 5 else "many"
-        pos = f"{r['position']}<sup>e</sup>" if r["position"] else "—"
-        if r["position"] == 1:
-            pos = "1<sup>re</sup>"
-        detail = fmt_counts(r["counts"])
-        octave = f" (octave {r['octave'] // 12:+d})" if r["octave"] else ""
+    for r in sorted(compat["rows"], key=lambda r: HARP_ORDER.index(r["harmonica"])):
         rows += (
-            f"<tr class='{cls}{' current' if r['is_file'] else ''}'>"
-            f"<td>{escape(r['harmonica'])}</td><td>{pos}</td>"
-            f"<td>{a}</td><td>{escape(detail + octave)}</td><td>{_shift(r)}</td></tr>\n"
+            f"<tr class='{'current' if r['is_file'] else ''}'>"
+            f"<td>{escape(r['harmonica'])}</td><td>{_transposed_cell(r, base, title)}</td></tr>\n"
         )
     tonic = compat["tonic"]
     tonic_txt = ""
     if tonic:
         tonic_txt = f" Tonalité du morceau : {fmt_key(tonic[0])} {'majeur' if tonic[1] == 'major' else 'mineur'}."
-    return render("partials/compat.html", rows=rows, file_key=compat["file_key"], tonic_txt=tonic_txt).rstrip("\n")
+    return render(
+        "partials/compat.html", rows=rows, file_key=compat["file_key"],
+        tonic_txt=tonic_txt, alt_txt=alt_txt,
+    ).rstrip("\n")
 
 
 def _pdf_cell(
@@ -552,7 +566,7 @@ def _song_row(meta: dict, public_only: bool, pdf_prefix: str = "", nav_maps: dic
     row += f"<td data-sort='{escape(composer.lower())}'{composer_title}>{composer_cell}</td>"
     row += f"<td data-sort='{key_num}'>{escape(key)}</td>"
     if show_links:
-        row += f"<td class='col-pdf'>{_pdf_cell(diat, mp3s, OUTPUT_DIR, base, 'diatonique', title, 'index.html', pdf_prefix, youtube, diat_prev, diat_next, diat_keys, compat_html_for(meta.get('compat'), diat_keys))}</td>"
+        row += f"<td class='col-pdf'>{_pdf_cell(diat, mp3s, OUTPUT_DIR, base, 'diatonique', title, 'index.html', pdf_prefix, youtube, diat_prev, diat_next, diat_keys, compat_html_for(meta.get('compat'), base, title))}</td>"
         row += difficulty_cell(diff)
         row += f"<td class='col-pdf'>{_pdf_cell(chro, mp3s, OUTPUT_DIR, base, 'chromatique', title, 'index.html', pdf_prefix, youtube, chro_prev, chro_next)}</td>"
     else:
@@ -830,26 +844,21 @@ valeur de note <i>d</i> de la mélodie (4 = noire, 8 = croche, 16 = double croch
 <h2>4. Tri de la colonne Difficulté</h2>
 <math display="block"><mi>S</mi><mo>=</mo><mi>T</mi><mo>+</mo><mi>V</mi></math>
 
-<h2>5. Harmonicas compatibles</h2>
+<h2>5. Jouer sur un autre harmonica</h2>
 <p>Ce bloc, affiché sur les pages des partitions diatoniques Richter, ne fait pas partie du score de
-difficulté. Il indique, pour chacune des 12 tonalités d'harmonica (Do, Ré♭, Ré, Mi♭, Mi, Fa, Fa♯,
-Sol, La♭, La, Si♭, Si), quelles notes de la mélodie sont jouables sans technique particulière si on la joue
-dans sa tonalité d'origine, avec la même table de positions que ci-dessus.</p>
+difficulté. Il propose la même partition pour un harmonica d'une autre tonalité (Do, Ré♭, Ré, Mi♭, Mi, Fa,
+Fa♯, Sol, La♭, La, Si♭, Si).</p>
 <ul>
-  <li><b>Altérations</b> : nombre de notes demandant un bend ({_fr_num(c.WEIGHT_BEND)} point par note),
-    un overblow ({_fr_num(c.WEIGHT_OVERBLOW)}), un overdraw ({_fr_num(c.WEIGHT_OVERDRAW)}) ou situées hors
-    de la tessiture de l'harmonica ({_fr_num(WEIGHT_OUT_OF_RANGE)}). Ces points servent uniquement à classer les
-    harmonicas, du plus au moins adapté ; le tableau affiche le nombre de notes concernées.</li>
-  <li><b>Octave</b> : pour chaque harmonica, l'octave qui minimise ces points est retenue
-    (« octave +1 » : la mélodie est jouée une octave plus haut que dans la partition).</li>
-  <li><b>Position</b> : 1<sup>re</sup> si la tonique du morceau est celle de l'harmonica, 2<sup>e</sup>
-    (« cross harp ») si elle est une quinte au-dessus, 3<sup>e</sup> une seconde au-dessus, etc.
-    La tonique est lue dans la première armure <code>\\key</code> de la mélodie.</li>
-  <li><b>Même tablature</b> : jouer la tablature fournie sur un harmonica d'une autre tonalité donne
-    exactement les mêmes gestes (aucune altération en plus ou en moins) : seule la hauteur du morceau
-    change, d'un décalage (<i>transposition</i>) compris entre −6 et +5 demi-tons. Par exemple, la tablature
-    d'un morceau écrit pour un harmonica en Mi♭ se joue sur un harmonica en Ré, et le morceau sonne alors
-    un demi-ton plus bas.</li>
+  <li><b>Même tablature</b> : jouer la tablature sur un harmonica d'une autre tonalité demande exactement les
+    mêmes gestes, donc les mêmes altérations (bends, overblows, overdraws). Seule la hauteur du morceau change.</li>
+  <li><b>Transposition</b> : la partition est recompilée avec toutes ses notes et ses accords décalés du plus court
+    intervalle possible (de −6 à +5 demi-tons). Par exemple, un morceau écrit pour un harmonica en Mi♭ et joué sur
+    un harmonica en Do est transposé de 3 demi-tons vers le bas. Les numéros de tablature sont ceux du
+    fichier d'origine, calculés avant la transposition.</li>
+  <li><b>Fichiers</b> : ces variantes sont générées automatiquement à la compilation (option LilyPond
+    <code>-dplay-on</code>, voir <code>include/harmonica.ly</code>), en PDF uniquement, sans enregistrement audio.
+    Elles ne sont pas produites pour les partitions Suzuki 5 trous, ni pour celles marquées
+    <code>transposition = "false"</code> dans leur en-tête.</li>
 </ul>
 
 <h2>Limites</h2>
@@ -857,7 +866,7 @@ dans sa tonalité d'origine, avec la même table de positions que ci-dessus.</p>
   <li>Les notes sont comptées, pas les passages : une chanson longue a un score plus élevé.</li>
   <li>Les silences et les respirations ne sont pas pris en compte dans les écarts.</li>
   <li>Un seul accordage est utilisé par partition (un changement d'harmonica en cours de morceau est ignoré).</li>
-  <li>Les harmonicas compatibles ne sont calculés que pour le diatonique Richter (ni Suzuki 5 trous, ni chromatique).</li>
+  <li>Les partitions transposées ne sont produites que pour le diatonique Richter (ni Suzuki 5 trous, ni chromatique).</li>
 </ul>
 """
 

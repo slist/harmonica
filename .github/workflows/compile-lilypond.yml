@@ -97,6 +97,33 @@ jobs:
           find partitions -maxdepth 1 -type f -name "*.ly" -print0 \
             | xargs -0 -P$(nproc) -I{} bash -c 'compile_file "$@"' _ {}
 
+      - name: Compile transposed diatonic scores (PDF)
+        run: |
+          set -euo pipefail
+
+          source scripts/ci/strip_ci_ignored.sh
+
+          # Même tablature, jouée sur un harmonica d'une autre tonalité : la partition
+          # (portée + accords) est transposée via -dplay-on=<demi-tons> (voir
+          # include/harmonica.ly). PDF uniquement : pas de MIDI/MP3 (poids du site).
+          compile_transposed() {
+            local file="$1" semitones="$2" key="$3"
+            local base tmp_file
+            base=$(basename "${file}" .ly)
+
+            tmp_file=$(strip_ci_ignored "${file}")
+            trap 'rm -f "${tmp_file}"' RETURN
+
+            mkdir -p "output/tonalites/${key}"
+            lilypond --formats=pdf -dcompile-diatonique -dplay-on="${semitones}" \
+              -o "output/tonalites/${key}/${base}_diatonique" "${tmp_file}" \
+              || { echo "❌ Failed: ${base} (diatonique, harmonica ${key})"; return 1; }
+          }
+          export -f compile_transposed
+
+          python scripts/ci/list_transposed_variants.py \
+            | xargs -P$(nproc) -L1 bash -c 'compile_transposed "$@"' _
+
       - name: Compile gamme scores (PDF + MIDI)
         run: |
           set -euo pipefail

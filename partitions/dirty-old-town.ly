@@ -7,6 +7,7 @@
   copyrightStatus = "copyrighted"
   composerNationality = "gb"
   youtube = "https://www.youtube.com/watch?v=JgGuRdYm9CQ"
+  transposition = "false"  % pas de variantes pour d'autres harmonicas
 }
 
 % From: https://musescore.com/user/28111512/scores/6520909
