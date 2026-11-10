@@ -212,26 +212,21 @@ valeur de note <i>d</i> de la mélodie (4 = noire, 8 = croche, 16 = double croch
 <h2>4. Tri de la colonne Difficulté</h2>
 <math display="block"><mi>S</mi><mo>=</mo><mi>T</mi><mo>+</mo><mi>V</mi></math>
 
-<h2>5. Harmonicas compatibles</h2>
+<h2>5. Jouer sur un autre harmonica</h2>
 <p>Ce bloc, affiché sur les pages des partitions diatoniques Richter, ne fait pas partie du score de
-difficulté. Il indique, pour chacune des 12 tonalités d'harmonica (Do, Ré♭, Ré, Mi♭, Mi, Fa, Fa♯,
-Sol, La♭, La, Si♭, Si), quelles notes de la mélodie sont jouables sans technique particulière si on la joue
-dans sa tonalité d'origine, avec la même table de positions que ci-dessus.</p>
+difficulté. Il propose la même partition pour un harmonica d'une autre tonalité (Do, Ré♭, Ré, Mi♭, Mi, Fa,
+Fa♯, Sol, La♭, La, Si♭, Si).</p>
 <ul>
-  <li><b>Altérations</b> : nombre de notes demandant un bend (1 point par note),
-    un overblow (3), un overdraw (3) ou situées hors
-    de la tessiture de l'harmonica (5). Ces points servent uniquement à classer les
-    harmonicas, du plus au moins adapté ; le tableau affiche le nombre de notes concernées.</li>
-  <li><b>Octave</b> : pour chaque harmonica, l'octave qui minimise ces points est retenue
-    (« octave +1 » : la mélodie est jouée une octave plus haut que dans la partition).</li>
-  <li><b>Position</b> : 1<sup>re</sup> si la tonique du morceau est celle de l'harmonica, 2<sup>e</sup>
-    (« cross harp ») si elle est une quinte au-dessus, 3<sup>e</sup> une seconde au-dessus, etc.
-    La tonique est lue dans la première armure <code>\key</code> de la mélodie.</li>
-  <li><b>Même tablature</b> : jouer la tablature fournie sur un harmonica d'une autre tonalité donne
-    exactement les mêmes gestes (aucune altération en plus ou en moins) : seule la hauteur du morceau
-    change, d'un décalage (<i>transposition</i>) compris entre −6 et +5 demi-tons. Par exemple, la tablature
-    d'un morceau écrit pour un harmonica en Mi♭ se joue sur un harmonica en Ré, et le morceau sonne alors
-    un demi-ton plus bas.</li>
+  <li><b>Même tablature</b> : jouer la tablature sur un harmonica d'une autre tonalité demande exactement les
+    mêmes gestes, donc les mêmes altérations (bends, overblows, overdraws). Seule la hauteur du morceau change.</li>
+  <li><b>Transposition</b> : la partition est recompilée avec toutes ses notes et ses accords décalés du plus court
+    intervalle possible (de −6 à +5 demi-tons). Par exemple, un morceau écrit pour un harmonica en Mi♭ et joué sur
+    un harmonica en Do est transposé de 3 demi-tons vers le bas. Les numéros de tablature sont ceux du
+    fichier d'origine, calculés avant la transposition.</li>
+  <li><b>Fichiers</b> : ces variantes sont générées automatiquement à la compilation (option LilyPond
+    <code>-dplay-on</code>, voir <code>include/harmonica.ly</code>), en PDF uniquement, sans enregistrement audio.
+    Elles ne sont pas produites pour les partitions Suzuki 5 trous, ni pour celles marquées
+    <code>transposition = "false"</code> dans leur en-tête.</li>
 </ul>
 
 <h2>Limites</h2>
@@ -239,7 +234,7 @@ dans sa tonalité d'origine, avec la même table de positions que ci-dessus.</p>
   <li>Les notes sont comptées, pas les passages : une chanson longue a un score plus élevé.</li>
   <li>Les silences et les respirations ne sont pas pris en compte dans les écarts.</li>
   <li>Un seul accordage est utilisé par partition (un changement d'harmonica en cours de morceau est ignoré).</li>
-  <li>Les harmonicas compatibles ne sont calculés que pour le diatonique Richter (ni Suzuki 5 trous, ni chromatique).</li>
+  <li>Les partitions transposées ne sont produites que pour le diatonique Richter (ni Suzuki 5 trous, ni chromatique).</li>
 </ul>
 
 </div>

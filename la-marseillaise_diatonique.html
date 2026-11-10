@@ -63,9 +63,6 @@ body{margin:0;font-family:'Public Sans',sans-serif;background:var(--bg);color:va
 #compat .compat-body{font-size:.9em;color:var(--ink)}
 #compat table{border-collapse:collapse;margin:.5em 0}
 #compat th,#compat td{padding:.25em .7em;border-bottom:1px solid var(--border);text-align:left}
-#compat tr.ok td:nth-child(3){color:#3fa86b;font-weight:700}
-#compat tr.few td:nth-child(3){color:#d99a2b;font-weight:700}
-#compat tr.many td:nth-child(3){color:#d9534f}
 #compat tr.current{background:var(--control-bg)}
 </style>
 <script>
@@ -129,7 +126,7 @@ body{margin:0;font-family:'Public Sans',sans-serif;background:var(--bg);color:va
   </div>
   <div id="player-bar-media">
     <div id="audio-controls">
-  <audio id='audio-player' controls src='la-marseillaise.mp3?v=326f3f2'>
+  <audio id='audio-player' controls src='la-marseillaise.mp3?v=6f8ed87'>
     Votre navigateur ne supporte pas la lecture audio.
   </audio>
   <span id="audio-idle-buttons">
@@ -148,32 +145,32 @@ body{margin:0;font-family:'Public Sans',sans-serif;background:var(--bg);color:va
   </div>
 </div>
 <details id="compat">
-  <summary>Harmonicas compatibles</summary>
+  <summary>Jouer sur un autre harmonica</summary>
   <div class="compat-body">
-    <p>La tablature ci-dessous est écrite pour un harmonica en <b>C</b>. Tonalité du morceau : C majeur.
-    La colonne « Altérations » compte les notes qui demandent un bend, un overblow, un overdraw ou qui sortent de la tessiture, si on joue la mélodie dans sa tonalité d'origine sur chaque harmonica (une autre tablature serait alors nécessaire).</p>
-    <p>La dernière colonne indique de combien de demi-tons le morceau sonne plus haut ou plus bas si l'on joue
-    <i>la même tablature</i> sur un harmonica d'une autre tonalité : aucune altération supplémentaire, seule la hauteur change.</p>
+    <p>Cette tablature est écrite pour un harmonica en <b>C</b>. Tonalité du morceau : C majeur. Elle demande 7 altération(s) : 6 bend, 1 overblow.</p>
+    <p>Pour jouer le même morceau sur un harmonica d'une autre tonalité, une partition transposée est proposée :
+    les numéros de tablature restent identiques (donc les mêmes altérations), seule la hauteur du morceau change du décalage indiqué.
+    Ces partitions n'ont pas d'enregistrement audio.</p>
     <table>
-      <thead><tr><th>Harmonica</th><th>Position</th><th>Altérations</th><th>Détail</th><th>Même tablature</th></tr></thead>
+      <thead><tr><th>Harmonica</th><th>Partition</th></tr></thead>
       <tbody>
-<tr class='many current'><td>C</td><td>1<sup>re</sup></td><td>7</td><td>6 bend, 1 overblow (octave +1)</td><td>tablature ci-dessus</td></tr>
-<tr class='many'><td>F</td><td>2<sup>e</sup></td><td>30</td><td>30 bend</td><td>+5 ½ ton</td></tr>
-<tr class='many'><td>Bb</td><td>3<sup>e</sup></td><td>22</td><td>17 bend, 5 overdraw (octave +2)</td><td>−2 ½ ton</td></tr>
-<tr class='many'><td>G</td><td>12<sup>e</sup></td><td>17</td><td>6 bend, 11 overblow (octave +1)</td><td>−5 ½ ton</td></tr>
-<tr class='many'><td>Eb</td><td>4<sup>e</sup></td><td>47</td><td>45 bend, 2 overblow</td><td>+3 ½ ton</td></tr>
-<tr class='many'><td>D</td><td>11<sup>e</sup></td><td>52</td><td>42 bend, 10 overblow</td><td>+2 ½ ton</td></tr>
-<tr class='many'><td>Ab</td><td>5<sup>e</sup></td><td>42</td><td>17 bend, 23 overblow, 2 overdraw (octave +1)</td><td>−4 ½ ton</td></tr>
-<tr class='many'><td>A</td><td>10<sup>e</sup></td><td>63</td><td>45 bend, 7 overblow, 11 overdraw (octave +2)</td><td>−3 ½ ton</td></tr>
-<tr class='many'><td>F#</td><td>7<sup>e</sup></td><td>94</td><td>90 bend, 4 overblow</td><td>−6 ½ ton</td></tr>
-<tr class='many'><td>E</td><td>9<sup>e</sup></td><td>77</td><td>54 bend, 23 overblow</td><td>+4 ½ ton</td></tr>
-<tr class='many'><td>Db</td><td>6<sup>e</sup></td><td>66</td><td>35 bend, 31 overblow</td><td>+1 ½ ton</td></tr>
-<tr class='many'><td>B</td><td>8<sup>e</sup></td><td>78</td><td>48 bend, 30 overblow (octave +1)</td><td>−1 ½ ton</td></tr>
+<tr class='current'><td>C</td><td>tablature ci-dessus</td></tr>
+<tr class=''><td>Db</td><td><a href='tonalites/Db/la-marseillaise_diatonique.html' title='Même tablature, partition transposée'>partition en Db</a> (+1 ½ ton)</td></tr>
+<tr class=''><td>D</td><td><a href='tonalites/D/la-marseillaise_diatonique.html' title='Même tablature, partition transposée'>partition en D</a> (+2 ½ ton)</td></tr>
+<tr class=''><td>Eb</td><td><a href='tonalites/Eb/la-marseillaise_diatonique.html' title='Même tablature, partition transposée'>partition en Eb</a> (+3 ½ ton)</td></tr>
+<tr class=''><td>E</td><td><a href='tonalites/E/la-marseillaise_diatonique.html' title='Même tablature, partition transposée'>partition en E</a> (+4 ½ ton)</td></tr>
+<tr class=''><td>F</td><td><a href='tonalites/F/la-marseillaise_diatonique.html' title='Même tablature, partition transposée'>partition en F</a> (+5 ½ ton)</td></tr>
+<tr class=''><td>F#</td><td><a href='tonalites/Fsharp/la-marseillaise_diatonique.html' title='Même tablature, partition transposée'>partition en F#</a> (−6 ½ ton)</td></tr>
+<tr class=''><td>G</td><td><a href='tonalites/G/la-marseillaise_diatonique.html' title='Même tablature, partition transposée'>partition en G</a> (−5 ½ ton)</td></tr>
+<tr class=''><td>Ab</td><td><a href='tonalites/Ab/la-marseillaise_diatonique.html' title='Même tablature, partition transposée'>partition en Ab</a> (−4 ½ ton)</td></tr>
+<tr class=''><td>A</td><td><a href='tonalites/A/la-marseillaise_diatonique.html' title='Même tablature, partition transposée'>partition en A</a> (−3 ½ ton)</td></tr>
+<tr class=''><td>Bb</td><td><a href='tonalites/Bb/la-marseillaise_diatonique.html' title='Même tablature, partition transposée'>partition en Bb</a> (−2 ½ ton)</td></tr>
+<tr class=''><td>B</td><td><a href='tonalites/B/la-marseillaise_diatonique.html' title='Même tablature, partition transposée'>partition en B</a> (−1 ½ ton)</td></tr>
       </tbody>
     </table>
   </div>
 </details>
-<iframe class='pdf-page' src='la-marseillaise_diatonique.pdf?v=326f3f2'></iframe>
+<iframe class='pdf-page' src='la-marseillaise_diatonique.pdf?v=6f8ed87'></iframe>
 <script>
 // Retour vers la liste d'où l'on vient (index.html ou private.html), pas la page précédente
 (function(){
