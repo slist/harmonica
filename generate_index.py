@@ -93,7 +93,7 @@ def parse_ly_metadata(ly_path: str) -> dict:
         "copyrightStatus": "unknown", "lyricsLang": [],
         "key": "unknown", "composer": "", "title": "",
         "composerNationality": "", "difficulty": {}, "youtube": "",
-        "diatonicHarmonicaKeys": "C", "instrument": "",
+        "diatonicHarmonicaKeys": "C", "instrument": "", "hidden": False,
     }
     if not os.path.exists(ly_path):
         logger.warning(f"  ⚠️  Fichier .ly introuvable : '{ly_path}'")
@@ -125,6 +125,8 @@ def parse_ly_metadata(ly_path: str) -> dict:
     metadata["instrument"]           = find(rf'^\s*instrument\s*=\s*"{_QUOTED}"', re.MULTILINE)
     metadata["composerNationality"]  = find(rf'composerNationality\s*=\s*"{_QUOTED}"')
     metadata["youtube"]               = find(rf'youtube\s*=\s*"{_QUOTED}"')
+    # hidden = "true" dans le \header : partition pas prête, exclue du site
+    metadata["hidden"] = find(rf'^\s*hidden\s*=\s*"{_QUOTED}"', re.MULTILINE).lower() == "true"
 
     m = re.search(r'lyricsLang\s*=\s*#\'\(([^)]*)\)', content)
     if m:
@@ -254,6 +256,8 @@ def collect_songs() -> list[dict]:
             continue
         base = fname[:-3]
         meta = parse_ly_metadata(full)
+        if meta["hidden"]:
+            continue
         meta['base'] = base
         meta['addedDate'] = git_added_date(full)
         meta['outputs'] = collect_outputs(base, OUTPUT_DIR)

@@ -21,7 +21,7 @@
 #(define compile-partition (ly:get-option 'compile-partition))
 
 melodie = {
-  \tempo 4 = 144
+  \tempo 4 = 120
   r4 c, e f g1
   \break
   r4 c, e f g1
@@ -106,7 +106,7 @@ midiScore =
     }
   }
   \midi {
-    \tempo 4 = 100
+    \tempo 4 = 120
   }
 }
 

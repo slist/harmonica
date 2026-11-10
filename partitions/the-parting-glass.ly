@@ -226,7 +226,7 @@ accompagnementMidiScore =
   >>
 
   \midi {
-    \tempo 4 = 112
+    \tempo 4 = 90
   }
 }
 

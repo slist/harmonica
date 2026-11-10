@@ -38,7 +38,7 @@ melodie = {
   %\key re \major % Tonalité de Ré majeur (fa♯, do♯)
   %\key fa \major % Tonalité de Fa majeur (sib♯)
   \time 4/4
-  \tempo 4 = 80
+  \tempo 4 = 100
   %\clef "treble^8"
   sol8 sol sol sol la4 sol8 la | si8 re4. r2 | mi8 mi sol mi re do4. | re2 r2 |
   \break

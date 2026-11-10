@@ -23,7 +23,7 @@
 
 melodie = {
   \time 4/4
-  \tempo 4 = 60
+  \tempo 4 = 80
   %\clef "treble^8"
 
   %\key sol \major % Sol majeur (un dièse : fa♯)

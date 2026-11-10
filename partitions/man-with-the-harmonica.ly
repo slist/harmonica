@@ -24,7 +24,7 @@
 
 melodie = {
   \time 6/4
-  \tempo "Lento" 4 = 58
+  \tempo "Lento" 4 = 66
   
   %\bar "|:"
   mi2\mp^\markup { \center-align \italic "ad lib." } red2^\markup { \italic "misterioso" } mi\> | mi\mp do4 red~\> red mi \bar "||" 
@@ -47,7 +47,6 @@ melodie = {
   mi8 do red8 mi~ mi4. red8 | mi4 r4 mi4 red | r2 mi4 red4 |
   \break
   mi4 r4 r2^\markup { \italic "rit...." } \bar "||"
-  \tempo "Faster" 4=82 
   la,1 | mi'1 |
   \break
   si1 | r2 r8. si16 do si la si | la2 r2 |
@@ -59,7 +58,6 @@ melodie = {
   re2 r8 re8 mi16 re do re | do1 | la'2. r8 la8 |
   \break
   si2 mi,4.\mp red8 | mi1\<^\markup { \italic "accel... "} \bar "||"
-  \tempo "A little Faster" 4=82
   la,2\mf mi'2 |
   \break
   si2 si8 si do16 si la si | la2 la'2 | si4 mi,2 fa4 |

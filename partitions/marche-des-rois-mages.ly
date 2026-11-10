@@ -14,6 +14,7 @@
   copyrightStatus = "public-domain"
   composerNationality = "fr"
   youtube = ""
+  hidden = "true"  % pas prête : exclue du site web
 }
 
 \include "../include/harmonica.ly"
@@ -191,7 +192,7 @@ accompagnementMidiScore =
   >>
 
   \midi {
-    \tempo 4 = 112
+    \tempo 4 = 100
   }
 }
 

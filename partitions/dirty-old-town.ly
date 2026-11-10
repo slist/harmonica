@@ -24,7 +24,7 @@
 
 melodieD = {
   \time 4/4
-  \tempo "swing" 4 = 120
+  \tempo "swing" 4 = 110
   \key re \major % Ré majeur (fa♯, do♯)
   
   r4 ^\markup \box { \italic "Harmonica diatonique en D" }
@@ -78,7 +78,7 @@ melodieG = {
 
 melodieChromatique = {
   \time 4/4
-  \tempo "swing" 4 = 120
+  \tempo "swing" 4 = 110
 
   \key re \major % Ré majeur (fa♯, do♯)
   
@@ -181,7 +181,7 @@ midiScore =
     }
   }
   \midi {
-    \tempo 4 = 50
+    \tempo 4 = 110
   }
 }
 

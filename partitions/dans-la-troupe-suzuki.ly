@@ -24,7 +24,7 @@
 #(define compile-partition (ly:get-option 'compile-partition))
 
 melodie = {
-  \tempo 4 = 96
+  \tempo 4 = 100
   \time 4/4
   
   % FR

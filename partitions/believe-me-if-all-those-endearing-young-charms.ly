@@ -174,7 +174,7 @@ midiScore =
   >>
 
   \midi {
-    \tempo 4 = 120
+    \tempo 4 = 72
   }
 }
 
@@ -204,7 +204,7 @@ accompagnementMidiScore =
   >>
 
   \midi {
-    \tempo 4 = 120
+    \tempo 4 = 72
   }
 }
 
