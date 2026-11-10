@@ -121,7 +121,13 @@ def inline_music_variables(content: str, melody: str) -> str:
 
 # --------- Difficulty analysis ---------
 
-def analyze_difficulty(content: str) -> dict:
+def parse_melody(content: str) -> dict:
+    """Extract the notes of the `melodie` block of a score.
+
+    Returns the absolute pitches (MIDI numbers, 60 = LilyPond c') with their
+    duration denominator (None when not written), plus the tuning root,
+    layout and tempo found in the file.
+    """
     content = strip_comments(content)
     is_french = bool(re.search(r'language\s*"fran', content))
     notes_map = FRENCH_NOTES if is_french else ENGLISH_NOTES
@@ -173,11 +179,7 @@ def analyze_difficulty(content: str) -> dict:
             r"(?<![a-zA-Z])([cdefgab])(isis|eses|is|es)?([\',]*)(\d+)?(\.+)?(?![a-zA-Z])"
         )
 
-    counts = {'bend': 0, 'overblow': 0, 'overdraw': 0}
-    jumps = jump_holes = high_notes = 0
-    prev_hole = None
-    fastest = None
-
+    notes: list[tuple[int, int | None]] = []
     for m in note_re.finditer(melody):
         name    = m.group(1)
         acc     = m.group(2) or ''
@@ -198,11 +200,23 @@ def analyze_difficulty(content: str) -> dict:
         abs_p   = (current + diff_up) if diff_up <= 6 else (current - (12 - diff_up))
         abs_p  += oct_str.count("'") * 12 - oct_str.count(",") * 12
         current = abs_p
+        notes.append((abs_p, int(dur_str) if dur_str else None))
 
-        if dur_str:
-            d = int(dur_str)
-            if fastest is None or d > fastest:
-                fastest = d
+    return {'notes': notes, 'root': root, 'layout': layout, 'tempo': tempo,
+            'is_french': is_french, 'content': content, 'melody': melody}
+
+
+def analyze_difficulty(content: str) -> dict:
+    parsed = parse_melody(content)
+    root, layout, tempo = parsed['root'], parsed['layout'], parsed['tempo']
+    counts = {'bend': 0, 'overblow': 0, 'overdraw': 0}
+    jumps = jump_holes = high_notes = 0
+    prev_hole = None
+    fastest = None
+
+    for abs_p, d in parsed['notes']:
+        if d is not None and (fastest is None or d > fastest):
+            fastest = d
 
         # Notes outside the harmonica range (tab "X") are skipped.
         entry = layout.get(abs_p - 60 - root)
