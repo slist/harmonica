@@ -432,7 +432,7 @@ def _write_player_page(
 def _transposed_cell(r: dict, base: str, title: str) -> str:
     """Cellule « Partition transposée » : lien vers la page de la variante si elle existe."""
     if r["is_file"]:
-        return "tablature ci-dessus"
+        return "tablature ci-dessous"
     shift = f"{r['shift']:+d} ½ ton".replace("-", "−")
     key_dir = r["harmonica"].replace("#", "sharp")
     folder = os.path.join(OUTPUT_DIR, TRANSPOSED_DIR, key_dir)
