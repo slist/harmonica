@@ -104,5 +104,5 @@ midiScore =
      (ly:parser-include-string "\\midiScore"))
 
 % CI-IGNORE-BELOW : lignes de test manuel local, toujours ignorées par la compilation GitHub Actions
-%\diatoniqueScore
-%\midiScore
+\diatoniqueScore
+\midiScore
