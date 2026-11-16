@@ -58,7 +58,9 @@ melodie = {
   %\key dob \major  % 7b - sib, mib, lab, reb, solb, dob, fab
 
   \partial 2 % anacrouse
-  la4 mi | la4. si8 do8. si16 do8.
+  la4 mi | la4. si8 do8. si16 do8. la16 | mi'4. r16 do16 ré4 mi | fa8 mi ré do si4 mi |
+  \break
+  
   \bar "|."
 }
 \addlyrics {
@@ -68,8 +70,8 @@ melodie = {
 
 % TODO : check si c'est des s ou q qu'il faut faire
 accords = \chordmode {
-  la:m q q do re:m sol
-  ré:m la:m q q q q ré:m do sol
+  %la:m q q do re:m sol
+  %ré:m la:m q q q q ré:m do sol
 }
 
 % ============================
