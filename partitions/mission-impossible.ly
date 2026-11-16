@@ -24,12 +24,13 @@
 \markup {
   \column {
     \vspace #0.5
-    \fill-line {
-      \wordwrap {
-        Votre mission, si toutefois vous l’acceptez, consiste à interpréter ce morceau à l’harmonica.
-        Attention : cette partition s’autodétruira dans cinq minutes…
-        Bonne chance !
-      }
+    \left-column {
+      \italic "Votre mission, si toutefois vous l’acceptez,"
+      \italic "consiste à interpréter ce morceau à l’harmonica."
+      \vspace #0.6
+      \line { \bold "Attention :" \italic "cette partition s’autodétruira dans cinq secondes…" }
+      \vspace #0.6
+      \bold "Bonne chance !"
     }
     \vspace #1
   }
@@ -233,16 +234,16 @@ midiScore =
 
 \markup {
   \column {
-    %   \vspace #1
-    %   \bold "Indications de nuances"
     \vspace #0.5
-    \line {       "   • pp = pianissimo : très doux" }
-    \line {       "   • p = piano : doux" }
-    \line { \bold "   • mp" " = mezzo-piano : moyennement doux" }
-    \line { \bold "   • mf = mezzo-forte : moyennement fort" }
-    \line { \bold "   • f" " = forte : fort" }
-    \line {       "   • ff = fortissimo : très fort" }
-    \line {       "   • sfz = sforzando : accent fort et soudain" }
+    \fontsize #1 \bold "Nuances"
+    \vspace #0.3
+    \line { \pad-to-box #'(0 . 7) #'(0 . 0) \left-align { \dynamic pp } \pad-to-box #'(0 . 14) #'(0 . 0) \left-align { \italic "pianissimo" } \left-align { "très doux" } }
+    \line { \pad-to-box #'(0 . 7) #'(0 . 0) \left-align { \dynamic p } \pad-to-box #'(0 . 14) #'(0 . 0) \left-align { \italic "piano" } \left-align { "doux" } }
+    \line { \pad-to-box #'(0 . 7) #'(0 . 0) \left-align { \dynamic mp } \pad-to-box #'(0 . 14) #'(0 . 0) \left-align { \italic "mezzo-piano" } \left-align { "moyennement doux" } }
+    \line { \pad-to-box #'(0 . 7) #'(0 . 0) \left-align { \dynamic mf } \pad-to-box #'(0 . 14) #'(0 . 0) \left-align { \italic "mezzo-forte" } \left-align { "moyennement fort" } }
+    \line { \pad-to-box #'(0 . 7) #'(0 . 0) \left-align { \dynamic f } \pad-to-box #'(0 . 14) #'(0 . 0) \left-align { \italic "forte" } \left-align { "fort" } }
+    \line { \pad-to-box #'(0 . 7) #'(0 . 0) \left-align { \dynamic ff } \pad-to-box #'(0 . 14) #'(0 . 0) \left-align { \italic "fortissimo" } \left-align { "très fort" } }
+    \line { \pad-to-box #'(0 . 7) #'(0 . 0) \left-align { \dynamic sfz } \pad-to-box #'(0 . 14) #'(0 . 0) \left-align { \italic "sforzando" } \left-align { "accent fort et soudain" } }
     \vspace #1
   }
 }

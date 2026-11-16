@@ -152,14 +152,14 @@ midiScore =
 \score {
   <<
     % Noms des accords sur la partition
-    \new ChordNames {
+    \new ChordNames \with { \remove "Staff_performer" } {
       \accords
     }
 
     % Mélodie
     \new Staff {
       \set Staff.midiInstrument = #"harmonica"
-      \unfoldRepeats \relative do'' {
+      \unfoldRepeats \relative do''' {
         \melodie
       }
     }
@@ -167,12 +167,14 @@ midiScore =
     % Accords joués au piano
     \new Staff {
       \set Staff.midiInstrument = #"acoustic grand"
+      \set Staff.midiMinimumVolume = #0.2
+      \set Staff.midiMaximumVolume = #0.35
       \unfoldRepeats \accords
     }
   >>
 
   \midi {
-    \tempo 4 = 120
+    \tempo 4 = 72
   }
 }
 
@@ -180,7 +182,7 @@ accompagnementMidiScore =
 \score {
   <<
     % Noms des accords sur la partition
-    \new ChordNames {
+    \new ChordNames \with { \remove "Staff_performer" } {
       \accords
     }
 
@@ -202,7 +204,7 @@ accompagnementMidiScore =
   >>
 
   \midi {
-    \tempo 4 = 120
+    \tempo 4 = 72
   }
 }
 
@@ -216,6 +218,43 @@ accompagnementMidiScore =
      (ly:parser-include-string "\\partitionScore"))
 #(if compile-midi
      (ly:parser-include-string "\\midiScore"))
+
+\pageBreak
+
+\markup {
+  \column {
+    \vspace #1
+    \fill-line { \bold "Commentaires" }
+  }
+}
+
+\markup {
+  \column {
+    \bold "Note de rythme : La sicilienne"
+    \vspace #0.5
+    \fill-line {
+      \wordwrap {
+        La mélodie de ce morceau traditionnel repose sur une utilisation fréquente du rythme de la sicilienne. 
+        Ce motif ternaire caractéristique, composé d'une croche pointée suivie d'une double croche puis d'une croche, donne toute sa fluidité et son balancement à l'interprétation.
+      }
+    }
+  }
+}
+
+\markup {
+  \column {
+    \vspace #1.5
+    \bold "Motif ternaire"
+    \vspace #0.5
+    \fill-line {
+      \wordwrap {
+        Un motif ternaire est un motif musical basé sur un rythme en trois temps, souvent représenté par une mesure à 3/4 ou 6/8.
+        Dans ce morceau, le motif ternaire est utilisé pour créer une sensation de mouvement fluide et dansant, typique des airs traditionnels irlandais.
+      }
+    }
+  }
+}
+
 
 % CI-IGNORE-BELOW : lignes de test manuel local, toujours ignorées par la compilation GitHub Actions
 \diatoniqueScore

@@ -3,7 +3,7 @@
 \header {
   title = "Blowin' In The Wind (Suzuki)"
   instrument = "Harmonica en C"
-  arranger = "Pour suzuki 5 trous"
+  arranger = "Pour Suzuki 5 trous"
   composer = "Bob Dylan (1941-)" % May 24, 1941 -
   lyricsLang = #'(en)
   copyrightStatus = "copyrighted"

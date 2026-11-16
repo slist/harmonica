@@ -229,10 +229,10 @@ midiScore =
     \vspace #1
     \bold "Les chemins musicaux : Segno, D.S. al Coda, Coda"
     \vspace #0.5
-    \line { "Tu joues normal… jusqu’à lire : D.S. al Coda (= Dal Segno à la Coda)" }
+    \line { "Tu joues normalement… jusqu’à lire : D.S. al Coda (= Dal Segno à la Coda)" }
     \line { "Tu reviens au symbole $ (Segno)" }
     \line { "Tu rejoues à partir du Segno jusqu’à voir : To Coda" }
-    \line { "Tu sautes vers la Coda, symbole 'O' avec une croix,  placé plus loin (dernière ligne dans ce morceau)" }
+    \line { "Tu sautes vers la Coda, symbole 'O' avec une croix, placé plus loin (dernière ligne dans ce morceau)" }
     \line { "Tu joues la Coda jusqu'à la fin." }
     \line { " " }
     \line { "La Coda est une fin alternative, un \"bout spécial\" pour conclure le morceau." }

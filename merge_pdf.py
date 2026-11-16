@@ -123,7 +123,13 @@ def fusionner_avec_index(
 
 titres_partitions = construire_table_titres(PARTITIONS_DIR)
 
-fichiers = os.listdir(DOSSIER)
+# Partitions marquées hidden = "true" dans leur \header : exclues des PDF fusionnés
+cachees = {
+    f[:-3] for f in os.listdir(PARTITIONS_DIR)
+    if f.endswith(".ly") and parse_ly_metadata(os.path.join(PARTITIONS_DIR, f))["hidden"]
+}
+
+fichiers = [f for f in os.listdir(DOSSIER) if base_de_pdf(f) not in cachees]
 
 
 def est_suzuki5(pdf: str) -> bool:

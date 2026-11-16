@@ -2,7 +2,7 @@
 \header {
   title = "Dans la troupe (Suzuki)"
   composer = "Traditionnel"
-  arranger = "Pour suzuki 5 trous"
+  arranger = "Pour Suzuki 5 trous"
   %Ce chant n'est pas sous copyright : https://fr.scoutwiki.org/Dans_la_troupe
   lyricsLang = #'(fr)
   copyrightStatus = "public-domain"
@@ -24,7 +24,7 @@
 #(define compile-partition (ly:get-option 'compile-partition))
 
 melodie = {
-  \tempo 4 = 96
+  \tempo 4 = 100
   \time 4/4
   
   % FR

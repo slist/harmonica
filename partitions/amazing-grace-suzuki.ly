@@ -3,7 +3,7 @@
 \header {
   title = "Amazing Grace (Suzuki)"
 %  meter = "Hymn"
-  arranger = "Pour suzuki 5 trous"
+  arranger = "Pour Suzuki 5 trous"
   composer = "John Newton (1725-1807)"
   lyricsLang = #'(en)
   copyrightStatus = "public-domain"

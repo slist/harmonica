@@ -344,6 +344,78 @@ New version for multiple notes
 		                    (list element)))
 				         music)
 
+%% ---------------------------------------------------------------------
+%% Jouer sur un harmonica d'une autre tonalité (option -dplay-on=<demi-tons>)
+%%
+%% Avec -dplay-on=N (N = 0..11 demi-tons au-dessus de do : 0=C, 2=D, 3=Eb, ...),
+%% toute la partition (portée, accords, MIDI) est transposée de façon à ce que
+%% la MÊME tablature se joue sur un harmonica de tonalité N. Les numéros de
+%% tablature ne changent pas : ils sont calculés avant la transposition, sur
+%% les notes d'origine. Sans l'option, rien ne change.
+%%
+%% La tonalité d'origine est celle de la commande de tablature diatonique
+%% utilisée dans le fichier (\diatonicEbHarmonicaTab -> 3, etc.).
+%% ---------------------------------------------------------------------
+%% (une option -d inconnue de LilyPond est lue comme une chaîne : on la convertit)
+#(define play-on
+   (let ((v (ly:get-option 'play-on)))
+     (cond ((number? v) v)
+           ((string? v) (string->number v))
+           (else #f))))
+#(define source-tuning-root #f)
+
+#(define diatonic-tuning-roots
+   '((diatonic-c-ritcher . 0)  (diatonic-db-ritcher . 1) (diatonic-d-ritcher . 2)
+     (diatonic-eb-ritcher . 3) (diatonic-e-ritcher . 4)  (diatonic-f-ritcher . 5)
+     (diatonic-f-sharp-ritcher . 6) (diatonic-g-ritcher . 7) (diatonic-ab-ritcher . 8)
+     (diatonic-a-ritcher . 9)  (diatonic-bb-ritcher . 10) (diatonic-b-ritcher . 11)))
+
+%% (notename . alteration) de chaque tonalité d'harmonica, de 0 (C) à 11 (B)
+#(define harmonica-key-spellings
+   #((0 . 0) (1 . -1/2) (1 . 0) (2 . -1/2) (2 . 0) (3 . 0)
+     (3 . 1/2) (4 . 0) (5 . -1/2) (5 . 0) (6 . -1/2) (6 . 0)))
+
+#(define (note-source-tuning! tuning)
+   (let ((root (assq-ref diatonic-tuning-roots tuning)))
+     (if (and root (not source-tuning-root))
+         (set! source-tuning-root root))))
+
+%% Intervalle de transposition (le plus court, -6..+5 demi-tons) de la
+%% tonalité `from` vers la tonalité `to`, orthographié d'après les noms
+%% de tonalité d'harmonica (Mib -> Do = tierce mineure descendante).
+#(define (play-on-interval from to)
+   (let* ((shift (- (modulo (+ (- to from) 6) 12) 6))
+          (from-spelling (vector-ref harmonica-key-spellings from))
+          (to-spelling   (vector-ref harmonica-key-spellings to))
+          (from-pitch (ly:make-pitch 0 (car from-spelling) (cdr from-spelling)))
+          (to-pitch0  (ly:make-pitch 0 (car to-spelling) (cdr to-spelling)))
+          (octave (/ (- shift (- (ly:pitch-semitones to-pitch0)
+                                 (ly:pitch-semitones from-pitch)))
+                     12)))
+     (ly:pitch-diff
+       (ly:make-pitch octave (car to-spelling) (cdr to-spelling))
+       from-pitch)))
+
+#(define default-score-handler toplevel-score-handler)
+
+#(define (play-on-score-handler score)
+   (if (and play-on source-tuning-root (not (= play-on source-tuning-root)))
+       (ly:music-transpose (ly:score-music score)
+                           (play-on-interval source-tuning-root play-on)))
+   (default-score-handler score))
+
+#(ly:parser-define! 'toplevel-score-handler play-on-score-handler)
+
+%% L'en-tête de la partition annonce la tonalité de l'harmonica visé.
+#(define harmonica-key-labels
+   #("Do (C)" "Réb (Db)" "Ré (D)" "Mib (Eb)" "Mi (E)" "Fa (F)"
+     "Fa# (F#)" "Sol (G)" "Lab (Ab)" "La (A)" "Sib (Bb)" "Si (B)"))
+
+#(if (and play-on (integer? play-on) (<= 0 play-on 11))
+     (module-define! (ly:parser-lookup '$defaultheader) 'instrument
+                     (string-append "Harmonica diatonique en "
+                                    (vector-ref harmonica-key-labels play-on))))
+
 %% Parcours séquentiel à état : ajoute les numéros de tablature en tenant
 %% compte des liaisons.
 %%   - note prolongée par une liaison ~ (la précédente portait un ~)  -> symbole
@@ -353,6 +425,7 @@ New version for multiple notes
 %% réinitialise l'état (la note suivante est une attaque fraîche).
 #(define (make-tab-adder tuning)
    (lambda (top-music)
+     (note-source-tuning! tuning)
      (let ((prev-pitch #f)   ; demi-tons de la note précédente, ou #f
            (prev-tie?  #f)   ; la note précédente portait-elle un ~
            (in-slur?   #f))  ; sommes-nous à l'intérieur d'un slur

@@ -1,9 +1,9 @@
 \version "2.24.3"
 
 \header {
-  title = "XIème Symphonie opus 125"
+  title = "9e Symphonie, opus 125"
   subtitle = "Pour accompagner ma fille au violon"
-  composer = "L. W. Beethoven (1770-1827)"
+  composer = "Ludwig van Beethoven (1770-1827)"
   lyricsLang = #'()
   copyrightStatus = "public-domain"
   composerNationality = "de"
@@ -23,7 +23,7 @@
 
 melodie = {
   \time 4/4
-  \tempo 4 = 60
+  \tempo 4 = 80
   %\clef "treble^8"
 
   %\key sol \major % Sol majeur (un dièse : fa♯)

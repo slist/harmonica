@@ -16,6 +16,12 @@ from markdown.extensions.toc import slugify_unicode
 
 import complexity
 from complexity import analyze_difficulty, brace_block, difficulty_cell, strip_comments
+from harmonica_compat import (
+    HARP_KEYS,
+    analyze_compatibility,
+    fmt_counts,
+    fmt_key,
+)
 
 logging.basicConfig(level=logging.INFO, format="%(message)s")
 logger = logging.getLogger(__name__)
@@ -43,16 +49,19 @@ SPECIAL_TAB_LABELS: dict[str, str] = {
 
 COUNTRY_FLAGS: dict[str, str] = {
     'ar': '🇦🇷', 'at': '🇦🇹', 'ca': '🇨🇦', 'de': '🇩🇪', 'fr': '🇫🇷', 'gb': '🇬🇧',
-    'ie': '🇮🇪', 'it': '🇮🇹', 'ru': '🇷🇺', 'us': '🇺🇸',
+    'ie': '🇮🇪', 'it': '🇮🇹', 'jp': '🇯🇵', 'mx': '🇲🇽', 'ru': '🇷🇺', 'us': '🇺🇸',
+    'en': '🇬🇧',
 }
 
 COUNTRY_NAMES: dict[str, str] = {
     'ar': 'Argentine', 'at': 'Autriche', 'ca': 'Canada', 'de': 'Allemagne', 'fr': 'France',
-    'gb': 'Royaume-Uni', 'ie': 'Irlande', 'it': 'Italie', 'ru': 'Russie',
-    'us': 'États-Unis',
+    'gb': 'Royaume-Uni', 'ie': 'Irlande', 'it': 'Italie', 'jp': 'Japon', 'mx': 'Mexique',
+    'ru': 'Russie', 'us': 'États-Unis', 'en': 'Angleterre',
 }
 
 OUTPUT_DIR     = "output"
+HARP_ORDER = list(HARP_KEYS)  # C, Db, D, ..., B
+TRANSPOSED_DIR = "tonalites"  # sous-dossier de output/ : partitions transposées, par tonalité
 PARTITIONS_DIR = "partitions"
 GAMMES_DIR     = "gammes"
 LIENS_UTILES_MD = "liens_utiles.md"
@@ -92,7 +101,7 @@ def parse_ly_metadata(ly_path: str) -> dict:
         "copyrightStatus": "unknown", "lyricsLang": [],
         "key": "unknown", "composer": "", "title": "",
         "composerNationality": "", "difficulty": {}, "youtube": "",
-        "diatonicHarmonicaKeys": "C", "instrument": "",
+        "diatonicHarmonicaKeys": "C", "instrument": "", "hidden": False, "compat": None,
     }
     if not os.path.exists(ly_path):
         logger.warning(f"  ⚠️  Fichier .ly introuvable : '{ly_path}'")
@@ -124,6 +133,8 @@ def parse_ly_metadata(ly_path: str) -> dict:
     metadata["instrument"]           = find(rf'^\s*instrument\s*=\s*"{_QUOTED}"', re.MULTILINE)
     metadata["composerNationality"]  = find(rf'composerNationality\s*=\s*"{_QUOTED}"')
     metadata["youtube"]               = find(rf'youtube\s*=\s*"{_QUOTED}"')
+    # hidden = "true" dans le \header : partition pas prête, exclue du site
+    metadata["hidden"] = find(rf'^\s*hidden\s*=\s*"{_QUOTED}"', re.MULTILINE).lower() == "true"
 
     m = re.search(r'lyricsLang\s*=\s*#\'\(([^)]*)\)', content)
     if m:
@@ -134,6 +145,7 @@ def parse_ly_metadata(ly_path: str) -> dict:
         metadata["key"] = m.group(1)
 
     metadata["difficulty"] = analyze_difficulty(content)
+    metadata["compat"] = analyze_compatibility(content)
     metadata["diatonicHarmonicaKeys"] = diatonic_harmonica_keys(content)
     return metadata
 
@@ -161,6 +173,13 @@ def copyright_cell(status: str, composer: str) -> str:
         else:
             tooltip = "Sous droits — libre 70 ans après la mort de l'auteur"
     return f"<td class='badge' data-sort='{escape(status)}' title='{escape(tooltip)}'>{icon}</td>"
+
+
+LANG_NAMES = {
+    "fr": "Français", "en": "Anglais", "de": "Allemand", "es": "Espagnol",
+    "it": "Italien", "pt": "Portugais", "nl": "Néerlandais", "pl": "Polonais",
+    "ru": "Russe", "sv": "Suédois", "da": "Danois", "no": "Norvégien",
+}
 
 
 def lyrics_icon(langs: list) -> str:
@@ -246,6 +265,8 @@ def collect_songs() -> list[dict]:
             continue
         base = fname[:-3]
         meta = parse_ly_metadata(full)
+        if meta["hidden"]:
+            continue
         meta['base'] = base
         meta['addedDate'] = git_added_date(full)
         meta['outputs'] = collect_outputs(base, OUTPUT_DIR)
@@ -324,6 +345,7 @@ def _nav_link_html(direction: str, href: str, title: str) -> str:
 def _player_page_html(
     title: str, mp3_file: str, pdf_files: list[str], back_href: str, youtube_id: str = "",
     prev_href: str = "", prev_title: str = "", next_href: str = "", next_title: str = "",
+    compat_html: str = "",
 ) -> str:
     prev_btn = _nav_link_html("prev", prev_href, prev_title)
     next_btn = _nav_link_html("next", next_href, next_title)
@@ -371,7 +393,7 @@ def _player_page_html(
         prev_btn=prev_btn, next_btn=next_btn,
         yt_toggle=yt_toggle, yt_html=yt_html, yt_script=yt_script,
         audio_html=audio_html, audio_script=audio_script,
-        pdf_html=pdf_html,
+        pdf_html=pdf_html, compat_html=compat_html,
     )
 
 
@@ -379,6 +401,7 @@ def _write_player_page(
     output_dir: str, base: str, tuning: str, title: str,
     pdf_files: list[str], mp3_files: list[str], back_href: str, prefix: str = "",
     youtube_url: str = "", prev_song: dict | None = None, next_song: dict | None = None,
+    compat_html: str = "",
 ) -> str:
     """Write a standalone page combining the sheet music PDF with a sticky audio player."""
     fname = f"{base}_{tuning}.html"
@@ -399,22 +422,69 @@ def _write_player_page(
         youtube_id=_youtube_video_id(youtube_url),
         prev_href=prev_href, prev_title=f"Précédent : {prev_title}" if prev_title else "",
         next_href=next_href, next_title=f"Suivant : {next_title}" if next_title else "",
+        compat_html=compat_html,
     )
     with open(os.path.join(output_dir, fname), "w", encoding="utf-8") as fh:
         fh.write(html)
     return fname
 
 
+def _transposed_cell(r: dict, base: str, title: str) -> str:
+    """Cellule « Partition transposée » : lien vers la page de la variante si elle existe."""
+    if r["is_file"]:
+        return "tablature ci-dessous"
+    shift = f"{r['shift']:+d} ½ ton".replace("-", "−")
+    key_dir = r["harmonica"].replace("#", "sharp")
+    folder = os.path.join(OUTPUT_DIR, TRANSPOSED_DIR, key_dir)
+    pdfs = collect_outputs(base, folder)["diat"] if base else []
+    if not pdfs:
+        return shift
+    page = _write_player_page(
+        folder, base, "diatonique", f"{title} — harmonica en {r['harmonica']}",
+        pdfs, [], "../../index.html",
+    )
+    href = escape(f"{TRANSPOSED_DIR}/{key_dir}/{page}")
+    return f"<a href='{href}' title='Même tablature, partition transposée'>partition en {escape(r['harmonica'])}</a> ({shift})"
+
+
+def compat_html_for(compat: dict | None, base: str = "", title: str = "") -> str:
+    """Bloc repliable « Jouer sur un autre harmonica » de la page joueur diatonique."""
+    if not compat:
+        return ""
+
+    own = next(r for r in compat["rows"] if r["is_file"])
+    if own["alterations"]:
+        alt_txt = f"Elle demande {own['alterations']} altération(s) : {fmt_counts(own['counts'])}."
+    else:
+        alt_txt = "Elle ne demande aucune altération (bend, overblow, overdraw)."
+
+    rows = ""
+    for r in sorted(compat["rows"], key=lambda r: HARP_ORDER.index(r["harmonica"])):
+        rows += (
+            f"<tr class='{'current' if r['is_file'] else ''}'>"
+            f"<td>{escape(r['harmonica'])}</td><td>{_transposed_cell(r, base, title)}</td></tr>\n"
+        )
+    tonic = compat["tonic"]
+    tonic_txt = ""
+    if tonic:
+        tonic_txt = f" Tonalité du morceau : {fmt_key(tonic[0])} {'majeur' if tonic[1] == 'major' else 'mineur'}."
+    return render(
+        "partials/compat.html", rows=rows, file_key=compat["file_key"],
+        tonic_txt=tonic_txt, alt_txt=alt_txt,
+    ).rstrip("\n")
+
+
 def _pdf_cell(
     files: list[str], mp3_files: list[str], output_dir: str, base: str, tuning: str,
     title: str, back_href: str, prefix: str = "", youtube_url: str = "",
     prev_song: dict | None = None, next_song: dict | None = None, harmonica_keys: str = "",
+    compat_html: str = "",
 ) -> str:
     if not files:
         return "<span class='hidden'>—</span>"
     fname = _write_player_page(
         output_dir, base, tuning, title, files, mp3_files, back_href, prefix, youtube_url,
-        prev_song, next_song,
+        prev_song, next_song, compat_html,
     )
     href = escape(prefix + fname)
     if harmonica_keys:
@@ -469,7 +539,7 @@ def _song_row(meta: dict, public_only: bool, pdf_prefix: str = "", nav_maps: dic
     nat        = meta['composerNationality'].lower()
     flag_emoji = COUNTRY_FLAGS.get(nat, '')
     country    = COUNTRY_NAMES.get(nat, '')
-    flag       = f"<span title='{escape(country)}'>{flag_emoji}</span>" if flag_emoji and country else flag_emoji
+    flag       = flag_emoji
     diff       = meta['difficulty']
     youtube    = meta.get('youtube', '')
     diat_keys  = meta.get('diatonicHarmonicaKeys', 'C')
@@ -492,17 +562,20 @@ def _song_row(meta: dict, public_only: bool, pdf_prefix: str = "", nav_maps: dic
 
     row  = "<tr>"
     row += f"<td data-sort='{escape(title.lower())}'>{escape(title)}</td>"
-    row += f"<td data-sort='{escape(composer.lower())}'>{composer_cell}</td>"
+    composer_title = f" title='{escape(country)}'" if flag_emoji and country else ""
+    row += f"<td data-sort='{escape(composer.lower())}'{composer_title}>{composer_cell}</td>"
     row += f"<td data-sort='{key_num}'>{escape(key)}</td>"
     if show_links:
-        row += f"<td class='col-pdf'>{_pdf_cell(diat, mp3s, OUTPUT_DIR, base, 'diatonique', title, 'index.html', pdf_prefix, youtube, diat_prev, diat_next, diat_keys)}</td>"
+        row += f"<td class='col-pdf'>{_pdf_cell(diat, mp3s, OUTPUT_DIR, base, 'diatonique', title, 'index.html', pdf_prefix, youtube, diat_prev, diat_next, diat_keys, compat_html_for(meta.get('compat'), base, title))}</td>"
         row += difficulty_cell(diff)
         row += f"<td class='col-pdf'>{_pdf_cell(chro, mp3s, OUTPUT_DIR, base, 'chromatique', title, 'index.html', pdf_prefix, youtube, chro_prev, chro_next)}</td>"
     else:
         row += "<td class='hidden col-pdf'>—</td>"
         row += difficulty_cell(diff)
         row += "<td class='hidden col-pdf'>—</td>"
-    row += f"<td class='badge'>{lyrics_icon(lyrics)}</td>"
+    lyrics_names = ", ".join(LANG_NAMES.get(l, l) for l in lyrics)
+    lyrics_title = f" title='{escape(lyrics_names)}'" if lyrics_names else ""
+    row += f"<td class='badge'{lyrics_title}>{lyrics_icon(lyrics)}</td>"
     row += copyright_cell(status, composer)
     row += _added_cell(meta.get('addedDate', ''))
     row += "</tr>\n"
@@ -690,7 +763,7 @@ la tablature : Richter 10 trous (Do, Ré, Mi, Fa, Sol, La, Si♭) ou Suzuki 5 tr
 
 <h2>1. Position des notes</h2>
 <p>Chaque note est convertie en écart en demi-tons par rapport à la tonique de l'harmonica,
-puis associée à un trou <i>h</i> et à une technique (souffle/aspiré, bend, overblow, overdraw),
+puis associée à un trou <i>h</i> et à une technique (soufflé/aspiré, bend, overblow, overdraw),
 avec la même table que la tablature. Les notes hors de la tessiture sont ignorées.</p>
 
 <h2>2. Score technique <i>T</i></h2>
@@ -771,11 +844,29 @@ valeur de note <i>d</i> de la mélodie (4 = noire, 8 = croche, 16 = double croch
 <h2>4. Tri de la colonne Difficulté</h2>
 <math display="block"><mi>S</mi><mo>=</mo><mi>T</mi><mo>+</mo><mi>V</mi></math>
 
+<h2>5. Jouer sur un autre harmonica</h2>
+<p>Ce bloc, affiché sur les pages des partitions diatoniques Richter, ne fait pas partie du score de
+difficulté. Il propose la même partition pour un harmonica d'une autre tonalité (Do, Ré♭, Ré, Mi♭, Mi, Fa,
+Fa♯, Sol, La♭, La, Si♭, Si).</p>
+<ul>
+  <li><b>Même tablature</b> : jouer la tablature sur un harmonica d'une autre tonalité demande exactement les
+    mêmes gestes, donc les mêmes altérations (bends, overblows, overdraws). Seule la hauteur du morceau change.</li>
+  <li><b>Transposition</b> : la partition est recompilée avec toutes ses notes et ses accords décalés du plus court
+    intervalle possible (de −6 à +5 demi-tons). Par exemple, un morceau écrit pour un harmonica en Mi♭ et joué sur
+    un harmonica en Do est transposé de 3 demi-tons vers le bas. Les numéros de tablature sont ceux du
+    fichier d'origine, calculés avant la transposition.</li>
+  <li><b>Fichiers</b> : ces variantes sont générées automatiquement à la compilation (option LilyPond
+    <code>-dplay-on</code>, voir <code>include/harmonica.ly</code>), en PDF uniquement, sans enregistrement audio.
+    Elles ne sont pas produites pour les partitions Suzuki 5 trous, ni pour celles marquées
+    <code>transposition = "false"</code> dans leur en-tête.</li>
+</ul>
+
 <h2>Limites</h2>
 <ul>
   <li>Les notes sont comptées, pas les passages : une chanson longue a un score plus élevé.</li>
   <li>Les silences et les respirations ne sont pas pris en compte dans les écarts.</li>
   <li>Un seul accordage est utilisé par partition (un changement d'harmonica en cours de morceau est ignoré).</li>
+  <li>Les partitions transposées ne sont produites que pour le diatonique Richter (ni Suzuki 5 trous, ni chromatique).</li>
 </ul>
 """
 

@@ -7,6 +7,7 @@
   copyrightStatus = "copyrighted"
   composerNationality = "gb"
   youtube = "https://www.youtube.com/watch?v=JgGuRdYm9CQ"
+  transposition = "false"  % pas de variantes pour d'autres harmonicas
 }
 
 % From: https://musescore.com/user/28111512/scores/6520909
@@ -24,10 +25,10 @@
 
 melodieD = {
   \time 4/4
-  \tempo "swing" 4 = 120
+  \tempo "swing" 4 = 110
   \key re \major % Ré majeur (fa♯, do♯)
   
-  r4 ^\markup \box { \italic "Harmonica Diatonique en D" }
+  r4 ^\markup \box { \italic "Harmonica diatonique en D" }
   la4 re mi | fad1 | r4 re8 mi fad4 re | la1 | r2 fad'4 la
   \break
   si1 | r4 la8 fad mi4. re8 | fad1 | r2 la,8 re fad4
@@ -44,7 +45,7 @@ melodieG = {
   \time 4/4  
   \key sol \major % Sol majeur (un dièse : fa♯)
   
-  r4 ^\markup \box { \italic "Harmonica Diatonique en G" }
+  r4 ^\markup \box { \italic "Harmonica diatonique en G" }
   
   re'4 sol8 la4 si8~ \bar "||"
   \break
@@ -78,7 +79,7 @@ melodieG = {
 
 melodieChromatique = {
   \time 4/4
-  \tempo "swing" 4 = 120
+  \tempo "swing" 4 = 110
 
   \key re \major % Ré majeur (fa♯, do♯)
   
@@ -181,7 +182,7 @@ midiScore =
     }
   }
   \midi {
-    \tempo 4 = 50
+    \tempo 4 = 110
   }
 }
 

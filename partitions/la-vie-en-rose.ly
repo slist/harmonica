@@ -3,7 +3,7 @@
 \header {
   title = "La vie en rose"
   composer = "Louis Guillaume Guglielmi (1916-1991)"
-  poet = "Edit Piaf (1915-1963)"
+  poet = "Édith Piaf (1915-1963)"
   lyricsLang = #'(fr)
   copyrightStatus = "copyrighted"
   composerNationality = "fr"

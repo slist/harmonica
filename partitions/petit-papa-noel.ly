@@ -194,7 +194,7 @@ midiScore =
     }
     \vspace #0.5
     \wordwrap {
-      L'anacrouse (musicologie) ou la note levée, c’est la ou les notes qui arrivent avant le premier temps fort d’un morceau.
+      L’anacrouse (musicologie) ou la note levée, c’est la ou les notes qui arrivent avant le premier temps fort d’un morceau.
     }
   }
 }

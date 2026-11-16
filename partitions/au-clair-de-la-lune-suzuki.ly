@@ -3,7 +3,7 @@
 \header {
   title = "Au Clair de la Lune (Suzuki)"
   instrument = "Harmonica en C"
-  arranger = "Pour suzuki 5 trous"
+  arranger = "Pour Suzuki 5 trous"
   composer = "Anonyme"
   copyrightStatus = "public-domain"
   lyricsLang = #'(fr)

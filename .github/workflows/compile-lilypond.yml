@@ -54,26 +54,18 @@ jobs:
           echo "/opt/lilypond-${LILYPOND_VERSION}/bin" >> "${GITHUB_PATH}"
           echo "VERSION_LILYPOND=${LILYPOND_VERSION}" >> "${GITHUB_ENV}"
           "/opt/lilypond-${LILYPOND_VERSION}/bin/lilypond" --version
-    
-      #- name: Install LilyPond, fluidsynth and lame
+
       - name: Install fluidsynth and lame
         run: |
           set -euo pipefail
           sudo apt-get update
-          # sudo apt-get install -y lilypond fluidsynth fluid-soundfont-gm lame
-          sudo apt-get install -y lilypond fluidsynth fluid-soundfont-gm lame
-          # lilypond --version
+          sudo apt-get install -y --no-install-recommends fluidsynth fluid-soundfont-gm lame
 
       - name: Set up Python
         uses: actions/setup-python@v7
         with:
           python-version: "3.14"
           cache: "pip"
-
-      - name: Install system dependencies for pycairo
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libcairo2-dev pkg-config
 
       - name: Install Python dependencies
         run: pip install -r requirements.txt
@@ -104,6 +96,33 @@ jobs:
           # Compile partitions (all .ly files directly in partitions/)
           find partitions -maxdepth 1 -type f -name "*.ly" -print0 \
             | xargs -0 -P$(nproc) -I{} bash -c 'compile_file "$@"' _ {}
+
+      - name: Compile transposed diatonic scores (PDF)
+        run: |
+          set -euo pipefail
+
+          source scripts/ci/strip_ci_ignored.sh
+
+          # Même tablature, jouée sur un harmonica d'une autre tonalité : la partition
+          # (portée + accords) est transposée via -dplay-on=<demi-tons> (voir
+          # include/harmonica.ly). PDF uniquement : pas de MIDI/MP3 (poids du site).
+          compile_transposed() {
+            local file="$1" semitones="$2" key="$3"
+            local base tmp_file
+            base=$(basename "${file}" .ly)
+
+            tmp_file=$(strip_ci_ignored "${file}")
+            trap 'rm -f "${tmp_file}"' RETURN
+
+            mkdir -p "output/tonalites/${key}"
+            lilypond --formats=pdf -dcompile-diatonique -dplay-on="${semitones}" \
+              -o "output/tonalites/${key}/${base}_diatonique" "${tmp_file}" \
+              || { echo "❌ Failed: ${base} (diatonique, harmonica ${key})"; return 1; }
+          }
+          export -f compile_transposed
+
+          python scripts/ci/list_transposed_variants.py \
+            | xargs -P$(nproc) -L1 bash -c 'compile_transposed "$@"' _
 
       - name: Compile gamme scores (PDF + MIDI)
         run: |
@@ -137,8 +156,10 @@ jobs:
       - name: Generate MP3 files from MIDI
         run: |
           set -euo pipefail
-          # Converts all .midi files found anywhere under output/ (including output/gammes/)
-          find output -type f -name "*.midi" -print0 | while IFS= read -r -d '' midi_file; do
+          # Converts all .midi files found anywhere under output/ (including output/gammes/), in parallel
+          midi_to_mp3() {
+            local midi_file="$1"
+            local dir base wav_file mp3_file
             dir=$(dirname "${midi_file}")
             base=$(basename "${midi_file}" .midi)
             wav_file="${dir}/${base}.wav"
@@ -148,8 +169,12 @@ jobs:
             fluidsynth -ni /usr/share/sounds/sf2/FluidR3_GM.sf2 "${midi_file}" -F "${wav_file}" -r 44100 \
               && lame --preset standard "${wav_file}" "${mp3_file}" \
               && rm "${wav_file}" \
-              || { rm -f "${wav_file}"; echo "❌ Failed MP3 conversion for ${base}"; exit 1; }
-          done
+              || { rm -f "${wav_file}"; echo "❌ Failed MP3 conversion for ${base}"; return 1; }
+          }
+          export -f midi_to_mp3
+
+          find output -type f -name "*.midi" -print0 \
+            | xargs -0 -P$(nproc) -I{} bash -c 'midi_to_mp3 "$@"' _ {}
 
       - name: Merge PDF files
         run: python merge_pdf.py

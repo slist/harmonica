@@ -1,0 +1,14 @@
+<details id="compat">
+  <summary>Jouer sur un autre harmonica</summary>
+  <div class="compat-body">
+    <p>Cette tablature est écrite pour un harmonica en <b>{{ file_key }}</b>.{{ tonic_txt }} {{ alt_txt }}</p>
+    <p>Pour jouer le même morceau sur un harmonica d'une autre tonalité, une partition transposée est proposée :
+    les numéros de tablature restent identiques (donc les mêmes altérations), seule la hauteur du morceau change du décalage indiqué.
+    Ces partitions n'ont pas d'enregistrement audio.</p>
+    <table>
+      <thead><tr><th>Harmonica</th><th>Partition</th></tr></thead>
+      <tbody>
+{{ rows | safe }}      </tbody>
+    </table>
+  </div>
+</details>

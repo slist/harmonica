@@ -215,3 +215,12 @@ def test_melodie_split_into_variables_is_analysed_like_inline():
     \diatonicHarmonicaTab
     """
     assert analyze_difficulty(split) == analyze_difficulty(inline)
+
+
+def test_accented_re_is_counted_as_a_note():
+    ly = '''\\language "français"
+melodie = { re'4 mi' fad' sol' }
+\\diatonicDHarmonicaTab \\relative do' { \\melodie }
+'''
+    notes_only_accent = ly.replace("re'", "ré'")
+    assert analyze_difficulty(notes_only_accent) == analyze_difficulty(ly)

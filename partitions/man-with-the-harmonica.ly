@@ -24,7 +24,7 @@
 
 melodie = {
   \time 6/4
-  \tempo "Lento" 4 = 58
+  \tempo "Lento" 4 = 66
   
   %\bar "|:"
   mi2\mp^\markup { \center-align \italic "ad lib." } red2^\markup { \italic "misterioso" } mi\> | mi\mp do4 red~\> red mi \bar "||" 
@@ -47,7 +47,6 @@ melodie = {
   mi8 do red8 mi~ mi4. red8 | mi4 r4 mi4 red | r2 mi4 red4 |
   \break
   mi4 r4 r2^\markup { \italic "rit...." } \bar "||"
-  \tempo "Faster" 4=82 
   la,1 | mi'1 |
   \break
   si1 | r2 r8. si16 do si la si | la2 r2 |
@@ -59,7 +58,6 @@ melodie = {
   re2 r8 re8 mi16 re do re | do1 | la'2. r8 la8 |
   \break
   si2 mi,4.\mp red8 | mi1\<^\markup { \italic "accel... "} \bar "||"
-  \tempo "A little Faster" 4=82
   la,2\mf mi'2 |
   \break
   si2 si8 si do16 si la si | la2 la'2 | si4 mi,2 fa4 |
@@ -176,13 +174,15 @@ midiScore =
 \markup {
   \column {
     \vspace #0.5
-    \line { "   • pp = pianissimo : très doux" }
-    \line { "   • p = piano : doux" }
-    \line { "   • mp = mezzo-piano : moyennement doux" }
-    \line { "   • mf = mezzo-forte : moyennement fort" }
-    \line { "   • f = forte : fort" }
-    \line { "   • ff = fortissimo : très fort" }
-    \line { "   • sfz = sforzando : accent fort et soudain" }
+    \fontsize #1 \bold "Nuances"
+    \vspace #0.3
+    \line { \pad-to-box #'(0 . 7) #'(0 . 0) \left-align { \dynamic pp } \pad-to-box #'(0 . 14) #'(0 . 0) \left-align { \italic "pianissimo" } \left-align { "très doux" } }
+    \line { \pad-to-box #'(0 . 7) #'(0 . 0) \left-align { \dynamic p } \pad-to-box #'(0 . 14) #'(0 . 0) \left-align { \italic "piano" } \left-align { "doux" } }
+    \line { \pad-to-box #'(0 . 7) #'(0 . 0) \left-align { \dynamic mp } \pad-to-box #'(0 . 14) #'(0 . 0) \left-align { \italic "mezzo-piano" } \left-align { "moyennement doux" } }
+    \line { \pad-to-box #'(0 . 7) #'(0 . 0) \left-align { \dynamic mf } \pad-to-box #'(0 . 14) #'(0 . 0) \left-align { \italic "mezzo-forte" } \left-align { "moyennement fort" } }
+    \line { \pad-to-box #'(0 . 7) #'(0 . 0) \left-align { \dynamic f } \pad-to-box #'(0 . 14) #'(0 . 0) \left-align { \italic "forte" } \left-align { "fort" } }
+    \line { \pad-to-box #'(0 . 7) #'(0 . 0) \left-align { \dynamic ff } \pad-to-box #'(0 . 14) #'(0 . 0) \left-align { \italic "fortissimo" } \left-align { "très fort" } }
+    \line { \pad-to-box #'(0 . 7) #'(0 . 0) \left-align { \dynamic sfz } \pad-to-box #'(0 . 14) #'(0 . 0) \left-align { \italic "sforzando" } \left-align { "accent fort et soudain" } }
     \vspace #1
   }
 }
@@ -213,14 +213,12 @@ Selon le contexte, cela peut vouloir dire :
     \vspace #1
     \bold "Abréviations"
     \vspace #0.5
-    \line { "dim. = diminuendo = diminuer progressivement le volume de la note ou du passage." }
-    \line { "cresc. = crescendo = augmenter le volume progressivement." }
-    \vspace #0.5
-    \line { "accel. = accelerando = accélérer progressivement le tempo." }
-    \line { "rit. = ritardando = ralentir progressivement le tempo." }
-    \line { "rall. = rallentado = ralentir progressivement le tempo (souvent un peu plus long que \"rit.\"." }
-    \line { "molto rall. = molto rallentado = ralentir fortement le tempo." }
-    
+    \line { \pad-to-box #'(0 . 9) #'(0 . 0) \left-align { \bold \italic "dim." } \pad-to-box #'(0 . 16) #'(0 . 0) \left-align { \italic "diminuendo" } \left-align { "diminuer progressivement le volume de la note ou du passage" } }
+    \line { \pad-to-box #'(0 . 9) #'(0 . 0) \left-align { \bold \italic "cresc." } \pad-to-box #'(0 . 16) #'(0 . 0) \left-align { \italic "crescendo" } \left-align { "augmenter le volume progressivement" } }
+    \line { \pad-to-box #'(0 . 9) #'(0 . 0) \left-align { \bold \italic "accel." } \pad-to-box #'(0 . 16) #'(0 . 0) \left-align { \italic "accelerando" } \left-align { "accélérer progressivement le tempo" } }
+    \line { \pad-to-box #'(0 . 9) #'(0 . 0) \left-align { \bold \italic "rit." } \pad-to-box #'(0 . 16) #'(0 . 0) \left-align { \italic "ritardando" } \left-align { "ralentir progressivement le tempo" } }
+    \line { \pad-to-box #'(0 . 9) #'(0 . 0) \left-align { \bold \italic "rall." } \pad-to-box #'(0 . 16) #'(0 . 0) \left-align { \italic "rallentando" } \left-align { "ralentir progressivement le tempo (un peu plus long que « rit. »)" } }
+    \line { \pad-to-box #'(0 . 9) #'(0 . 0) \left-align { \bold \italic "molto rall." } \pad-to-box #'(0 . 16) #'(0 . 0) \left-align { \italic "molto rallentando" } \left-align { "ralentir fortement le tempo" } }
   }
 }
 

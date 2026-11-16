@@ -59,7 +59,7 @@ melodie = {
   \break
   sol4 mi 
   
-  % rall. = rallentado = ralentir progressivement dans le tempo
+  % rall. = rallentando = ralentir progressivement dans le tempo
   %\mark \markup { \italic "rall." }
       
   % Début du rallentando avec ligne

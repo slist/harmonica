@@ -155,7 +155,7 @@ midiScore =
 \score {
   <<
     % Noms des accords sur la partition
-    \new ChordNames {
+    \new ChordNames \with { \remove "Staff_performer" } {
       \accords
     }
 
@@ -170,6 +170,8 @@ midiScore =
     % Accords joués au piano
     \new Staff {
       \set Staff.midiInstrument = #"acoustic grand"
+      \set Staff.midiMinimumVolume = #0.2
+      \set Staff.midiMaximumVolume = #0.35
       \unfoldRepeats \accords
     }
   >>
@@ -183,7 +185,7 @@ accompagnementMidiScore =
 \score {
   <<
     % Noms des accords sur la partition
-    \new ChordNames {
+    \new ChordNames \with { \remove "Staff_performer" } {
       \accords
     }
 

@@ -48,6 +48,15 @@ these via `ly:get-option` and conditionally includes the matching `\score` block
 "Anatomy of a partition" below) — this is how one source file produces four different
 outputs without recompiling by hand for each.
 
+**Transposed variants** (`-dplay-on=<semitones>`, 0=C … 11=B): `include/harmonica.ly` redefines
+`toplevel-score-handler` so that, when the option is set, the whole score (staff, chords, MIDI) is
+transposed by the shortest interval (-6..+5) from the tuning of the file's diatonic tab command to the
+target tuning. Tab numbers are computed before the transposition, so they stay identical (same gestures,
+another pitch). A dedicated CI step (`scripts/ci/list_transposed_variants.py` lists the jobs) compiles
+PDF-only variants into `output/tonalites/<key>/`, for every diatonic Richter song except `-suzuki.ly`,
+`hidden = "true"` and `transposition = "false"` ones; `generate_index.py` links them from the player page
+(`compat_html_for`). Variants have no MIDI/MP3 (site size).
+
 `scripts/ci/strip_ci_ignored.sh` strips a `.ly` file of everything from a
 `% CI-IGNORE-BELOW` marker onward before compilation — the safety net for manual test/scratch
 lines left at the bottom of a file during editing.

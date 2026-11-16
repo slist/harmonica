@@ -29,7 +29,7 @@
 
 melodie = {
   \time 2/4
-  \tempo 4 = 80
+  \tempo 4 = 100
   %\clef "treble^15"
   %    \ottava #2
 
@@ -171,12 +171,14 @@ midiScore =
     % Accords joués au piano
     \new Staff {
       \set Staff.midiInstrument = #"acoustic grand"
+      \set Staff.midiMinimumVolume = #0.2
+      \set Staff.midiMaximumVolume = #0.35
       \unfoldRepeats \accords
     }
   >>
 
   \midi {
-    \tempo 4 = 120
+    \tempo 4 = 100
   }
 }
 
@@ -206,7 +208,7 @@ accompagnementMidiScore =
   >>
 
   \midi {
-    \tempo 4 = 120
+    \tempo 4 = 100
   }
 }
 
