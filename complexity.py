@@ -143,6 +143,10 @@ def parse_melody(content: str) -> dict:
             break
     is_suzuki = bool(re.search(r'\\diatonicSuzukiFiveHarmonicaTab\b', content))
     layout = SUZUKI_FIVE_LAYOUT if is_suzuki else RICHTER_LAYOUT
+    if not is_suzuki and re.search(
+            r'#\(\s*(?:define|set!)\s+prefer-blow-3\s+#t\s*\)', content):
+        # Mirrors `prefer-blow-3` in include/harmonica.ly: the low "sol" is blown (+3).
+        layout = {**layout, 7: (3, 'natural')}
 
     tempo = None
     m = re.search(r'\\tempo\s+\d+\.?\s*=\s*(\d+)', content)

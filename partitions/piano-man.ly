@@ -19,6 +19,9 @@
 \include "../include/harmonica.ly"
 \include "../include/style.ly"
 
+% Préférer +3 (soufflé) à -2 (aspiré) pour le sol
+#(define prefer-blow-3 #t)
+
 \language "français"
 
 % Options de compilation personnalisées

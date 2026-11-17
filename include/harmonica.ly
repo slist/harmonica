@@ -74,6 +74,12 @@ dip =
 ((7) (blow "3"))
 %}
 
+%% Le sol grave (7 demi-tons au-dessus de la tonique) existe en -2 (aspiré) et en +3 (soufflé).
+%% Par défaut : -2. Une partition peut choisir +3 pour toutes ses notes en écrivant,
+%% après les \include : #(define prefer-blow-3 #t)
+%% (complexity.py détecte cette ligne pour que la difficulté suive.)
+#(define prefer-blow-3 #f)
+
 #(define (get-diatonic-c-ritcher-tab NoteEvent)
    (case (ly:pitch-semitones (ly:music-property NoteEvent 'pitch))
     ((0) (blow "1"))
@@ -83,7 +89,7 @@ dip =
     ((4) (blow "2"))
     ((5) (draw "2" 2))
     ((6) (draw "2" 1))
-    ((7) (draw "2")) ; can be (draw "2") or (blow "3")
+    ((7) (if prefer-blow-3 (blow "3") (draw "2"))) ; -2 par défaut, +3 si prefer-blow-3
     ((8) (draw "3" 3))
     ((9) (draw "3" 2))
     ((10) (draw "3" 1))
@@ -125,7 +131,7 @@ dip =
        ((4) (blow "2"))
        ((5) (draw "2" 2))
        ((6) (draw "2" 1))
-       ((7) (draw "2")) ; can be (draw "2") or (blow "3")
+       ((7) (if prefer-blow-3 (blow "3") (draw "2"))) ; -2 par défaut, +3 si prefer-blow-3
        ((8) (draw "3" 3))
        ((9) (draw "3" 2))
        ((10) (draw "3" 1))

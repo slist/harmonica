@@ -224,3 +224,16 @@ melodie = { re'4 mi' fad' sol' }
 '''
     notes_only_accent = ly.replace("re'", "ré'")
     assert analyze_difficulty(notes_only_accent) == analyze_difficulty(ly)
+
+
+def test_prefer_blow_3_moves_low_sol_from_hole_2_to_hole_3():
+    # g (7 semitones) is draw 2 by default, blow 3 with `#(define prefer-blow-3 #t)`;
+    # the hole change shortens the jump to the g one octave above (hole 6).
+    base = r"""
+melodie = { g4 g' }
+\diatonicHarmonicaTab \relative c'' { \melodie }
+"""
+    default = analyze_difficulty(base)
+    preferred = analyze_difficulty("#(define prefer-blow-3 #t)\n" + base)
+    assert default["jump_holes"] == 2
+    assert preferred["jump_holes"] == 1
