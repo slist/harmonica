@@ -43,10 +43,6 @@ melodie = {
   re,,, sol si re fa la si re fa la  
   \break
 
-  \sectionTitle "Altérations"
-  reb,,, solb fa sib la lab reb mi lab si mib re solb fa si sib
-  \break
-
   \sectionTitle "Toutes les notes"
   do,,, reb re mib mi fa solb sol lab la sib si
   do    reb re mib mi fa solb sol lab la sib si
@@ -97,7 +93,6 @@ melodie = {
   \override LyricText.font-size = #1  % Augmente la taille (0 est la taille normale)
   Do Mi Sol Do Mi Sol Do Mi Sol Do
   "Ré" Sol Si "Ré" Fa La Si "Ré" Fa La
-  "Ré♭" Sol♭ Fa Si♭ La La♭ "Ré♭" Mi La♭ Si Mi♭ "Ré" Sol♭ Fa Si Si♭
   
   Do "Ré♭" "Ré" Mi♭ Mi Fa Sol♭ Sol La♭ La Si♭ Si
   Do "Ré♭" "Ré" Mi♭ Mi Fa Sol♭ Sol La♭ La Si♭ Si
