@@ -88,6 +88,14 @@ melodie = {
     
     }
   }
+  
+  \break
+  r4 r4 r4
+  \break
+  sol,4     % +3 car prefer-blow-3 #t
+  \draw sol % -2
+  \blow sol % +3
+  r4 r4 r4
 
   \bar "|."
 }
