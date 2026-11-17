@@ -11,6 +11,10 @@
   %subtitle = ""
   composer = "Stevie Wonder (1950 - )"
   %arranger = ""
+  
+  instrument = "Harmonica diatonique en Do (C)"
+  enteredby = "Stéphane List"
+  source = "https://musescore.com/user/39593079/scores/15840265"
 
   lyricsLang = #'(en)
   copyrightStatus = "copyrighted"
@@ -51,7 +55,7 @@ melodie = {
   %\break
   sol4. mi8 fa4 sol8 fa~ | fa2~  \tuplet 3/2 { fa4 mi mi } | mi8 re do re~ re4 do8. la16~ | la4. sol8 \tuplet 3/2 { mi'4 fa mi } |
   %\break
-  re2 do | la sol4. mi16 ( re | do4 ) \tuplet 3/2 { r8 sol8 la } \tuplet 3/2 { do re mi }  \tuplet 3/2 { sol la do } | do4-. do,-. 
+  re2 do | la sol4. mi16 ( re | do4 ) \tuplet 3/2 { r8 ^\markup { "N.C." } sol8 la } \tuplet 3/2 { do re mi }  \tuplet 3/2 { sol la do } | do4-. do,-. 
   
   % do4.  = do noire pointée (durée 1,5 temps)
   % do4-. = do noire staccato (courte)
@@ -66,6 +70,10 @@ melodie = {
 }
 
 accords = \chordmode {
+  s2 la1:m7 ré:9 sol:7 do
+  la:m7 ré:9 sol:7 do
+  fa:maj7 mi:7 la:m7 ré:9
+  sol:7sus4 sol:7sus4 do 
 }
 
 % ============================
@@ -75,6 +83,9 @@ accords = \chordmode {
 diatoniqueScore =
 \score {
   <<
+    \new ChordNames {
+      \accords
+    }
     \new Staff {
       %\set Staff.instrumentName = "Harmonica en C"
       \diatonicHarmonicaTab \relative do''' {
@@ -128,12 +139,24 @@ partitionScore =
 
 midiScore =
 \score {
-  \new Staff {
-    \set Staff.midiInstrument = #"harmonica"
-    \relative do''' {
-      \melodie
+  <<
+
+    \new Staff {
+      \set Staff.midiInstrument = #"harmonica"
+      \relative do''' {
+        \melodie
+      }
     }
-  }
+
+% Accords joués au piano
+    \new Staff {
+      \set Staff.midiInstrument = #"acoustic grand"
+      \set Staff.midiMinimumVolume = #0.2
+      \set Staff.midiMaximumVolume = #0.35
+      \unfoldRepeats \accords
+    }
+  >>
+
   \midi {
     \tempo 4 = 112
   }
@@ -148,6 +171,27 @@ midiScore =
      (ly:parser-include-string "\\partitionScore"))
 #(if compile-midi
      (ly:parser-include-string "\\midiScore"))
+
+\markup {
+  \column {
+    \vspace #1
+    \fill-line { \bold "Commentaires" }
+  }
+}
+
+\markup {
+  \column {
+    \bold "Notes staccato"
+    \vspace #0.5
+    \fill-line {
+      \wordwrap {
+        Les deux dernières notes sont des noires staccato : elles doivent être jouées brièvement, avec un son court et détaché.
+        Attention à ne pas les confondre avec des noires pointées, qui valent chacune 1,5 temps.
+      }
+    }
+  }
+}
+
 
 % CI-IGNORE-BELOW : lignes de test manuel local, toujours ignorées par la compilation GitHub Actions
 \diatoniqueScore
