@@ -169,10 +169,28 @@ def parse_melody(content: str) -> dict:
     # Strip \key <tonic> \major/\minor first: otherwise the generic backslash-
     # command stripping below removes only "\key", leaving the tonic name
     # (e.g. "sol" from "\key sol \major") behind as a phantom extra note.
-    melody = re.sub(r'\\key\s+\S+\s+\\(major|minor)', ' ', melody)
-    melody = re.sub(r'\\[a-zA-Z]+(?:\s*\{[^{}]*\})?', ' ', melody)
-    melody = re.sub(r'"[^"]*"', ' ', melody)
-    melody = re.sub(r'#[^|\n{} ]*', ' ', melody)
+    # The stripping below keeps the text length unchanged so that the positions
+    # of the \\blow / \\draw markers stay valid for the notes that follow.
+    def blank(m):
+        return ' ' * len(m.group(0))
+
+    # \blow / \draw (include/harmonica.ly): per-note choice of +3 / -2 for the low sol.
+    singles: list[tuple[int, str]] = []
+    ranges: list[tuple[int, int, str]] = []
+    for m in re.finditer(r'\\(blow|draw)\b', melody):
+        pref = 'blow' if m.group(1) == 'blow' else 'draw'
+        nxt = re.compile(r'\s*').match(melody, m.end()).end()
+        if melody[nxt:nxt + 1] == '{':
+            end = nxt + 1 + len(brace_block(melody, nxt + 1))
+            ranges.append((nxt, end, pref))
+        else:
+            singles.append((m.end(), pref))
+    melody = re.sub(r'\\(blow|draw)\b', blank, melody)
+
+    melody = re.sub(r'\\key\s+\S+\s+\\(major|minor)', blank, melody)
+    melody = re.sub(r'\\[a-zA-Z]+(?:\s*\{[^{}]*\})?', blank, melody)
+    melody = re.sub(r'"[^"]*"', blank, melody)
+    melody = re.sub(r'#[^|\n{} ]*', blank, melody)
 
     if is_french:
         note_re = re.compile(
@@ -184,6 +202,9 @@ def parse_melody(content: str) -> dict:
         )
 
     notes: list[tuple[int, int | None]] = []
+    prefs: list[str | None] = []   # 'blow' / 'draw' / None, parallel to `notes`
+    single_idx = 0
+    pending = None
     for m in note_re.finditer(melody):
         name    = m.group(1)
         acc     = m.group(2) or ''
@@ -206,7 +227,17 @@ def parse_melody(content: str) -> dict:
         current = abs_p
         notes.append((abs_p, int(dur_str) if dur_str else None))
 
-    return {'notes': notes, 'root': root, 'layout': layout, 'tempo': tempo,
+        while single_idx < len(singles) and singles[single_idx][0] <= m.start():
+            pending = singles[single_idx][1]
+            single_idx += 1
+        pref = pending
+        pending = None
+        for a, b, rp in ranges:
+            if pref is None and a <= m.start() < b:
+                pref = rp
+        prefs.append(pref)
+
+    return {'notes': notes, 'prefs': prefs, 'root': root, 'layout': layout, 'tempo': tempo,
             'is_french': is_french, 'content': content, 'melody': melody}
 
 
@@ -218,7 +249,7 @@ def analyze_difficulty(content: str) -> dict:
     prev_hole = None
     fastest = None
 
-    for abs_p, d in parsed['notes']:
+    for (abs_p, d), pref in zip(parsed['notes'], parsed['prefs']):
         if d is not None and (fastest is None or d > fastest):
             fastest = d
 
@@ -226,6 +257,8 @@ def analyze_difficulty(content: str) -> dict:
         entry = layout.get(abs_p - 60 - root)
         if entry is None:
             continue
+        if pref and abs_p - 60 - root == 7 and layout is not SUZUKI_FIVE_LAYOUT:
+            entry = (3 if pref == 'blow' else 2, 'natural')
         hole, technique = entry
         if technique in counts:
             counts[technique] += 1

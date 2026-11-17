@@ -237,3 +237,25 @@ melodie = { g4 g' }
     preferred = analyze_difficulty("#(define prefer-blow-3 #t)\n" + base)
     assert default["jump_holes"] == 2
     assert preferred["jump_holes"] == 1
+
+
+def test_draw_and_blow_markers_override_the_global_choice():
+    # Same melody as above: \draw forces -2 (hole 2) even with prefer-blow-3,
+    # \blow forces +3 (hole 3) even without it, one note or a braced group.
+    def jump_holes(prefix, marker):
+        content = prefix + rf"""
+melodie = {{ {marker} g4 g' }}
+\diatonicHarmonicaTab \relative c'' {{ \melodie }}
+"""
+        return analyze_difficulty(content)["jump_holes"]
+
+    blow3 = "#(define prefer-blow-3 #t)\n"
+    assert jump_holes(blow3, r"\draw") == 2
+    assert jump_holes("", r"\blow") == 1
+
+    braced = r"""
+melodie = { \blow { g4 g' } }
+\diatonicHarmonicaTab \relative c'' { \melodie }
+"""
+    assert analyze_difficulty(braced)["jump_holes"] == 1
+    assert analyze_difficulty(braced.replace("blow", "draw"))["jump_holes"] == 2
