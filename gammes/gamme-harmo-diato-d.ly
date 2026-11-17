@@ -34,7 +34,7 @@ melodie = {
   \clef "treble^8"
 
   \sectionTitle "Notes soufflées de 1 à 10 (-2 = +3)"
-  re' fad' la' re'' fad'' la'' re''' fad''' la''' re''''
+  re' fad' \blow la' re'' fad'' la'' re''' fad''' la''' re''''
   \break
   \sectionTitle "Notes aspirées de 1 à 10"
   mi' la' dod'' mi'' sol'' si'' dod''' mi''' sol''' si'''
