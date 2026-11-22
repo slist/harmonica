@@ -2,6 +2,7 @@
 
 \header {
   title = "Hard Times"
+  category = "Folk / traditionnel"
   composer = "Stephen Foster (1826-1864)"
   lyricsLang = #'(en)
   copyrightStatus = "public-domain"

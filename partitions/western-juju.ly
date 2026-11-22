@@ -2,6 +2,7 @@
 
 \header {
   title = "Western JuJu"
+  category = "Country / western"
   copyrightStatus = "copyrighted"
 }
 

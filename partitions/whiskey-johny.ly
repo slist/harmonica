@@ -8,6 +8,7 @@
 
 \header {
   title = "Whiskey Johny"
+  category = "Musique irlandaise"
   subtitle = "Traditional American Folk Song"
   composer = "Traditional (author unknown)"
   %poet = "Traditional"

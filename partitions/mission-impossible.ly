@@ -2,6 +2,7 @@
 
 \header {
   title = "Mission Impossible"
+  category = "Musique de film / jeu vidéo"
   composer = "Gustav Anderson (1920-1989) ou Lalo Schifrin (1932-)"
   copyrightStatus = "copyrighted"
   composerNationality = "ar"

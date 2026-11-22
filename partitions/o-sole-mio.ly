@@ -8,6 +8,7 @@
 
 \header {
   title = "O sole mio!"
+  category = "Chanson traditionnelle italienne"
   composer = "E. di Capua (1865-1917)"
   poet = "G. Capurro (1879–1920)"
   lyricsLang = #'(it)

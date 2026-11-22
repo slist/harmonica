@@ -8,6 +8,7 @@
 
 \header {
   title = "Bella ciao"
+  category = "Chanson traditionnelle italienne"
   subtitle = "Musique traditionnelle d'un chant de révolte italien"
   composer = "Traditionnel"
   %arranger = ""

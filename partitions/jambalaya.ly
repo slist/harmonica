@@ -2,6 +2,7 @@
 
 \header {
   title = "Jambalaya"
+  category = "Country / western"
   subtitle = "(On the Bayou)"
   subsubtitle = "Melody derived from \"Grand Texas\""
   date = "1952"  

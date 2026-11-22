@@ -28,6 +28,12 @@
   <li><a href="{{ all_suzuki5_href }}">Toutes les partitions pour Suzuki 5 trous (PDF)</a></li>
 </ul>
 <p>{{ songs_count }} partitions (toutes, y compris sous droits)</p>
+<div class="category-filter">
+  <label for="category-filter">Filtrer par catégorie</label>
+  <select id="category-filter">
+    <option value="">Toutes les catégories</option>
+  </select>
+</div>
 <table id="data-table">
 {{ thead | safe }}
 <tbody>
@@ -36,6 +42,7 @@
 </table>
 <script>
 {% include "partials/sort.js" %}
+{% include "partials/category_filter.js" %}
 </script>
 </div>
 <script>

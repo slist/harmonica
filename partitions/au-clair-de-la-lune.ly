@@ -2,6 +2,7 @@
 
 \header {
   title = "Au Clair de la Lune"
+  category = "Comptine"
   instrument = "Harmonica en C"
   composer = "Anonyme"
   copyrightStatus = "public-domain"

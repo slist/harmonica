@@ -2,6 +2,7 @@
 
 \header {
   title = "Marche des Rois Mages"
+  category = "Musique classique"
   subtitle = "Chanson traditionnelle française"
   %subsubtitle = ""
   date = "1872"

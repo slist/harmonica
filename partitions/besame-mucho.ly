@@ -8,6 +8,7 @@
 
 \header {
   title = "Bésame Mucho"
+  category = "Chanson internationale"
   composer = "Consuelo Velázquez (1916–2005)"
   lyricsLang = #'(es)
   copyrightStatus = "copyrighted"

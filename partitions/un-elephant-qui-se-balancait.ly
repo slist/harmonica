@@ -2,6 +2,7 @@
 
 \header {
   title = "Un éléphant qui se balançait"
+  category = "Comptine"
   composer = "Traditionnel"
   copyrightStatus = "public-domain"
   composerNationality = "fr"

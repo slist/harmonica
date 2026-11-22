@@ -2,6 +2,7 @@
 
 \header {
   title = "Mon beau sapin"
+  category = "Noël / chant religieux"
   subtitle = "O Tannenbaum"
   composer = "Ernst Anschütz (1780-1861)"
   lyricsLang = #'(fr)

@@ -8,6 +8,7 @@
 
 \header {
   title = "Edelweiss"
+  category = "Folk / traditionnel"
   subtitle = "The Sound of Music (1959)"
   
   poet = "Oscar Hammerstein II (1895–1960)"

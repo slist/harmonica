@@ -2,6 +2,7 @@
 
 \header {
   title = "Au Clair de la Lune (Suzuki)"
+  category = "Comptine"
   instrument = "Harmonica en C"
   arranger = "Pour Suzuki 5 trous"
   composer = "Anonyme"

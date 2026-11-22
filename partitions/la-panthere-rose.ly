@@ -6,6 +6,7 @@
 
 \header {
   title = "La panthère rose"
+  category = "Musique de film / jeu vidéo"
   composer = "Henry Mancini (1924-1994)"
   copyrightStatus = "copyrighted"
   composerNationality = "us"

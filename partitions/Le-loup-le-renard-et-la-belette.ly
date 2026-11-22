@@ -2,6 +2,7 @@
 
 \header {
   title = "Le loup, le renard et la belette"
+  category = "Comptine"
   composer = "Traditionnel"
   lyricsLang = #'(fr)
   copyrightStatus = "public-domain"

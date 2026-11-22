@@ -8,6 +8,7 @@
 
 \header {
   title = "Timber"
+  category = "Pop / rock"
   composer = "Pitbull (1981 – ) - Kesha (1987 - )"
   lyricsLang = #'(en)
   copyrightStatus = "copyrighted"

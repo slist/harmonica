@@ -1,6 +1,7 @@
 \version "2.24.3"
 \header {
   title = "Dans la troupe (Suzuki)"
+  category = "Comptine"
   composer = "Traditionnel"
   arranger = "Pour Suzuki 5 trous"
   %Ce chant n'est pas sous copyright : https://fr.scoutwiki.org/Dans_la_troupe

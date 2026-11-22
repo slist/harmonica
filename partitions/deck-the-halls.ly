@@ -2,6 +2,7 @@
 
 \header {
   title = "Deck the halls"
+  category = "Noël / chant religieux"
   composer = "Traditional (Welsh melody)"
   lyricsLang = #'(en)
   copyrightStatus = "public-domain" % Mélodie galloise traditionnelle (XVIe siècle)

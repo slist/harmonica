@@ -12,6 +12,12 @@
   {{ songs_count }} partitions · {{ free_count }} libres de droits · {{ locked_count }} sous droits
   <a href="difficulte.html" title="{{ difficulty_help }}" style="margin-left:.5em;text-decoration:none">ℹ️</a>
 </p>
+<div class="category-filter">
+  <label for="category-filter">Filtrer par catégorie</label>
+  <select id="category-filter">
+    <option value="">Toutes les catégories</option>
+  </select>
+</div>
 <table id="data-table">
 {{ thead | safe }}
 <tbody>
@@ -20,6 +26,7 @@
 </table>
 <script>
 {% include "partials/sort.js" %}
+{% include "partials/category_filter.js" %}
 try{sessionStorage.setItem("lastList",location.pathname.endsWith("/")?location.pathname+"index.html":location.pathname);}catch(e){}
 </script>
 <p style="margin-top:2em;text-align:right;font-size:0.8em">

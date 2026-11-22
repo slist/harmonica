@@ -8,6 +8,7 @@
 
 \header {
   title = "Tom Sawyer"
+  category = "Pop / rock"
   composer = "Geddy Lee (1953–), Alex Lifeson (1953–)"
   poet = "Neil Peart (1952–2020), Pye Dubois (1947–)"
   lyricsLang = #'(fr)

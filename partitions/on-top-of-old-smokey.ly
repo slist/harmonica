@@ -8,6 +8,7 @@
 
 \header {
   title = "On top of Old Smokey"
+  category = "Folk / traditionnel"
   composer = "Traditional"
   
     instrument = \markup { 

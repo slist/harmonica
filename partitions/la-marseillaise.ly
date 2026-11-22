@@ -2,6 +2,7 @@
 
 \header {
   title = "La Marseillaise"
+  category = "Chanson traditionnelle française"
   composer = "Claude Joseph Rouget de Lisle (1760 - 1836)"
   lyricsLang = #'(fr)
   copyrightStatus = "public-domain" % Hymne national français

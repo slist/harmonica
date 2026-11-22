@@ -2,6 +2,7 @@
 
 \header {
   title = "The wild rover"
+  category = "Musique irlandaise"
   composer = "The Dubliners"
   date = "1964"
   lyricsLang = #'(en)

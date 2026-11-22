@@ -2,6 +2,7 @@
 
 \header {
   title = "Shenandoah"
+  category = "Country / western"
   composer = "Traditional"
   lyricsLang = #'(en)
   copyrightStatus = "public-domain" % Mélodie traditionnelle

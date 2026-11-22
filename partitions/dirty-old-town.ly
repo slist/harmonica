@@ -2,6 +2,7 @@
 
 \header {
   title = "Dirty old town"
+  category = "Musique irlandaise"
   composer = "Ewan MacColl (1915-1989)"
   lyricsLang = #'(en)
   copyrightStatus = "copyrighted"

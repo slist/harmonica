@@ -2,6 +2,7 @@
 
 \header {
   title = "I'm on my way"
+  category = "Folk / traditionnel"
   composer = "Traditional"
   lyricsLang = #'(en)
   copyrightStatus = "public-domain"

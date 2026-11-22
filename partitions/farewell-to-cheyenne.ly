@@ -2,6 +2,7 @@
 
 \header {
   title = "Farewell To Cheyenne"
+  category = "Musique de film / jeu vidéo"
   subtitle = "from Once Upon a Time in The West"
   composer = "Ennio Morricone (1928-2020)"
   copyrightStatus = "copyrighted"

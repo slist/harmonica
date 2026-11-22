@@ -1,6 +1,7 @@
 \version "2.24.3"
 \header {
   title = "Sarabande"
+  category = "Musique classique"
   
   composer = \markup {
     \column {

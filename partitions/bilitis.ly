@@ -8,6 +8,7 @@
 
 \header {
   title = "Bilitis"
+  category = "Musique de film / jeu vidéo"
   composer = "Francis Lai (1932-2018)"
   copyrightStatus = "copyrighted"
   composerNationality = "fr"

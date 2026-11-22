@@ -2,6 +2,7 @@
 
 \header {
   title = "J'ai du bon tabac"
+  category = "Comptine"
   composer = "Gabriel-Charles de Lattaignant (Abbé)"
   date = "1697-1779"
   lyricsLang = #'(fr)

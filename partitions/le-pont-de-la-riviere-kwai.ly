@@ -2,6 +2,7 @@
 
 \header {
   title = "Le pont de la rivière Kwaï"
+  category = "Musique de film / jeu vidéo"
   arranger = "Robert Longfield (1947 - )" % US
   composer = "Malcolm Arnold (1921 - 2006)" % UK
   lyricsLang = #'(en)

@@ -2,6 +2,7 @@
 
 \header {
   title = "Go, tell it on the mountain"
+  category = "Noël / chant religieux"
   composer = ""
   date = ""
   copyrightStatus = "public-domain"

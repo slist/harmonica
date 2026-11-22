@@ -2,6 +2,7 @@
 
 \header {
   title = "Aura Lee"
+  category = "Folk / traditionnel"
   instrument = "Harmonica en C"
   composer = "George R. Poulton (1828-1867)"
   lyricsLang = #'(en)

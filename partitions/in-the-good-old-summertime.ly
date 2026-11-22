@@ -2,6 +2,7 @@
 
 \header {
   title = "In the good Old Summertime"
+  category = "Folk / traditionnel"
   subtitle = ""
   %subsubtitle = ""
   date = "1902"

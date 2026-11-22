@@ -2,6 +2,7 @@
 
 \header {
   title = "My Darling Clementine - La poursuite infernale"
+  category = "Comptine"
   composer = ""
   date = ""
   copyrightStatus = "public-domain"

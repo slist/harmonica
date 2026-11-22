@@ -2,6 +2,7 @@
 
 \header {
   title = "Sweet Betsy from Pike"
+  category = "Country / western"
   composer = "Traditional"
   poet = "Traditional"
   arranger = "Traditional American folk song"

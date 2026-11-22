@@ -102,8 +102,9 @@ scoring will silently drift out of sync with the actual generated tab.
   prose alongside any weight/threshold constant changed in `complexity.py`**, since it's
   meant to stay in sync with the code, not just describe it once.
 - `generate_index.py` scans `partitions/` and `gammes/`, extracts header metadata per file via
-  regex (`parse_ly_metadata`), pairs each song with whatever compiled outputs already exist in
-  `output/` (`collect_outputs`, matched by filename convention
+  regex (`parse_ly_metadata`), including the song category used by the index column and filter,
+  pairs each song with compiled outputs already in `output/` (`collect_outputs`, matched by
+  filename convention
   `<base>_diatonique(-N)?.pdf` / `_chromatique(-N)?.pdf` / `<base>(-N)?.mp3`), and renders HTML
   through Jinja2 templates in `templates/` (`index.html`, `gammes.html`, `private.html`,
   `content_page.html`, `player.html`, plus shared `templates/partials/`). It also builds one

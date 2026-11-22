@@ -2,6 +2,7 @@
 
 \header {
   title = "L'as-tu vu ?"
+  category = "Comptine"
   composer = "Traditionnel"
   lyricsLang = #'(fr)
   copyrightStatus = "public-domain"

@@ -2,6 +2,7 @@
 
 \header {
   title = "Zelda’s Lullaby"
+  category = "Musique de film / jeu vidéo"
   subtitle = "from the Legend of Zelda series of video games"
   subsubtitle = "The Legend of Zelda: Ocarina of Time."
   date = "1998"  

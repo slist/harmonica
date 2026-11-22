@@ -2,6 +2,7 @@
 
 \header {
   title = "Joyeux anniversaire"
+  category = "Comptine"
   composer = "Traditional"
   lyricsLang = #'(fr)
   copyrightStatus = "public-domain"

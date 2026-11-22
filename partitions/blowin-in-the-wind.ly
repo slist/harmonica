@@ -2,6 +2,7 @@
 
 \header {
   title = "Blowin' In The Wind"
+  category = "Pop / rock"
   instrument = "Harmonica en C"
   composer = "Bob Dylan (1941-)" % May 24, 1941 -
   lyricsLang = #'(en)

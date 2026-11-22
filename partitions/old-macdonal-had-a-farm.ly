@@ -2,6 +2,7 @@
 
 \header {
   title = "Old MacDonald had a farm"
+  category = "Comptine"
   composer = "Anonyme (XVIII siècle)"
   lyricsLang = #'(en)
   copyrightStatus = "public-domain"

@@ -2,6 +2,7 @@
 
 \header {
   title = "Plaine, ma plaine"
+  category = "Chanson traditionnelle russe"
   subtitle = "Polyushka Polye from Symphony No.4 in D Major, Op.41"
   composer = "Lev Knipper (1898-1974)" % (Dec 3, 1898 - Jul 30, 1974)
   lyricsLang = #'(fr)

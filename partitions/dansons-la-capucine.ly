@@ -1,6 +1,7 @@
 \version "2.24.3"
 \header {
   title = "Dansons la capucine"
+  category = "Comptine"
   composer = "Traditionnel français"
   lyricsLang = #'(fr)
   copyrightStatus = "public-domain"

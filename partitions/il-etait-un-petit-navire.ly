@@ -2,6 +2,7 @@
 
 \header {
   title = "Il était un petit navire"
+  category = "Comptine"
   subtitle = "Chant de marins traditionnel (XIXe siècle)"
   %subsubtitle = ""
   date = ""

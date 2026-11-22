@@ -2,6 +2,7 @@
 
 \header {
   title = "Une puce, un pou"
+  category = "Comptine"
   composer = "Traditionnel"
   lyricsLang = #'(fr)
   copyrightStatus = "public-domain"

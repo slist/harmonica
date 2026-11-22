@@ -2,6 +2,7 @@
 
 \header {
   title = "Greensleeves"
+  category = "Folk / traditionnel"
   %instrument = "Harmonica en C"
   composer = "Traditional"
   %date = ""

@@ -2,6 +2,7 @@
 
 \header {
   title = "Silent night - Douce nuit"
+  category = "Noël / chant religieux"
   composer = "Franz Xaver Gruber (1787-1863)"
   lyricsLang = #'(fr)
   copyrightStatus = "public-domain"

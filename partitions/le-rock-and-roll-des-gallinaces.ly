@@ -2,6 +2,7 @@
 
 \header {
   title = "Le rock and roll des gallinacés"
+  category = "Pop / rock"
   composer = "Steve Waring (1943-) ou Pierre Lozère (1948-) ?"  
   lyricsLang = #'(fr)
   copyright = "© Steve Waring — Tous droits réservés"

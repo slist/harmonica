@@ -2,6 +2,7 @@
 
 \header {
   title = "Trois petits chats"
+  category = "Comptine"
   composer = "Traditionnel"
   lyricsLang = #'(fr)
   copyrightStatus = "public-domain" % Chanson traditionnelle française

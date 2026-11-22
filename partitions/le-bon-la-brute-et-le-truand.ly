@@ -2,6 +2,7 @@
 
 \header {
   title = "Le Bon, la Brute et le Truand"
+  category = "Musique de film / jeu vidéo"
   composer = "Ennio Morricone (1928-2020)"
   copyrightStatus = "copyrighted"
   composerNationality = "it"

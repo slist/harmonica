@@ -8,6 +8,7 @@
 
 \header {
   title = "Santiano"
+  category = "Chanson française"
   subtitle = "Chant de marins d'origine anglaise"
   composer = "Hugues Aufray (1929-)"
   %arranger = ""

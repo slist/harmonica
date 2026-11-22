@@ -2,6 +2,7 @@
 
 \header {
   title = "Frère Jacques"
+  category = "Comptine"
   composer = "Traditionnel"
   lyricsLang = #'(fr)
   copyrightStatus = "public-domain"

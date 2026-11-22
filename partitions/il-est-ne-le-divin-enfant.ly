@@ -2,6 +2,7 @@
 
 \header {
   title = "Il est né le divin enfant"
+  category = "Noël / chant religieux"
   %poet = "Placide Cappeau (1808–1877)"
   composer = "Traditionnel"
   %date = "XVIIᵉ ou XVIIIᵉ siècle"

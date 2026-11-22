@@ -1,6 +1,7 @@
 \version "2.24.3"
 \header {
   title = "House of the Rising Sun"
+  category = "Folk / traditionnel"
   subtitle = "Les portes du pénitencier"
   composer = "The Animals"
   arranger = ""

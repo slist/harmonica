@@ -2,6 +2,7 @@
 
 \header {
   title = "Amazing Grace (Suzuki)"
+  category = "Noël / chant religieux"
 %  meter = "Hymn"
   arranger = "Pour Suzuki 5 trous"
   composer = "John Newton (1725-1807)"

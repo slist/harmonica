@@ -2,6 +2,7 @@
 
 \header {
   title = "La vie en rose"
+  category = "Chanson française"
   composer = "Louis Guillaume Guglielmi (1916-1991)"
   poet = "Édith Piaf (1915-1963)"
   lyricsLang = #'(fr)

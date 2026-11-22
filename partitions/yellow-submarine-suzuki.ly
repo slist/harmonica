@@ -8,6 +8,7 @@
 
 \header {
   title = "Yellow Submarine (Suzuki)"
+  category = "Pop / rock"
   arranger = "Pour suzuki 5 trous"
   composer = "John Lennon (1940 – 1980) - Paul McCartney (1942 - )"
   lyricsLang = #'(en)

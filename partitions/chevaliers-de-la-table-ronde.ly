@@ -1,6 +1,7 @@
 \version "2.24.3"
 \header {
   title = "Chevaliers de la table ronde"
+  category = "Comptine"
   lyricsLang = #'(fr)
   copyrightStatus = "public-domain" % Chanson traditionnelle française
   composer = "Traditionnel"

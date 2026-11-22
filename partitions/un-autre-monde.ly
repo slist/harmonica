@@ -8,6 +8,7 @@
 
 \header {
   title = "Un autre monde"
+  category = "Chanson française"
   subtitle = "Téléphone (1984)"
   composer = "Jean Louis Aubert / Louis Bertignac"
   arranger = "Corine Marienneau / Richard Kolinka"

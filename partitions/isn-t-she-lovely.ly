@@ -8,6 +8,7 @@
 
 \header {
   title = "Isn't She Lovely" % 1976
+  category = "Pop / rock"
   %subtitle = ""
   composer = "Stevie Wonder (1950 - )"
   %arranger = ""

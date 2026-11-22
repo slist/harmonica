@@ -100,7 +100,8 @@ def parse_ly_metadata(ly_path: str) -> dict:
     metadata: dict = {
         "copyrightStatus": "unknown", "lyricsLang": [],
         "key": "unknown", "composer": "", "title": "",
-        "composerNationality": "", "difficulty": {}, "youtube": "",
+        "composerNationality": "", "category": "Non classée",
+        "difficulty": {}, "youtube": "",
         "diatonicHarmonicaKeys": "C", "instrument": "", "hidden": False, "compat": None,
     }
     if not os.path.exists(ly_path):
@@ -130,6 +131,7 @@ def parse_ly_metadata(ly_path: str) -> dict:
                     metadata["composer"] = s.strip()
                     break
     metadata["title"]                = find(rf'^\s*title\s*=\s*"{_QUOTED}"', re.MULTILINE)
+    metadata["category"]             = find(rf'^\s*category\s*=\s*"{_QUOTED}"', re.MULTILINE) or "Non classée"
     metadata["instrument"]           = find(rf'^\s*instrument\s*=\s*"{_QUOTED}"', re.MULTILINE)
     metadata["composerNationality"]  = find(rf'composerNationality\s*=\s*"{_QUOTED}"')
     metadata["youtube"]               = find(rf'youtube\s*=\s*"{_QUOTED}"')
@@ -562,6 +564,8 @@ def _song_row(meta: dict, public_only: bool, pdf_prefix: str = "", nav_maps: dic
 
     row  = "<tr>"
     row += f"<td data-sort='{escape(title.lower())}'>{escape(title)}</td>"
+    category = meta.get("category") or "Non classée"
+    row += f"<td class='category' data-sort='{escape(category.lower())}'>{escape(category)}</td>"
     composer_title = f" title='{escape(country)}'" if flag_emoji and country else ""
     row += f"<td data-sort='{escape(composer.lower())}'{composer_title}>{composer_cell}</td>"
     row += f"<td data-sort='{key_num}'>{escape(key)}</td>"
@@ -585,7 +589,7 @@ def _song_row(meta: dict, public_only: bool, pdf_prefix: str = "", nav_maps: dic
 # --------- Page generators ---------
 
 _TABLE_COLS = [
-    ("Œuvre", ""), ("Compositeur", ""), ("Clé", ""),
+    ("Œuvre", ""), ("Catégorie", ""), ("Compositeur", ""), ("Clé", ""),
     ("Diatonique", "col-pdf"), ("Difficulté 🎵", ""),
     ("Chromatique", "col-pdf"),
     ("Paroles", ""), ("Droits", ""), ("Ajouté", "sort-desc-first sort-desc"),

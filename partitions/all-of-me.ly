@@ -2,6 +2,7 @@
 
 \header {
   title = "All Of Me"
+  category = "Pop / rock"
   arranger = ""
   composer = "John Legend (1978 - )"
   lyricsLang = #'(en)

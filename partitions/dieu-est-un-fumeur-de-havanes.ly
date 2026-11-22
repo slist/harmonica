@@ -8,6 +8,7 @@
 
 \header {
   title = "Dieu est un fumeur de Havanes"
+  category = "Chanson française"
   composer = "Serge Gainsbourg (1928-1991)"
   lyricsLang = #'(fr)
   copyrightStatus = "copyrighted"

@@ -2,6 +2,7 @@
 
 \header {
   title = "Piano Man"
+  category = "Pop / rock"
   %subtitle = ""
   %subsubtitle = ""
   date = "1973"

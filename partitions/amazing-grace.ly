@@ -2,6 +2,7 @@
 
 \header {
   title = "Amazing Grace"
+  category = "Noël / chant religieux"
   meter = "Hymn"
   arranger = "Trad. arr."
   composer = "John Newton (1725-1807)"

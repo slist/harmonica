@@ -2,6 +2,7 @@
 
 \header {
   title = "Cadet Roussel"
+  category = "Comptine"
   composer = "Traditionnel"
   lyricsLang = #'(fr)
   copyrightStatus = "public-domain"

@@ -2,6 +2,7 @@
 
 \header {
   title = "Head, shoulders, Knees and toes"
+  category = "Comptine"
   instrument = "Harmonica en C"
   composer = "Gilbert DeBenedetti (1946-)"
   lyricsLang = #'(en)

@@ -2,6 +2,7 @@
 
 \header {
   title = "Ah ! vous dirai-je, maman"
+  category = "Comptine"
   composer = "Traditionnel"
   lyricsLang = #'(fr)
   copyrightStatus = "public-domain"

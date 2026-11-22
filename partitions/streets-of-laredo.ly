@@ -2,6 +2,7 @@
 
 \header {
   title = "Streets of Laredo"
+  category = "Country / western"
   subtitle = "Cowboy's Lament"
   %subsubtitle = ""
   %date = ""

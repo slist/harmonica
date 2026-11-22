@@ -2,6 +2,7 @@
 
 \header {
   title = "9e Symphonie, opus 125"
+  category = "Musique classique"
   subtitle = "Pour accompagner ma fille au violon"
   composer = "Ludwig van Beethoven (1770-1827)"
   lyricsLang = #'()

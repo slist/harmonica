@@ -2,6 +2,7 @@
 
 \header {
   title = "Good night, ladies"
+  category = "Folk / traditionnel"
   composer = "Edwin Pearce Christy (1825-1915)"
   date = "1847"
   lyricsLang = #'(en)

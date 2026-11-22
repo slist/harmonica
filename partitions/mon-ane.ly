@@ -2,6 +2,7 @@
 
 \header {
   title = "Mon âne"
+  category = "Comptine"
   composer = "Traditionnel"
   lyricsLang = #'(fr)
   copyrightStatus = "public-domain"

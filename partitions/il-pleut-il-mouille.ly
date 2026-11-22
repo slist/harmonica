@@ -2,6 +2,7 @@
 
 \header {
   title = "Il pleut, il mouille"
+  category = "Comptine"
   composer = "Traditionnel"
   lyricsLang = #'(fr)
   copyrightStatus = "public-domain"

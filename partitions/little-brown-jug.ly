@@ -2,6 +2,7 @@
 
 \header {
   title = "Little brown jug"
+  category = "Jazz / blues"
   composer = "Glenn Miller Orchestra (1940)"
   copyrightStatus = "public-domain"
   composerNationality = "us"

@@ -2,6 +2,7 @@
 
 \header {
   title = "Casatschok - Katioucha - Katyusha"
+  category = "Chanson traditionnelle russe"
   instrument = "Harmonica en C"
   autor = "Mikhaïl Issakovski"
   composer = "Matveï Blanter (1903-1990)"

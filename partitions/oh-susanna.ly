@@ -2,6 +2,7 @@
 
 \header {
   title = "Oh! Susanna"
+  category = "Folk / traditionnel"
   composer = "Stephen Foster (1826-1864)"
   date = "1848"
   lyricsLang = #'(en)

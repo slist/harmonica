@@ -8,6 +8,7 @@
 
 \header {
   title = "Georgia on My Mind"
+  category = "Jazz / blues"
   composer = "Hoagy Carmichael (1899-1981) & Stuart Gorrell (1901-1963)"
   %lyricsLang = #'(en)
   copyrightStatus = "copyrighted"

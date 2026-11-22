@@ -2,6 +2,7 @@
 
 \header {
   title = "Balade country"
+  category = "Country / western"
   copyrightStatus = "copyrighted"
   composerNationality = "us"
 }

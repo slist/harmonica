@@ -2,6 +2,7 @@
 
 \header {
   title = "Kum ba yah"
+  category = "Noël / chant religieux"
   composer = ""
   date = ""
   copyrightStatus = "public-domain"

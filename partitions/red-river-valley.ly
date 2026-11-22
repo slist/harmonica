@@ -8,6 +8,7 @@
 
 \header {
   title = "Red River Valley"
+  category = "Country / western"
   subtitle = "Traditional American Folk Song"
   composer = "Traditional (author unknown)"
   %poet = "Traditional"

@@ -2,6 +2,7 @@
 
 \header {
   title = "Ah! Les Crocodiles"
+  category = "Comptine"
   composer = "Traditionnel"
   lyricsLang = #'(fr)
   copyrightStatus = "public-domain"

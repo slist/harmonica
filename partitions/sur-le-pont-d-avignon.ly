@@ -2,6 +2,7 @@
 
 \header {
   title = "Sur le pont d'Avignon"
+  category = "Comptine"
   %instrument = "Harmonica en C"
   composer = "Traditionnel"
   %date = ""

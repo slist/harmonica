@@ -2,6 +2,7 @@
 
 \header {
   title = "Believe Me, If All Those Endearing Young Charms"
+  category = "Musique irlandaise"
   subtitle = "Traditional Irish Air"
   %subsubtitle = ""
   date = "1808"

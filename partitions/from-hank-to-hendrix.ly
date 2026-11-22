@@ -2,6 +2,7 @@
 
 \header {
   title = "From Hank to Hendrix"
+  category = "Country / western"
     subtitle = "TODO: Review tempo of last line"
 
   composer = "Neil Young (1945 - )"

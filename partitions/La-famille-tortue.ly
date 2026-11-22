@@ -2,6 +2,7 @@
 
 \header {
   title = "La famille tortue"
+  category = "Comptine"
   composer = "Traditionnel"
   lyricsLang = #'(fr)
   copyrightStatus = "public-domain"

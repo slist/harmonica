@@ -2,6 +2,7 @@
 
 \header {
   title = "Ashokan Farewell"
+  category = "Folk / traditionnel"
   subtitle = ""
   %subsubtitle = ""
   date = "1982"

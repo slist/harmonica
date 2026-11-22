@@ -2,6 +2,7 @@
 
 \header {
   title = "The Parting Glass"
+  category = "Musique irlandaise"
   subtitle = "Scottish Traditional Song"
   %subsubtitle = ""
   %date = ""

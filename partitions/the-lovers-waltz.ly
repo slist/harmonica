@@ -2,6 +2,7 @@
 
 \header {
   title = "The Lovers' Waltz"
+  category = "Pop / rock"
   %subtitle = ""
   %subsubtitle = ""
   year = "1997"

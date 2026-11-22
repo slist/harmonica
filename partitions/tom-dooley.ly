@@ -2,6 +2,7 @@
 
 \header {
   title = "Tom Dooley"
+  category = "Folk / traditionnel"
   composer = ""
   date = ""
   copyrightStatus = "public-domain"

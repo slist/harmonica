@@ -2,6 +2,7 @@
 
 \header {
   title = "Campton Races"
+  category = "Folk / traditionnel"
   instrument = "Harmonica en C"
   composer = "Stephen Foster (1826-1864)"
   date = "1850-02"

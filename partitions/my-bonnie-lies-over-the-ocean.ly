@@ -2,6 +2,7 @@
 
 \header {
   title = "My Bonnie lies over the ocean"
+  category = "Folk / traditionnel"
   composer = "Auteur original inconnu"
   lyricsLang = #'(en)
   copyrightStatus = "public-domain"
