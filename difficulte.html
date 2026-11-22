@@ -31,6 +31,9 @@
 .theme-control label{font-weight:600}
 .theme-control select{padding:.3em .45em;border:1px solid var(--border);border-radius:4px;
                       background:var(--control-bg);color:var(--ink);font:inherit;cursor:pointer}
+.category-filter{display:flex;align-items:center;gap:.5em;margin:.75em 0;color:var(--muted)}
+.category-filter select{padding:.3em .45em;border:1px solid var(--border);border-radius:4px;
+                        background:var(--control-bg);color:var(--ink);font:inherit;cursor:pointer}
 body{font-family:'Public Sans',sans-serif;max-width:1400px;margin:0 auto;padding:1em;
      background:var(--bg);color:var(--ink)}
 .theme-control{justify-content:flex-end;margin-bottom:.5em}
@@ -52,7 +55,7 @@ thead th.sort-asc::after{content:" ▲";font-size:.8em}
 thead th.sort-desc::after{content:" ▼";font-size:.8em}
 tbody td{border:1px solid var(--border);padding:5px 8px;text-align:center}
 tbody td:first-child{text-align:left}
-tbody td:nth-child(2){text-align:left}
+tbody td:nth-child(2),tbody td:nth-child(3){text-align:left}
 tbody tr:hover{background:var(--row-hover)}
 .hidden{color:var(--hidden-color);font-style:italic}
 .badge{font-size:1.1em}
