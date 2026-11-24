@@ -1,11 +1,18 @@
 \version "2.24.3"
 
 \header {
-  title = "All Of Me"
+  title = "All of Me"
+  subtitle = \markup \center-column {
+    "John Legend (1978–)"
+  }
   category = "Pop / rock"
-  arranger = ""
-  composer = "John Legend (1978 - )"
+  composer = \markup \column {
+    "John Stephens (1978–)"
+    "Toby Gad (1968–)"
+  }
+  poet = ""
   lyricsLang = #'(en)
+  instrument = "Harmonica diatonique en La bémol (Ab)"
   copyrightStatus = "copyrighted"
   composerNationality = "us"
   youtube = "https://www.youtube.com/watch?v=450p7goxZqg"
@@ -24,7 +31,11 @@
 
 melodie = {
   \time 4/4
+    \clef "treble^8"
+
   \key lab \major % 4b - sib, mib, lab, reb
+  
+  r1 r1 r1 r1  
   
   r2 sib8 do do4 | do8 do do4 do lab | 
   \break
@@ -46,10 +57,13 @@ melodie = {
   No kid -- din' I can't pin you down What's go -- ing on in that beau -- ti -- ful mind
   I'm on your ma -- gi -- cal my -- ste -- ry ride And I'm so di -- zzy. Don't
   know what hit me. But I'll be al -- right. My head's un -- der -- wa -- ter but I'm
-
 }
 
-
+accords = \chordmode {
+fa1:m reb lab mib fa:m reb lab mib
+fa:m reb:7 lab mib fa:m reb:maj7
+lab mib fa:m % reb:1.3.5.9 lab mib
+}
 
 % ============================
 % SCORE DIATONIQUE
@@ -58,8 +72,11 @@ melodie = {
 diatoniqueScore = 
 \score {
   <<
+    \new ChordNames {
+      \accords
+    }
     \new Staff { 
-      \diatonicHarmonicaTab \relative do'' {
+      \diatonicAbHarmonicaTab \relative do''' {
         \melodie
       }
     }
@@ -107,12 +124,29 @@ partitionScore =
 
 midiScore =
 \score {
-  \new Staff {
-    \set Staff.midiInstrument = #"harmonica"
-    \chromaticHarmonicaTab \relative do'' {
-      \melodie
+  <<
+    % Noms des accords sur la partition
+    \new ChordNames \with { \remove "Staff_performer" } {
+      \accords
     }
-  }
+
+    % Mélodie
+    \new Staff {
+      \set Staff.midiInstrument = #"harmonica"
+      \unfoldRepeats \relative do'' {
+        \melodie
+      }
+    }
+
+    % Accords joués au piano
+    \new Staff {
+      \set Staff.midiInstrument = #"acoustic grand"
+      \set Staff.midiMinimumVolume = #0.2
+      \set Staff.midiMaximumVolume = #0.35
+      \unfoldRepeats \accords
+    }
+  >>
+
   \midi {
     \tempo 4 = 90
   }
@@ -144,5 +178,6 @@ midiScore =
 
 
 % CI-IGNORE-BELOW : lignes de test manuel local, toujours ignorées par la compilation GitHub Actions
-\chromatiqueScore
+\diatoniqueScore
+%\chromatiqueScore
 \midiScore
