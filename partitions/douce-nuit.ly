@@ -1,7 +1,7 @@
 \version "2.24.3"
 
 \header {
-  title = "Silent night - Douce nuit"
+  title = "Douce nuit"
   category = "Noël / chant religieux"
   composer = "Franz Xaver Gruber (1787-1863)"
   lyricsLang = #'(fr)
@@ -9,10 +9,6 @@
   composerNationality = "at"
   youtube = "https://www.youtube.com/watch?v=pu55DXQTz0I"
 }
-
-\markup " "
-\markup " "
-\markup " "
 
 \include "../include/harmonica.ly"
 \include "../include/style.ly"
@@ -27,7 +23,7 @@
 
 melodie = {
   \time 3/4
-  %\tempo 4 = 80
+  \tempo 4 = 90
   
   sol4. la8 sol4 | mi2. | sol4. la8 sol4 | mi2. | re'2 re4 | si2. | do2 do4 | sol2. | la2 la4 | do4. si8 la4 | sol4. la8 sol4 |
   \break
@@ -120,5 +116,5 @@ midiScore =
      (ly:parser-include-string "\\midiScore"))
 
 % CI-IGNORE-BELOW : lignes de test manuel local, toujours ignorées par la compilation GitHub Actions
-%\diatoniqueScore
-%\midiScore
+\diatoniqueScore
+\midiScore
